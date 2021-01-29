@@ -1,3 +1,6 @@
+.navbar{
+    padding: 0;
+}
 .brand-text{
     display: grid;
     
@@ -75,7 +78,10 @@ background: transparent;
     color: black;
 }
 .user-avatar {
-    box-shadow: 0 0.25rem 0.55rem rgba(60,68,177,.35);
+    border-radius: 50%;
+    border: 1px solid blue;
+    height: 2.5rem;
+    box-shadow: 0 0.45rem  0.55rem rgba(60,68,177,.35);
     margin-right: 10px;
     display: inline-block;
     position: relative;

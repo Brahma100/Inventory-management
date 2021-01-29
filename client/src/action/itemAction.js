@@ -3,6 +3,7 @@ import axios from 'axios';
 import {tokenConfig} from './authActions';
 import {returnErrors} from './errorActions';
 
+
 export const getItems=()=> dispatch =>{
     dispatch(setItemsLoading());
 
@@ -54,14 +55,26 @@ export const deleteSelectedItem=ids=>dispatch=>{
     ).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
 }
 
-
-
-export const updateItem=({id,name,manufacturer,description,stock,price,rating})=>dispatch=>{
-    console.log("Id of Item",id);
+export const rankItem=(id,user)=>dispatch=>{
     const config={
         headers:{'Content-Type':'application/json'}
     }
-    const body=JSON.stringify({id,name,description,manufacturer,price,stock,rating});
+    const body=JSON.stringify({id,user});
+    console.log("Action Product Id",id);
+    axios.post('/rank_product',body,config).then(
+        res=>dispatch({
+            type:UPDATE_ITEM,
+            payload:res.data
+        })
+    ).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
+}
+
+export const updateItem=({id,name,manufacturer,description,stock,price,rating,user})=>dispatch=>{
+    console.log("Id of Item",id,user);
+    const config={
+        headers:{'Content-Type':'application/json'}
+    }
+    const body=JSON.stringify({id,name,description,manufacturer,price,stock,rating,user});
     console.log("Action Product Id",id);
     axios.post('/update_product',body,config).then(
         res=>dispatch({

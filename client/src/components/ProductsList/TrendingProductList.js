@@ -215,7 +215,7 @@ class TrendingProductList extends Component {
                             </Media.Body>
                             </Media>
                             </Card.Body>   
-                             <NavLink className="m-3 p-2 btn btn-primary" style={{color:'white'}} to='/admin/products'><span className="btn-wrapper--label">View All</span></NavLink>
+                             <NavLink className="m-3 p-2 btn btn-primary" style={{color:'white'}} to='/products'><span className="btn-wrapper--label">View All</span></NavLink>
                          
                     </Card>
              

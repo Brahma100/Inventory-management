@@ -85,14 +85,14 @@ export const login=({email,password})=>dispatch=>{
 
 // Register User
 
-export const register=({name,email,password})=>dispatch=>{
+export const register=({name,email,password,img})=>dispatch=>{
     // Headers
     const config={
         headers:{'Content-Type':'application/json'}
     }
     // Request body
 
-    const body=JSON.stringify({name,email,password});
+    const body=JSON.stringify({name,email,password,img});
     console.log(body);
 
     axios.post("/auth/register",body,config)

@@ -1,8 +1,15 @@
 /* 470 .btn */
-
-body{
+html,body{
   overflow-x: hidden;
 }
+.page-item.active .page-link{
+  background: #3b44c1;
+  border:3px solid #b3b8ff ;
+}
+/* body{
+ 
+  overflow-x: hidden;
+} */
 /* close button of modal */
 .close,.close:hover{
   color: white;
@@ -744,6 +751,7 @@ body > .navbar-collapse[data-color="purple"]:after {
 
 .btn:disabled, .btn[disabled], .btn.disabled {
   opacity: 0.5;
+  color: red;
   filter: alpha(opacity=50); }
 
 .btn-round {
@@ -926,9 +934,11 @@ body > .navbar-collapse[data-color="purple"]:after {
   border-color: #9A9A9A; }
 
 .alert {
+  background: #ffedeb;
+  border-radius: 200px !important;
   border: 0;
   border-radius: 0;
-  color: #FFFFFF;
+  color:red;
   padding: 10px 15px;
   font-size: 14px; }
   .container .alert {

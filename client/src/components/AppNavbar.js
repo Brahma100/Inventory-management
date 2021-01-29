@@ -11,7 +11,7 @@ import {
     Container,Dropdown, Badge, Button
 } from 'react-bootstrap';
 import Logout from './auth/Logout';
-import RegisterModal from './auth/RegisterModal';
+import RegisterModal from './auth/RegisterModal1';
 import LoginModal from './auth/LoginModal';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -64,7 +64,7 @@ class AppNavbar extends Component{
     render(){
         const {isAuthenticated, user}=this.props.auth;
        
-
+        // console.log("from Nav:",user?user.img:'Hello');
         const authLinks=(
             <Fragment >
                 {/* <Nav.Item>About</Nav.Item> */}
@@ -74,7 +74,7 @@ class AppNavbar extends Component{
                     
                     <Dropdown.Toggle id="dropdown-basic" caret>
                     {user? <div className="user-avatar">
-                    <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={avatar} />
+                    <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
                     <div class="status-overlay">
                         <i class="bowtie-icon bowtie-status-success success"></i>
                     </div>
@@ -89,7 +89,7 @@ class AppNavbar extends Component{
                     <Dropdown.Menu bottom>
                             <Dropdown.Item header>
                             {user? <div className="user-avatar">
-                    <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={avatar} />
+                    <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
                     {/* <div class="status-overlay">
                         <i class="bowtie-icon bowtie-status-success success"></i>
                     </div> */}
@@ -129,9 +129,9 @@ class AppNavbar extends Component{
                     <       Button style={{background:'#7a7b97',paddingLeft:' 1.5rem',paddingRight:'1.5rem'}}><b> About</b></Button>
                         </NavLink>
                 </Nav.Item>
-                <Nav.Item>
+                {/* <Nav.Item>
                     <LoginModal/>
-                </Nav.Item>
+                </Nav.Item> */}
             </Fragment>
         );
         return(

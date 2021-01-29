@@ -15,7 +15,7 @@ import Footer from './components/Footer/Footer';
 
 import AdminNavbar from './components/Navbars/AdminNavbar';
 import  Dashboard  from './components/views/Dashboard.js';
-import { Route, Switch,Redirect } from "react-router-dom";
+import { Route, Switch,Redirect ,withRouter} from "react-router-dom";
 import NotificationSystem from "react-notification-system";
 import routes from "./routes.js";
 import Test1 from './components/Test1';
@@ -24,6 +24,7 @@ import image from "./assets/images/sidebar-3.jpg";
 import { getItems } from './action/itemAction';
 import Home from './components/auth/Home';
 import back from './assets/images/back.jpg'
+import { getCategories } from './action/categoryAction';
 
 
 
@@ -44,6 +45,7 @@ class App extends Component {
       if (prop.layout === "/admin") {
         return (
           <Route
+          exact
             path={prop.layout + prop.path}
             render={props => (
               <prop.component
@@ -74,18 +76,29 @@ class App extends Component {
 
   
   componentDidMount(e){
-
+    
     store.dispatch(loadUser());
-    setTimeout(()=>{
-      if(!this.props.isAuthenticated){
-        this.props.history.push('/')
-        this.props.loginModalOpen(true);
-       }
-    },150)
+    store.dispatch(getCategories());
+    
+    if(this.props.history.action==='POP')
+    {
+        setTimeout(()=>{
+        console.log("timeout");
+        if(!this.props.isAuthenticated){
+          this.props.history.push('/')
+          this.props.loginModalOpen(true);
+        }
+      },150)
+    }
+    else if(!this.props.isAuthenticated){
+      console.log("Direct");
+      this.props.history.push('/')
+      this.props.loginModalOpen(true);
+     }
    
   }
   componentDidUpdate(e){
-
+  
     store.dispatch(loadUser());
    if(!this.props.isAuthenticated){
     this.props.history.push('/')
@@ -118,7 +131,7 @@ class App extends Component {
 
       {/* <AppNavbar isModalOpen={this.state.isModalOpen}/> */}
       <AdminNavbar
-            {...this.props}
+            {...this.props} routes={this.getRoutes(routes)}
             brandText={this.getBrandText(this.props.location.pathname)}
           />
 
@@ -154,4 +167,4 @@ class App extends Component {
   })
  }
 
-export default connect(mapStateToProps,{loginModalOpen})(App);
+export default connect(mapStateToProps,{loginModalOpen})(withRouter(App));

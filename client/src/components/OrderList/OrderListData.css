@@ -4,43 +4,28 @@
     }
 
 }
-.range-input{
-    width: 13rem;
-    display: flex;
-    padding: 5px 10px;
-    margin: 10px 0px;
-    border-radius: 20px;
-    border: 1px solid #3b44c1;
-}
-.range-input:active,.range-input:focus,.range-input:hover{
-    box-shadow: 1px 0px 0px 3px #a0a6ff;
-}
-.range-input>input{
-    color: #3b44c1;
-    font-weight: bold;
-    width: 9rem;
-    outline: none !important;
-    border: none;
-}
 .product-card-indentical:hover{
     background: #fff7eb !important;
     color: #5e66dd !important;
 }
 .asending{
+    
     width: 200px;
-    padding-left: .5rem;
+    padding:.2rem .7rem;
+    border-radius: 20px;
 }
 .desending{
     width: 200px;
-    padding-left: .5rem;
+    padding:.2rem .7rem;
+    border-radius: 20px;
 }
 .asending:hover{
-    background: rgb(231, 255, 231);
-    border-radius: 10%;
+    background: rgb(194, 255, 194);
+    border-radius: 20px;
 }
 .desending:hover{
-    background: rgb(255, 238, 238);
-    border-radius: 10%;
+    background: rgb(255, 213, 213);
+    border-radius: 20px;
 }
 .dropdown-menu[x-placement=bottom-start]{
     /* background: red; */
@@ -75,7 +60,7 @@
     background-color: #fff;
 }
 .card>button:hover{
-    background-color: #f3f3f3;
+    background-color: #fafafa;
 }
 .accordion>.card{
     margin-bottom: 0px;

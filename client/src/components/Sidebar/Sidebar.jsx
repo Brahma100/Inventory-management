@@ -71,6 +71,7 @@ class Sidebar extends Component {
                     key={key}
                   >
                     <NavLink
+                      style={{display:prop.display}}
                       to={prop.layout + prop.path}
                       className="nav-link"
                       activeClassName="active"

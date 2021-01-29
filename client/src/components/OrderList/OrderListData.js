@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Card,Container, Row, Col,Button,Media,Form,Tooltip, Accordion, DropdownButton, OverlayTrigger, Spinner } from "react-bootstrap";
+import { Card,Container, Row, Col,Button,Media,Form,Tooltip, Accordion, DropdownButton, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch,faFilter, faTimes,faEdit, faTrash, faArrowDown, faArrowLeft, faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '../CustomCheckbox/CustomCheckbox';
-import './ProductListData.css'
+import './OrderListData.css'
 import {deleteItem, deleteSelectedItem} from '../../action/itemAction'
 import { connect } from 'react-redux';
 import { propTypes } from 'react-bootstrap/esm/Image';
@@ -24,7 +24,7 @@ const styles = {
     }
   };
 
-function ProductList({products,deleteSelectedItem,deleteItem,user,isAuthenticated}) {
+function OrderList({products,deleteSelectedItem,deleteItem}) {
     var f=0;
     let deleteAllClass="not-checked"
     const [state,setState]=useState({
@@ -44,43 +44,12 @@ function ProductList({products,deleteSelectedItem,deleteItem,user,isAuthenticate
     const [chkBox,setChkBox]=useState(false)
     const [q,setQ]=useState("")
 
-    const [isNewest,setIsNewest]=useState(false);
-    const [isAscending,setIsAscending]=useState(false);
-    const [isDecending,setIsDecending]=useState(false);
-    const [minRange,setMinRange]=useState(0);
-    const [maxRange,setMaxRange]=useState(1000000);
-    
-    let newProducts=products;
-    const Range=(p)=>{
-        console.log("min:",minRange,"  max:",maxRange," num:",p.length);
-        return p.filter(product=>parseInt(product.price)>=minRange && parseInt(product.price)<=maxRange)
-    }
-    const sort=()=>{
-            console.log("Sorting Called",isAscending,isDecending);
-            // let newProducts=products;
-                // if(!isAscending && !isDecending)
-                // newProducts=products;
-             if(isAscending){
-                setIsAscending(false);
-                newProducts= products.sort((a, b) => b.price - a.price)
-            }
-            else if(isDecending){
-                setIsDecending(false);
-                newProducts=products.sort((a, b) => a.price - b.price)
-            }
-          else newProducts=products;
-    }
-    useEffect(()=>{
-            // Range();
-            sort();
-    },[isDecending,isAscending,isNewest,newProducts]);
-
-    const Search=(products)=>{    
-        return (products.filter(product=>
+    const Search=(products)=>{
+        return products.filter(product=>
                 product.name.toLowerCase().indexOf(q.toLowerCase())!==-1 || //str.includes(PATTERN)
                 // product.price.toLowerCase().indexOf(q.toLowerCase())!==-1 ||
                 product.manufacturer.toLowerCase().indexOf(q.toLowerCase())!==-1
-                ));
+                );
 
         }
 
@@ -165,6 +134,12 @@ const handleCheck= async (e,product)=> {
     
         <>
 
+
+
+
+
+
+
         <Col>
           <div className='products'>
                  <Card  className='cardpl'>
@@ -208,15 +183,13 @@ const handleCheck= async (e,product)=> {
                     <Card.Body className="filter-body" style={{width:'15rem',padding:'0rem'}}>
                         <Accordion defaultActiveKey="0">
                             <Card>
-                                <Accordion.Toggle style={{background:!open1?"#fff":'#f3f3f3'}} eventKey="0" onClick={() => setOpen1(!open1)}>
-                                    <div className="accordion-header" ><h6>Price</h6><FontAwesomeIcon style={{color:open1?"red":"#3b44c1"}} icon={open1?faChevronCircleRight:faChevronCircleDown} /></div>
+                                <Accordion.Toggle  eventKey="0" onClick={() => setOpen1(!open1)}>
+                                    <div className="accordion-header"><h6>Price</h6><FontAwesomeIcon style={{color:open1?"red":"#3b44c1"}} icon={open1?faChevronCircleRight:faChevronCircleDown} /></div>
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
-                                <Card.Body >
-                                  <div className="range-input" ><span style={{color:'gray'}}><b>Min:</b></span><input  type='number' value={minRange} onChange={(e)=>setMinRange(e.target.value)}/>
-                                  </div>
-                                  <div className="range-input"><span style={{color:'gray'}} ><b>Max:</b></span><input  type='number' value={maxRange} onChange={(e)=>setMaxRange(e.target.value)}/>
-                                </div></Card.Body>
+                                <Card.Body>
+                                   Hello
+                                </Card.Body>
                                 </Accordion.Collapse>
                             </Card>
                            
@@ -224,7 +197,7 @@ const handleCheck= async (e,product)=> {
                             <Accordion defaultActiveKey="1">
 
                             <Card>
-                            <Accordion.Toggle  style={{background:!open2?"#fff":'#f3f3f3'}} eventKey="1" onClick={()=>setOpen2(!open2)}>
+                            <Accordion.Toggle  eventKey="1" onClick={()=>setOpen2(!open2)}>
                                     <div className="accordion-header"><h6>Column</h6><FontAwesomeIcon style={{color:open2?"red":"#3b44c1"}} icon={open2?faChevronCircleRight:faChevronCircleDown}/></div>
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="1">
@@ -239,7 +212,7 @@ const handleCheck= async (e,product)=> {
                             <Accordion defaultActiveKey="2">
 
                             <Card>
-                            <Accordion.Toggle style={{background:!open3?"#fff":'#f3f3f3'}} eventKey="2" onClick={()=>setOpen3(!open3)}>
+                            <Accordion.Toggle  eventKey="2" onClick={()=>setOpen3(!open3)}>
                                     <div className="accordion-header"><h6>Brand</h6><FontAwesomeIcon style={{color:open3?"red":"#3b44c1"}} icon={open3?faChevronCircleRight:faChevronCircleDown}/></div>
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="2">
@@ -254,15 +227,14 @@ const handleCheck= async (e,product)=> {
                             <Accordion defaultActiveKey="5">
 
                             <Card>
-                            <Accordion.Toggle style={{background:open4?"#fff":'#f3f3f3'}}  eventKey="3" onClick={()=>setOpen4(!open4)}>
-                                    <div className="accordion-header"><h6>Sort By Price</h6><FontAwesomeIcon style={{color:open4?"#3b44c1":"red"}} icon={open4?faChevronCircleDown:faChevronCircleRight}/></div>
+                            <Accordion.Toggle  eventKey="3" onClick={()=>setOpen4(!open4)}>
+                                    <div className="accordion-header"><h6>Order</h6><FontAwesomeIcon style={{color:open4?"#3b44c1":"red"}} icon={open4?faChevronCircleDown:faChevronCircleRight}/></div>
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="3">
                                 <Card.Body>
                                     <div style={{display:'flex',flexDirection:'column',justifyContent:'space-around', alignItems:'center'}}>
-                                        
-                                        <div onClick={()=>{setIsAscending(!isAscending)}} className="asending" style={{marginBottom:'.6rem',display:'flex',alignItems:'center',cursor:'pointer'}}><a><FontAwesomeIcon style={{color:'#3b44c1'}} icon={faArrowAltCircleUp}/><h7>Ascending</h7></a></div>
-                                        <div onClick={()=>{setIsDecending(!isDecending)}} className="desending" style={{display:'flex',alignItems:'center',cursor:'pointer'}}><FontAwesomeIcon style={{color:'red'}} icon={faArrowAltCircleDown}/><h7>Decending</h7></div>
+                                        <div className="asending" style={{marginBottom:'.6rem',display:'flex',alignItems:'center',cursor:'pointer'}}><a><FontAwesomeIcon style={{color:'#3b44c1'}} icon={faArrowAltCircleUp}/><h7>Ascending</h7></a></div>
+                                        <div className="desending" style={{display:'flex',alignItems:'center',cursor:'pointer'}}><FontAwesomeIcon style={{color:'red'}} icon={faArrowAltCircleDown}/><h7>Decending</h7></div>
                                     </div>
                                 </Card.Body>
                                 </Accordion.Collapse>
@@ -299,19 +271,19 @@ const handleCheck= async (e,product)=> {
 
                     </Row>
                 </div>
-                 <Card.Body  className='productListBody overflow-auto custom-scrollbar-css '>
+                 <Card.Body className='productListBody overflow-auto custom-scrollbar-css '>
 
 
 
-                 
-            <p style={{display:'flex',alignItems:products.length<1?"center":"",flexDirection:'column-reverse'}}>{newProducts.length===0?<><Spinner style={{ marginTop:'4rem',width: '5rem', height: '5rem', color:'green' }} animation="grow" variant="success" /></>:Range(Search(newProducts)).map((product,id)=>(
+                 {/* to={`products/${product.id}`} */}
+            <p>{products.length!==0?Search(products).map((product,id)=>(
                 
                 <div className="product-card-indentical" style={{color:'black',display:'flex',alignItems:'center',border:'1px solid #dee2e6',margin:'.5rem'}}>
              {/* <Checkbox
              number={id}
              isChecked={false}
              /> */}
-              <div  style={{marginLeft:'1rem',marginTop:'2rem'}} className="checkBocAll">
+              <div style={{marginLeft:'1rem',marginTop:'2rem'}} className="checkBocAll">
               
                    
              <input
@@ -331,7 +303,7 @@ const handleCheck= async (e,product)=> {
                     style={{padding:'.5rem',flex:'1'}} className={styles.mediaItem}>
                            <NavLink to={{
                     pathname:`products/${product.id}`,
-                    state: {item:product,user:user} 
+                    state: {item:product}  
                   }} >
                       
                        <img
@@ -345,8 +317,8 @@ const handleCheck= async (e,product)=> {
                             
                             <Media.Body className={styles.mediaBody}>
                             <NavLink to={{
-                                    pathname:`products/${product.id}`,
-                                    state: {item:product,user:user}  
+                    pathname:`products/${product.id}`,
+                    state: {item:product}  
                   }} > <p><b>{product.name}</b></p></NavLink>
                                 <Row  className='product-row'>
                                 <Col style={{display:isManfacturer?"block":"none"}} className='product-col' xs={2}>
@@ -361,7 +333,7 @@ const handleCheck= async (e,product)=> {
                                 <Col xs={3} style={{minWidth:'10rem'}}>
                                     <div className='action-button'>
 
-                                    <EditModal1 user={user} product={product}/>
+                                    <EditModal1 product={product}/>
                                     
                                     <div>
                                         <OverlayTrigger
@@ -378,7 +350,7 @@ const handleCheck= async (e,product)=> {
                                 </Col>
                                 </Row>                              
                             </Media.Body>
-                            </Media></div> ))}
+                            </Media></div> )):null}
                            
                 </p>    
                 </Card.Body>   
@@ -391,10 +363,5 @@ const handleCheck= async (e,product)=> {
         </>
     )
 }
-const mapStateToProps=state=>{
-    return{
-        user:state.auth.user,
-        isAuthenticated:state.auth.isAuthenticated
-    }
-}
-export default connect(mapStateToProps,{deleteItem,deleteSelectedItem})(ProductList);
+
+export default connect(null,{deleteItem,deleteSelectedItem})(OrderList);

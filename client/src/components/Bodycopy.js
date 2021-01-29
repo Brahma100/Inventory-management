@@ -69,55 +69,12 @@ class Bodycopy extends Component {
       
       products=products.slice(this.state.Index1,this.state.Index2)
      
-      
-      setTimeout(()=>{  }, 3000);
+    
         return (
             <div>
             <ProductList/>
                             
-            <Body2/>
-
-              {this.props.products.length===0?<><Spinner style={{ width: '3rem', height: '3rem', color:'green' }} type="grow" /></>
-               :<>{this.props.isAuthenticated?<>
-
-
-
-
-
-                <Container style={{borderBottom:'.1rem solid #f00',borderRadius:'.5rem'}}>
-                  <Row style={{paddingBottom:'1rem',display:'flex'}}>
-                  <Col md-8><strong>Name:</strong> {this.props.user.name}</Col>
-                  <Col><strong>Email:</strong> {this.props.user.email}</Col>
-                  
-                  {/* <Col><EditModal/></Col> */}
-                  {/* <Col><E2/></Col> */}
-                  </Row>
-                  </Container>
-                 
-                  <Row >
-                
-                  {this.props.products.map(product=>(
-                    <Col m-8 key={product.id}>
-                  <Card style={{ width: '20.5rem' ,margin:'1rem'}}>
-                      <CardImg top width="100%" src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp-spacegray-select-202011?wid=1280&hei=1190&fmt=jpeg&qlt=80&.v=1603406905000" alt="Card image cap" />
-                      <CardBody>
-                                                                           
-                        <CardTitle><b>{product.name}</b></CardTitle>
-                        <CardSubtitle><b>Manufacturer:</b>{product.manufacturer}</CardSubtitle>
-                        <CardText >{ ((product.description).length > maxlimit) ? 
-    (((product.description).substring(0,maxlimit-3)) + '...') : 
-    product.description }</CardText>
-                        <EditModal1 product={product}/>
-                        <Button style={{marginLeft:'1rem'}} onClick={()=>{this.props.deleteItem(product.id)}}>Delete</Button>      
-                      </CardBody>
-                    </Card>
-                    </Col>
-                  ))}
-                  
-                </Row>
-                  </>:null} </>
-                }
-              
+            
             </div>
           );
     }

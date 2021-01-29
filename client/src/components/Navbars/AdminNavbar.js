@@ -8,7 +8,7 @@ import RegisterModal from "../auth/RegisterModal";
 import Logout from "../auth/Logout";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faDatabase, faShoppingBag, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 
 class Header extends Component {
   constructor(props) {
@@ -106,10 +106,22 @@ class Header extends Component {
           </Nav.Item>
       </ >
   );
+  const icon=()=>{
+    if(this.props.brandText==="User Profile"){
+      return faUserEdit;
+    }
+    else if(this.props.brandText==="Dashboard"){
+      return faDatabase;
+    }
+    else if(this.props.brandText==="Products"){
+      return faShoppingBag;
+    }
+  }
     return (
       <Navbar bg="dark" expand="lg" className="navbar" >
           <Navbar.Brand>
-            <a href="#pablo">{this.props.brandText}</a>
+            <div className="fontIcon-wrapper"><FontAwesomeIcon className="NavIcon-brand" icon={icon()}/></div>
+            <a href="#">{this.props.brandText}</a>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav"  onClick={this.mobileSidebarToggle} />
         <Navbar.Collapse>

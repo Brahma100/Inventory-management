@@ -10,8 +10,10 @@ const crypto= require('crypto')
 const server = jsonServer.create()
 
 const router = jsonServer.router('./products.json')
+
 const userdb = JSON.parse(fs.readFileSync('./users.json', 'UTF-8'))
 const productdb=JSON.parse(fs.readFileSync('./products.json','UTF-8'))
+const categorydb=JSON.parse(fs.readFileSync('./categories.json','UTF-8'))
 const orderdb=JSON.parse(fs.readFileSync('./orders.json','UTF-8'))
 
 server.use(bodyParser.urlencoded({extended: true}))
@@ -49,6 +51,10 @@ function CheckProduct({name}){
   console.log("Product Name:",name);
   return productdb.products.findIndex(product => product.name === name) !== -1
 }
+function CheckCategory({name}){
+  console.log("Category Name:",name);
+  return categorydb.categories.findIndex(category => category.name === name) !== -1
+}
 
 
 
@@ -73,32 +79,16 @@ server.get('/products',(req,res)=>{
 });
 });
 
-server.get('/orders',(req,res)=>{
 
-  fs.readFile("./orders.json", (err, data) => {  
-    if (err) {
-      const status = 401
-      const message = err
-      res.status(status).json({status, message})
-      return
-    };
-
-    // Get current users data
-    var data = JSON.parse(data.toString());
-    res.status(200).json(data.orders)
-    return
-
-});
-});
 
 //----------------------Add New Product-----------------------------
 
 
 
 server.post('/add_product', (req, res) => {
-  const {name,description, manufacturer,price,stock,rating} = req.body;
+  const {name,description,manufacturer,price,stock,img,CategoryName,user} = req.body;
 
-  if(!name || !description || !manufacturer || !stock || !rating || !price) return res.status(400).json({msg:'Please Enter all Fields'});
+  if(!name || !description || !manufacturer || !stock || !CategoryName || !img || !price) return res.status(400).json({msg:'Please Enter all Fields'});
   // Check for Existence of Registering Product
   if(CheckProduct({name}) === true) {  
       return res.status(400).json({msg:'Product Already Exits'});
@@ -111,12 +101,16 @@ fs.readFile("./products.json", (err, data) => {
         res.status(status).json({status, message})
         return
       };
-
+      // Date of product Creation
+      var dateTime = require('node-datetime');
+      var dt = dateTime.create();
+      var date = dt.format('Y-m-d H:M:S');
+      var rating="";
       // Get current products data
       var data = JSON.parse(data.toString());
       const id=crypto.randomBytes(12).toString('hex');
           
-                    data.products.push({id: id,name:name, description: description,manufacturer:manufacturer ,price:price,stock:stock,rating:rating}); //add some data
+                    data.products.push({id: id,name:name, description: description,manufacturer:manufacturer ,price:price,stock:stock,img:img,category:CategoryName,user:user,date:date,rank:0,rankUser:[],editUser:[]}); //add some data
                     console.log("Push Pass",data);
                     var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
@@ -135,7 +129,14 @@ fs.readFile("./products.json", (err, data) => {
                             manufacturer:manufacturer,
                             price:price,
                             stock:stock,
-                            rating:rating
+                            category:CategoryName,
+                            rating:rating,
+                            user:user,
+                            date:date,
+                            img:img,
+                            rank:0,
+                            rankUser:[],
+                            editUser:[]
                             }
               
           );
@@ -143,35 +144,60 @@ fs.readFile("./products.json", (err, data) => {
 })// End of Add Product Route
 
 
-server.post('/add_order', (req, res) => {
-  // "product_id":1,
-  //           "customer_name":"Raj",
-  //           "customer_address":"41/A hello World street pin:700K",
-  //           "by_user_id":1,
-  //           "date":"12/07/2020",
-  //           "time":"12:00 PM"
-  const {product_id,customer_name, customer_address,by_user_id} = req.body;
 
-  if(!product_id || !customer_name || !customer_address || !by_user_id) return res.status(400).json({msg:'Please Enter all Fields'});
 
-fs.readFile("./orders.json", (err, data) => {  
+
+server.get('/categories',(req,res)=>{
+
+  fs.readFile("./categories.json", (err, data) => {  
+    if (err) {
+      const status = 401
+      const message = err
+      res.status(status).json({status, message})
+      return
+    };
+
+    // Get current users data
+    var data = JSON.parse(data.toString());
+    res.status(200).json(data.categories)
+    return
+
+});
+});
+
+
+
+server.post('/add_category', (req, res) => {
+  const {name,user} = req.body;
+
+  if(!name) return res.status(400).json({msg:'Please Enter all Fields'});
+  // Check for Existence of Registering Product
+  if(CheckCategory({name}) === true) {  
+      return res.status(400).json({msg:'Category Already Exits'});
+  }
+
+fs.readFile("./categories.json", (err, data) => {  
       if (err) {
         const status = 401
         const message = err
         res.status(status).json({status, message})
         return
       };
-
-      // Get current products data
-      var data = JSON.parse(data.toString());
-      const id=crypto.randomBytes(12).toString('hex');
+      // Date of product Creation
       var dateTime = require('node-datetime');
       var dt = dateTime.create();
       var date = dt.format('Y-m-d H:M:S');
-    
-                    data.orders.push({id: id,product_id:product_id, customer_name: customer_name,customer_address:customer_address ,by_user_id:by_user_id,date:date}); //add some data
+
+      // Get current products data
+      var data = JSON.parse(data.toString());
+      
+      var id=data.categories[data.categories.length-1].id+1;
+     
+     
+          
+                    data.categories.push({id: id,name:name, user:user,date:date,products:[]}); //add some data
                     console.log("Push Pass",data);
-                    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+                    var writeData = fs.writeFile("./categories.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
                         const status = 401
                         const message = err
@@ -179,20 +205,19 @@ fs.readFile("./orders.json", (err, data) => {
                         return
                       }
                   });
-                  res.status(200).json({
+                  res.status(200).json(
                             
-                            order:{
+                            {
                             id:id,
-                            product_id:product_id,
-                            customer_name:customer_name,
-                            customer_address:customer_address,
-                            by_user_id:by_user_id,
-                            date:date
+                            name:name,
+                            user:user,
+                            date:date,
+                            products:[]
                             }
               
-          });
+          );
 }); 
-})// End of Add Product Route
+})// End of Add Categories Route
 
 
 
@@ -203,7 +228,7 @@ fs.readFile("./orders.json", (err, data) => {
 server.post("/update_product",function(req,res){  
   // req==request from client || res=== Response that would be from Server
 
-  const {id,name,description, manufacturer,price,stock,rating} = req.body;
+  const {id,name,description, manufacturer,price,stock,rating,user} = req.body;
 
   if(!name || !description || !manufacturer || !stock || !rating || !price) return res.status(400).json({msg:'Please Enter all Fields'});
   // Check for Existence of Registering User
@@ -231,6 +256,10 @@ server.post("/update_product",function(req,res){
     data.products[index].price=price;
     data.products[index].stock=stock;
     data.products[index].rating=rating;
+    data.products[index].editUser.push(user)
+
+    console.log(data.products[index].editUser,user);
+    
     // Writing Updated data to Json DB
     var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
@@ -249,7 +278,10 @@ server.post("/update_product",function(req,res){
         manufacturer:data.products[index].manufacturer,
         price:data.products[index].price,
         stock:data.products[index].stock,
-        rating:data.products[index].rating
+        rating:data.products[index].rating,
+        rank:data.products[index].rank,
+        rankUser:data.products[index].rankUser,
+        editUser:data.products[index].editUser
       }  
       })
           
@@ -258,6 +290,64 @@ server.post("/update_product",function(req,res){
 });// End of Update API
 
 
+server.post("/rank_product",function(req,res){  
+  // req==request from client || res=== Response that would be from Server
+
+  const {id,user} = req.body;
+
+  // if() return res.status(400).json({msg:'Please Enter all Fields'});
+  // Check for Existence of Registering User
+  // Finding product by Id 
+
+  const index=productdb.products.findIndex(product=>product.id===id.id);
+  // Check for Existense of Product
+  console.log("Id:",id.user);
+  if(index==-1) return res.status(400).json({msg:'Server: Product Not Exits1'});
+  // Storing target Product in "product" from db
+
+  const product=productdb.products[index];  
+  // Matching new Entries with Previous Entries
+  // if(name===product.name && description===product.description && manufacturer===product.manufacturer && price===product.price && stock===product.stock && rating===product.rating) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
+  // Reading Json DB
+  fs.readFile("./products.json", (err, data) => {  
+    if (err) {
+      return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
+    };
+
+    // Fetching Whole users data (JSON format to String)
+
+    var data = JSON.parse(data.toString());
+
+    data.products[index].rankUser.push(id.user);
+    data.products[index].rank=data.products[index].rank+1;
+    // Writing Updated data to Json DB
+    var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
+      if (err) {
+        return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
+      };
+    });// End of File Writing
+
+    // Returing Response with 200 Status and Updated Data To the Client
+
+  
+    res.status(200).json({
+      product:{
+        id:data.products[index].id,
+        name:data.products[index].name,
+        description:data.products[index].description,
+        manufacturer:data.products[index].manufacturer,
+        price:data.products[index].price,
+        stock:data.products[index].stock,
+        rating:data.products[index].rating,
+        rank:data.products[index].rank,
+        rankUser:data.products[index].rankuser,
+        editUser:data.products[index].editUser
+      }  
+      })
+          
+  }); // End of File Reading
+
+});// End of Update API
 //-------------------DELETE PRODUCT DATA----------------------------------------------
 
 
@@ -401,9 +491,9 @@ server.post('/auth/login', (req, res) => {
 
 
 server.post('/auth/register', (req, res) => {
-        const {name,email, password} = req.body;
+        const {name,email, password,img} = req.body;
 
-        if(!name || !email || !password) return res.status(400).json({msg:'Please Enter all Fields'});
+        if(!name || !email || !password ) return res.status(400).json({msg:'Please Enter all Fields'});
         // Check for Existence of Registering User
         if(CheckUser({email}) === true) {  
             return res.status(400).json({msg:'User Already Exits'});
@@ -416,7 +506,9 @@ server.post('/auth/register', (req, res) => {
               res.status(status).json({status, message})
               return
             };
-
+            var dateTime = require('node-datetime');
+            var dt = dateTime.create();
+            var date = dt.format('Y-m-d H:M:S');
             // Get current users data
             var data = JSON.parse(data.toString());
             var newPassword;
@@ -428,9 +520,10 @@ server.post('/auth/register', (req, res) => {
                         if(err) throw err;
                         newPassword=hash;
                         //Add new user
-                        console.log("New PAss",newPassword);
-                          data.users.push({id: last_item_id + 1,name:name, email: email, password: newPassword}); //add some data
-                          console.log("Push Pass",data);
+                        // console.log("New PAss",newPassword);
+                        // console.log("Img:",img);
+                          data.users.push({id: last_item_id + 1,name:name, email: email, password: newPassword,img:img,date:date}); //add some data
+                          // console.log("Push Pass",data);
                           var writeData = fs.writeFile("./users.json", JSON.stringify(data), (err, result) => {  // WRITE
                             if (err) {
                               const status = 401
@@ -451,13 +544,14 @@ server.post('/auth/register', (req, res) => {
                                   _id:last_item_id+1,
                                   name:name,
                                   email:email,
-                                  password:newPassword
+                                  password:newPassword,
+                                  img:img,
+                                  date:date
                       }})
                     });
                 });
       }); 
 })// End of Register Route
-
 
 
 
@@ -508,7 +602,8 @@ server.post("/auth/update",auth,function(req,res){
         _id:user.id,
         name:user.name,
         email:user.email,
-        password:user.password
+        password:user.password,
+        img:user.img
       }  
       })
           
@@ -543,6 +638,8 @@ server.get("/auth/user",auth, (req,res)=>{
       _id:user.id,
       name:user.name,
       email:user.email,
+      img:user.img,
+      date:user.date
       // password:user.password
     
   })
@@ -553,30 +650,112 @@ server.get("/auth/user",auth, (req,res)=>{
 
 
 
-server.use(/^(?!\/auth).*$/,  (req, res, next) => {
-  if (req.headers.authorization === undefined || req.headers.authorization.split(' ')[0] !== 'Bearer') {
-    const status = 401
-    const message = 'Error in authorization format'
-    res.status(status).json({status, message})
-    return
-  }
-  try {
-    let verifyTokenResult;
-     verifyTokenResult = verifyToken(req.headers.authorization.split(' ')[1]);
 
-     if (verifyTokenResult instanceof Error) {
-       const status = 401
-       const message = 'Access token not provided'
-       res.status(status).json({status, message})
-       return
-     }
-     next()
-  } catch (err) {
-    const status = 401
-    const message = 'Error access_token is revoked'
-    res.status(status).json({status, message})
-  }
-})
+
+
+
+
+
+
+
+
+
+server.get('/orders',(req,res)=>{
+
+  fs.readFile("./orders.json", (err, data) => {  
+    if (err) {
+      const status = 401
+      const message = err
+      res.status(status).json({status, message})
+      return
+    };
+
+    // Get current users data
+    var data = JSON.parse(data.toString());
+    res.status(200).json(data.orders)
+    return
+
+});
+});
+
+server.post('/add_order', (req, res) => {
+  // "product_id":1,
+  //           "customer_name":"Raj",
+  //           "customer_address":"41/A hello World street pin:700K",
+  //           "by_user_id":1,
+  //           "date":"12/07/2020",
+  //           "time":"12:00 PM"
+  const {product_id,customer_name, customer_address,by_user_id} = req.body;
+
+  if(!product_id || !customer_name || !customer_address || !by_user_id) return res.status(400).json({msg:'Please Enter all Fields'});
+
+fs.readFile("./orders.json", (err, data) => {  
+      if (err) {
+        const status = 401
+        const message = err
+        res.status(status).json({status, message})
+        return
+      };
+
+      // Get current products data
+      var data = JSON.parse(data.toString());
+      const id=crypto.randomBytes(12).toString('hex');
+      var dateTime = require('node-datetime');
+      var dt = dateTime.create();
+      var date = dt.format('Y-m-d H:M:S');
+    
+                    data.orders.push({id: id,product_id:product_id, customer_name: customer_name,customer_address:customer_address ,by_user_id:by_user_id,date:date}); //add some data
+                    console.log("Push Pass",data);
+                    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+                      if (err) {
+                        const status = 401
+                        const message = err
+                        res.status(status).json({status, message})
+                        return
+                      }
+                  });
+                  res.status(200).json({
+                            
+                            order:{
+                            id:id,
+                            product_id:product_id,
+                            customer_name:customer_name,
+                            customer_address:customer_address,
+                            by_user_id:by_user_id,
+                            date:date
+                            }
+              
+          });
+}); 
+})// End of Add Product Route
+
+
+
+
+// server.use(/^(?!\/auth).*$/,  (req, res, next) => {
+//   if (req.headers.authorization === undefined || req.headers.authorization.split(' ')[0] !== 'Bearer') {
+//     const status = 401
+//     const message = 'Error in authorization format'
+//     res.status(status).json({status, message})
+//     return
+//   }
+//   try {
+//     let verifyTokenResult;
+//      verifyTokenResult = verifyToken(req.headers.authorization.split(' ')[1]);
+
+//      if (verifyTokenResult instanceof Error) {
+//        const status = 401
+//        const message = 'Access token not provided'
+//        res.status(status).json({status, message})
+//        return
+//      }
+//      next()
+//   } catch (err) {
+//     const status = 401
+//     const message = 'Error access_token is revoked'
+//     res.status(status).json({status, message})
+//   }
+// })
 
 server.use(router)
 

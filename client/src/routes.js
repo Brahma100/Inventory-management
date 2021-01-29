@@ -9,18 +9,20 @@ import Dashboard from "./components/views/Dashboard";
 import Home from './components/auth/Home';
 import Bodycopy from "./components/Bodycopy";
 import UserProfile from './components/views/UserProfile'
-import { faDatabase, faHome, faLaptop, faShoppingBag, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faDatabase, faHome, faLaptop, faRupeeSign, faShoppingBag, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import Product from "./components/ProductsList/Product";
+import OrderList from "./components/OrderList/OrderList";
 
 
 const dashboardRoutes = [
-  {
-    upgrade: false,
-    path: "/",
-    name: "Home",
-    icon: faHome,
-    component: Home,
-    layout: ""
-  },
+  // {
+    
+  //   path: "/",
+  //   name: "Home",
+  //   icon: faHome,
+  //   component: Home,
+  //   layout: ""
+  // },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -42,14 +44,22 @@ const dashboardRoutes = [
     component: Bodycopy,
     layout: "/admin"
   },
-  // ,
-  // {
-  //   path: "/table",
-  //   name: "Table List",
-  //   icon: "pe-7s-note2",
-  //   component: TableList,
-  //   layout: "/admin"
-  // },
+  
+  {
+    path: "/orders",
+    name: "Orders",
+    icon: faRupeeSign,
+    component:OrderList ,
+    layout: "/admin"
+  },
+  {
+    path: "/products/:name",
+    name: "Single Product",
+    display:'none',
+    icon: faShoppingBag,
+    component:Product ,
+    layout: "/admin"
+  }
   // {
   //   path: "/typography",
   //   name: "Typography",

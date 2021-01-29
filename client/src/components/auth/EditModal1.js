@@ -3,9 +3,10 @@ import { Alert,NavLink, Button, Modal, ModalHeader, ModalBody,Form,FormGroup,Lab
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types';
-import {update,loadUser} from '../../action/authActions';
-
+import {loadUser,loginModalOpen} from '../../action/authActions';
+import back from '../../assets/images/back.jpg';
 import {clearErrors}  from '../../action/errorActions';
 
 // import e from 'express';
@@ -25,6 +26,7 @@ class EditModal extends Component{
         isUpdate:false
     };
     componentDidMount(){
+        // this.props.loadUser();
         const {name,description,manufacturer,price,stock,rating}=this.props.product;
         this.setState({name:name,description:description,manufacturer:manufacturer,price:price,stock:stock,rating:rating});
     }
@@ -60,10 +62,18 @@ class EditModal extends Component{
         // clear the error
         this.props.clearErrors();
         // to toggle the modal 
-        console.log("from Toggle-> Modal Open:: "+this.state.modal)
-        this.setState({
-            modal:!this.state.modal
-        })
+        console.log("Props",this.props);
+        if(!this.props.isAuthenticated){
+            console.log("Authen");
+            this.props.history.push('/')
+            this.props.loginModalOpen(true);
+           
+        }
+        // console.log("from Toggle-> Modal Open:: "+this.state.modal)
+        else
+            this.setState({
+                modal:!this.state.modal
+            })
     }
 
 
@@ -77,10 +87,11 @@ class EditModal extends Component{
         console.log("From Submit-> isUpdate:: "+this.props.isUpdate)
         e.preventDefault();
         const id=this.props.product.id;
-        console.log("User Id Given for Update: "+id)
+        var user=this.props.user;
+        console.log("User Id Given for Update: :",user)
         const {name,description,manufacturer,stock,price,rating}=this.state;
         const editProduct={
-            id,name,description,manufacturer,price,stock,rating
+            id,name,description,manufacturer,price,stock,rating,user
         }
         this.props.updateItem(editProduct);
         
@@ -100,7 +111,7 @@ render(){
             </Button>
 
             <Modal isOpen={this.state.modal}  >
-                <ModalHeader toggle={this.toggle}>Update</ModalHeader>
+                <ModalHeader toggle={this.toggle} style={{color:'white', backgroundImage: `url("${back}")`,backgroundSize:'32rem',backgroundRepeat:'no-repeat'}} closeButton>Update</ModalHeader>
                 <ModalBody>
     {this.state.msg?<Alert color="danger">{this.state.msg}</Alert>:null}
                     <Form onSubmit={this.onSubmit}>
@@ -168,11 +179,12 @@ render(){
 const mapStateToProps= state=>{
     return({
         isUpdate:state.auth.isUpdate,
+
         isAuthenticated:state.auth.isAuthenticated,
-        user:state.auth.user,
+        // user:state.auth.user,
         error:state.error
     })
 }
 
 
-export default connect(mapStateToProps,{getItems,updateItem,clearErrors})(EditModal);
+export default connect(mapStateToProps,{loadUser,loginModalOpen,getItems,updateItem,clearErrors})(withRouter(EditModal));

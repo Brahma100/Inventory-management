@@ -7,12 +7,14 @@ import ProductListData from './ProductListData';
 // import P2 from './P2';
 import Checkbox from "../CustomCheckbox/CustomCheckbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import NewProductModal from "./NewProductModal";
 
 
 function ProductList(props){
   // const [chkBox,setChkBox]=useState(false)
   const [products,setProducts]=useState([]);
+
   // const [q, setQ] = useState("");
 
 
@@ -29,16 +31,22 @@ function ProductList(props){
   },[props.products]);
 
 
+ 
     return (
-      
       <div className="content">
-        <Container  fluid>
+        <Container style={{marginTop:'1rem'}} fluid>
         
           <Row >
             <Col sm={12}>
             <div className='products'>
                  <Card  className='cardpt'>
-                 <Card.Header className='header'><b>Trending Products</b><p>Explore All Top Viewed Products</p></Card.Header>
+                 <Card.Header className='header'>
+                   <div  className="product-list-header">
+                      <div><b>All Products</b><p>Explore All Electronics Products</p></div>
+                      <NewProductModal/>
+                    
+                    </div>  
+                 </Card.Header>
                  {/* <Card.Body className='overflow-auto custom-scrollbar-css p-3'>
                             </Card.Body>    */}
                            
