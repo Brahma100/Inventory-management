@@ -49,7 +49,31 @@ export default function(state=initialState,action){
                 ...state,
                 itemsLoading:true,
                 itemsLoaded:false
-            }
+            };
+            case UPDATE_ITEM:
+            return{
+                ...state,
+               items:state.items.map((item)=>{
+                   if(item.id===action.payload.id){
+                       const updatedItem={
+                           ...item,
+                           name:action.payload.name,
+                           description:action.payload.description,
+                           manufacturer:action.payload.manufacturer,
+                           price:action.payload.price,
+                           stock:action.payload.stock,
+                           rating:action.payload.rating,
+                           editUser:item.editUser.push(action.payload.user),
+                       }
+                       return updatedItem;
+                   }
+                   return item;
+               }),
+               itemsLoading:false,
+                itemsLoaded:true
+               
+
+            }; 
         default:
             return state;
     }

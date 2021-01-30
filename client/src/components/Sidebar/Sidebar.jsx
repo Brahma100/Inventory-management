@@ -5,6 +5,7 @@ import AdminNavbarLinks from "../Navbars/AdminNavbarLinks";
 
 import logo from "../../assets/images/logo.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Navbar } from "react-bootstrap";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -39,22 +40,8 @@ class Sidebar extends Component {
           ) : (
             null
           )}
-        <div className="logo">
-          <a
-            href="#"
-            className="simple-text logo-mini"
-          >
-            <div className="logo-img">
-              <img src={logo} alt="logo_image" />
-            </div>
-          </a>
-          <a
-            href="/"
-            className="simple-text logo-normal"
-          >
-            ShopperZ
-          </a>
-        </div>
+         <Navbar.Brand href="/"><div className="nav-brand1"><img className="nav-logo1" src={logo}/><div className="brand-text1"><span>inventory</span><b>ShopperZ</b></div></div></Navbar.Brand>
+       
         <div className="sidebar-wrapper">
           <ul className="nav">
             {this.state.width <= 991 ? <AdminNavbarLinks /> : null}

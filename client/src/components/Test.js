@@ -180,7 +180,8 @@ elf, you'll want to disable the CSS animation. */
 
 
                                         styles={buildStyles({ pathTransition: "none",pathColor: "rgba(255,255,255,.95)", trailColor: "rgba(255,255,255,.1)" })}
-                                        > <div className="text-white d-40 rounded-circle btn-icon">
+                                        >
+                                             <div className="text-white d-40 rounded-circle btn-icon">
                                         <FontAwesomeIcon icon={faCommentDollar} className="font-size-lg icon1 " />
                                     </div>
                                     </CircularProgressbarWithChildren>

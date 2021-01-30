@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import ChartistGraph from "react-chartist";
-import { Container, Row, Col,Button,Media,Form,Tooltip } from "react-bootstrap";
-// import  Card  from "../Card/Card.js";
+import { Container, Row, Col} from "react-bootstrap";
 import './Home.css'
 import {Card} from 'react-bootstrap';   
-import  StatsCard  from "../StatsCard/StatsCard.js";
-import  Tasks  from "../Tasks/Tasks.js";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes,faEdit } from '@fortawesome/free-solid-svg-icons';
+
 import banner from '../../assets/images/Banner.png'
 import back from '../../assets/images/back.jpg'
 import AppNavbar from "../AppNavbar";
 import Home1 from '../Home/Home1'
-import { NavLink, withRouter, Redirect } from 'react-router-dom';
+import { NavLink, withRouter} from 'react-router-dom';
 import { loginModalOpen,loadUser } from './../../action/authActions';
 import { connect } from 'react-redux';
 import ApexChart from '../Home/ApexChart'
@@ -32,6 +28,14 @@ const styles = {
 class Home extends Component {
 
 componentDidMount(e){
+  var myobj = document.getElementById("bodyClick");
+  if(myobj!==null){
+  document.documentElement.classList.toggle("nav-open");
+  console.log("Body Click Removed");
+  myobj.remove();
+
+}
+
 this.props.loadUser();
  if(this.props.isAuthenticated){
   //  <Redirect from='/' to='/admin/dashboard' />

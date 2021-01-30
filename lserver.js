@@ -222,7 +222,7 @@ fs.readFile("./categories.json", (err, data) => {
 
 
 
-//----------------------------UPDATE USER DATA------------------------------------
+//----------------------------UPDATE PRODUCT DATA------------------------------------
 
   
 server.post("/update_product",function(req,res){  
@@ -293,7 +293,7 @@ server.post("/update_product",function(req,res){
 server.post("/rank_product",function(req,res){  
   // req==request from client || res=== Response that would be from Server
 
-  const {id,user} = req.body;
+  const {id} = req.body;
 
   // if() return res.status(400).json({msg:'Please Enter all Fields'});
   // Check for Existence of Registering User
@@ -301,7 +301,7 @@ server.post("/rank_product",function(req,res){
 
   const index=productdb.products.findIndex(product=>product.id===id.id);
   // Check for Existense of Product
-  console.log("Id:",id.user);
+  // console.log("Id:",id.user);
   if(index==-1) return res.status(400).json({msg:'Server: Product Not Exits1'});
   // Storing target Product in "product" from db
 
@@ -318,7 +318,7 @@ server.post("/rank_product",function(req,res){
 
     var data = JSON.parse(data.toString());
 
-    data.products[index].rankUser.push(id.user);
+    // data.products[index].rankUser.push(id.user);
     data.products[index].rank=data.products[index].rank+1;
     // Writing Updated data to Json DB
     var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
@@ -476,6 +476,7 @@ server.post('/auth/login', (req, res) => {
         _id:user.id,
         name:user.name,
         email:user.email,
+        img:user.img,
         password:user.password
     }  
     })

@@ -18,9 +18,9 @@ const Product=(props)=>{
 
   useEffect(()=>{
 //       if(parseInt(localStorage.getItem(history.location.state.item.id))!==parseInt(history.location.state.user._id)){
-        console.log("User1",history.location.state.user._id,localStorage.getItem(history.location.state.item.id));
+        // console.log("User1",history.location.state.user._id,localStorage.getItem(history.location.state.item.id));
 //         localStorage.setItem(history.location.state.item.id,history.location.state.user._id);
-        props.rankItem({id:history.location.state.item.id,user:history.location.state.user});
+        props.rankItem({id:history.location.state.item.id});
 //     }
     
   },[]);

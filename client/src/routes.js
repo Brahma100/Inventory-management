@@ -11,7 +11,7 @@ import Bodycopy from "./components/Bodycopy";
 import UserProfile from './components/views/UserProfile'
 import { faDatabase, faHome, faLaptop, faRupeeSign, faShoppingBag, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import Product from "./components/ProductsList/Product";
-import OrderList from "./components/OrderList/OrderList";
+
 
 
 const dashboardRoutes = [
@@ -45,13 +45,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   
-  {
-    path: "/orders",
-    name: "Orders",
-    icon: faRupeeSign,
-    component:OrderList ,
-    layout: "/admin"
-  },
+
   {
     path: "/products/:name",
     name: "Single Product",

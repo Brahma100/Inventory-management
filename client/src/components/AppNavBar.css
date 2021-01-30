@@ -1,9 +1,16 @@
+/* .navbar .navbar-light>.container{
+    display: flex;
+    width: 1000px;
+    justify-content: space-around;
+} */
 .navbar{
     padding: 0;
 }
 .brand-text{
     display: grid;
-    
+}
+.brand-text1{
+    color: #ec8129;
 }
 .brand-text>span{
     display: block;
@@ -13,7 +20,21 @@
     padding: 4px 0 0 0;
     color: #070919;
 }
+.brand-text1>span{
+    font-weight: bold;
+    display: block;
+    text-transform: uppercase;
+    font-size: .62917rem;
+    opacity: .7;
+    padding: 4px 0 0 0;
+    color: white;
+}
 .brand-text>b{
+    font-size: 1rem;
+    font-weight: 600;
+    /* text-transform: lowercase; */
+}
+.brand-text1>b{
     font-size: 1rem;
     font-weight: 600;
     /* text-transform: lowercase; */
@@ -21,8 +42,19 @@
 .brand-text>b:hover{
     color: #ec8129;
 }
+.brand-text1>b:hover{
+    color: #ffffff;
+}
 .nav-brand{
+
     display: flex;
+}
+.nav-brand1{
+    margin-left: 20px;
+    margin-top: 10px;
+    z-index: 10;
+    display: flex;
+    /* border-bottom: 1px solid white; */
 }
 .nav-logo{
     border: 1px solid black;
@@ -35,6 +67,19 @@
     align-items: center;
     align-content: center;
     box-shadow: 1px 1px 3px rgba(7,9,25,.2);
+
+}
+.nav-logo1{
+    border: 1px solid orange;
+    margin-right: 8px;
+    border-radius: .29rem;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    box-shadow: 1px 1px 3px rgb(247, 247, 255);
 
 }
 /* to make admin navbar active backgroung transparent */
@@ -61,7 +106,7 @@ background: transparent;
  
 }
 .dropdown-list-item:hover{
-    color: #0067f4;
+    color: #3b44c1;
     border-radius: 30px;
     padding:6px 15px;
     width: 170px;

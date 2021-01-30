@@ -11,6 +11,9 @@ html,body{
   overflow-x: hidden;
 } */
 /* close button of modal */
+.dropdown-toggle::after {
+  margin: 19px 0px 10px 7px;
+}
 .close,.close:hover{
   color: white;
 }

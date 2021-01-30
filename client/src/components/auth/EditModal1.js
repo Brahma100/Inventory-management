@@ -96,7 +96,7 @@ class EditModal extends Component{
         this.props.updateItem(editProduct);
         
         this.toggle();
-        this.props.getItems();
+        // this.props.getItems();
         // this.props.addItem(newItem);
    
         

@@ -64,7 +64,7 @@ class AppNavbar extends Component{
     render(){
         const {isAuthenticated, user}=this.props.auth;
        
-        // console.log("from Nav:",user?user.img:'Hello');
+        console.log("from Nav:",user?user:'Hello');
         const authLinks=(
             <Fragment >
                 {/* <Nav.Item>About</Nav.Item> */}
@@ -73,12 +73,12 @@ class AppNavbar extends Component{
                 <Dropdown className="user-dropdown" style={{padding:'0rem !important'}} isOpen={this.state.dropdownOpen} toggle={this.toggled}>
                     
                     <Dropdown.Toggle id="dropdown-basic" caret>
-                    {user? <div className="user-avatar">
-                    <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
-                    <div class="status-overlay">
-                        <i class="bowtie-icon bowtie-status-success success"></i>
-                    </div>
-                    </div>:'X'}
+                        {user? <div className="user-avatar">
+                        <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
+                        <div class="status-overlay">
+                            <i class="bowtie-icon bowtie-status-success success"></i>
+                        </div>
+                        </div>:'X'}
                     <div>
                         <span style={{color:'red',fontWeight:400,fontSize:'80%'}}>Shop Admin</span>
                         <div style={{color:'#3b3e66'}}>{user? user.name:'Hello Guest'}</div>

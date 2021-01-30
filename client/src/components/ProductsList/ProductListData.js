@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Card,Container, Row, Col,Button,Media,Form,Tooltip, Accordion, DropdownButton, OverlayTrigger, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch,faFilter, faTimes,faEdit, faTrash, faArrowDown, faArrowLeft, faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { faSearch,faFilter, faTimes,faEdit, faTrash, faArrowDown, faArrowLeft, faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown, faStar } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '../CustomCheckbox/CustomCheckbox';
 import './ProductListData.css'
 import {deleteItem, deleteSelectedItem} from '../../action/itemAction'
@@ -10,6 +10,9 @@ import { propTypes } from 'react-bootstrap/esm/Image';
 import EditModal1 from '../auth/EditModal1';
 import Price_Slider from '../Slider/Price_Slider';
 import {NavLink} from 'react-router-dom'
+import CountUp from 'react-countup';
+
+
 
 const styles = {
     mediaItem: {
@@ -76,11 +79,13 @@ function ProductList({products,deleteSelectedItem,deleteItem,user,isAuthenticate
     },[isDecending,isAscending,isNewest,newProducts]);
 
     const Search=(products)=>{    
-        return (products.filter(product=>
-                product.name.toLowerCase().indexOf(q.toLowerCase())!==-1 || //str.includes(PATTERN)
+    
+        return (products.length>0?products.filter(product=>
+
+               product?product.name.toLowerCase().indexOf(q.toLowerCase())!==-1 || //str.includes(PATTERN)
                 // product.price.toLowerCase().indexOf(q.toLowerCase())!==-1 ||
                 product.manufacturer.toLowerCase().indexOf(q.toLowerCase())!==-1
-                ));
+                :''):'');
 
         }
 
@@ -225,7 +230,7 @@ const handleCheck= async (e,product)=> {
 
                             <Card>
                             <Accordion.Toggle  style={{background:!open2?"#fff":'#f3f3f3'}} eventKey="1" onClick={()=>setOpen2(!open2)}>
-                                    <div className="accordion-header"><h6>Column</h6><FontAwesomeIcon style={{color:open2?"red":"#3b44c1"}} icon={open2?faChevronCircleRight:faChevronCircleDown}/></div>
+                                    <div className="accordion-header"><h6>Customize Columns</h6><FontAwesomeIcon style={{color:open2?"red":"#3b44c1"}} icon={open2?faChevronCircleRight:faChevronCircleDown}/></div>
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="1">
                                 <Card.Body>
@@ -236,21 +241,7 @@ const handleCheck= async (e,product)=> {
                                 </Accordion.Collapse>
                             </Card>
                             </Accordion>
-                            <Accordion defaultActiveKey="2">
-
-                            <Card>
-                            <Accordion.Toggle style={{background:!open3?"#fff":'#f3f3f3'}} eventKey="2" onClick={()=>setOpen3(!open3)}>
-                                    <div className="accordion-header"><h6>Brand</h6><FontAwesomeIcon style={{color:open3?"red":"#3b44c1"}} icon={open3?faChevronCircleRight:faChevronCircleDown}/></div>
-                                </Accordion.Toggle>
-                                <Accordion.Collapse eventKey="2">
-                                <Card.Body>
-                                    <Row><Col style={{display:'flex',paddingBottom:'.3rem'}} sm={6}><input style={{marginRight:'.3rem'}} type="checkbox"/><h6>Samsung</h6></Col><Col style={{display:'flex',paddingBottom:'.3rem'}} sm={6}><input style={{marginRight:'.3rem'}} type="checkbox"/><h6>Motorola</h6></Col></Row>
-                                    <Row><Col style={{display:'flex',paddingBottom:'.3rem'}} sm={6}><input style={{marginRight:'.3rem'}} type="checkbox"/><h6>Apple</h6></Col><Col style={{display:'flex',paddingBottom:'.3rem'}} sm={6}><input style={{marginRight:'.3rem'}} type="checkbox"/><h6>Nokia</h6></Col></Row>
-                                    <Row><Col style={{display:'flex',paddingBottom:'.3rem'}} sm={6}><input style={{marginRight:'.3rem'}} type="checkbox"/><h6>Google</h6></Col><Col style={{display:'flex',paddingBottom:'.3rem'}} sm={6}><input style={{marginRight:'.3rem'}} type="checkbox"/><h6>JBL</h6></Col></Row>
-                                </Card.Body>
-                                </Accordion.Collapse>
-                            </Card>
-                            </Accordion>
+                           
                             <Accordion defaultActiveKey="5">
 
                             <Card>
@@ -277,16 +268,9 @@ const handleCheck= async (e,product)=> {
          </Row>    
                                 </DropdownButton>
                           </div>
-                          {/* <FontAwesomeIcon icon={f}/> */}
+                         
                    </div>
-                   {/* <Row style={{width:'93%'}}>
-                      
-                       <Col sm={1}></Col>
-                       <Col sm={2}>Manufac..</Col>
-                       <Col sm={2}>Manufac..</Col>
-                       <Col sm={2}>Manufac..</Col>
-                       <Col sm={2}></Col>
-                   </Row> */}
+                  
                   </Card.Header>
                   <div className="title" style={{height:'2rem',marginLeft:'11rem'}}>
                     <Row style={{padding:'.5rem 0',fontWeight:'bold',color:'#3b44c1'}}>
@@ -307,10 +291,7 @@ const handleCheck= async (e,product)=> {
             <p style={{display:'flex',alignItems:products.length<1?"center":"",flexDirection:'column-reverse'}}>{newProducts.length===0?<><Spinner style={{ marginTop:'4rem',width: '5rem', height: '5rem', color:'green' }} animation="grow" variant="success" /></>:Range(Search(newProducts)).map((product,id)=>(
                 
                 <div className="product-card-indentical" style={{color:'black',display:'flex',alignItems:'center',border:'1px solid #dee2e6',margin:'.5rem'}}>
-             {/* <Checkbox
-             number={id}
-             isChecked={false}
-             /> */}
+             
               <div  style={{marginLeft:'1rem',marginTop:'2rem'}} className="checkBocAll">
               
                    
@@ -331,7 +312,7 @@ const handleCheck= async (e,product)=> {
                     style={{padding:'.5rem',flex:'1'}} className={styles.mediaItem}>
                            <NavLink to={{
                     pathname:`products/${product.id}`,
-                    state: {item:product,user:user} 
+                    state: {item:product} 
                   }} >
                       
                        <img
@@ -346,17 +327,33 @@ const handleCheck= async (e,product)=> {
                             <Media.Body className={styles.mediaBody}>
                             <NavLink to={{
                                     pathname:`products/${product.id}`,
-                                    state: {item:product,user:user}  
+                                    state: {item:product}  
                   }} > <p><b>{product.name}</b></p></NavLink>
                                 <Row  className='product-row'>
                                 <Col style={{display:isManfacturer?"block":"none"}} className='product-col' xs={2}>
-                                    <strong>By:</strong>{product.manufacturer}
+                                    <span className="inside-label"><strong>By:</strong></span>{product.manufacturer}
                                 </Col>
-                                <Col style={{display:isRating?"block":"none"}} className='product-col' xs={1}><b>4.5</b>/5</Col>
+                                <Col style={{display:isRating?"block":"none"}} className='product-col' xs={1}><b><p style={{width:'2.7rem',margin:'0 0 0 .5rem',borderRadius:'5px',background:'green',color:'white',padding:'.1rem .3rem',fontSize:'12px'}}>{product.rating?product.rating:"4.5"} <FontAwesomeIcon  icon={faStar}/></p></b></Col>
                                 <Col style={{display:isPrice?"block":"none"}} className='product-col' xs={1}>
-                                    <strong>₹{product.price}</strong>
+                                    <strong>₹<CountUp
+                                        start={0}
+                                        end={product.price}
+                                        duration={2}
+                                        delay={0}
+                                        separator=""
+                                        decimals={0}
+                                        decimal=","
+                                    /></strong>
                                 </Col>
-                                <Col style={{display:isStock?"block":"none"}} className='product-col' xs={2}><strong>Stock</strong>{product.stock}</Col>
+                                <Col style={{display:isStock?"block":"none"}} className='product-col' xs={2}><span className="inside-label"><strong>Stock:</strong></span><span style={{color:product.stock>=10?'#1bc943':'#f83245',borderRadius:'5px',border:product.stock>=10?'1px solid #1bc943':' 1px solid #f83245',background:product.stock>=10?'#e5f9ed':'#fff5f6',padding:'.0rem .3rem'}}><b><CountUp
+                                        start={0}
+                                        end={product.stock}
+                                        duration={3}
+                                        delay={0}
+                                        separator=""
+                                        decimals={0}
+                                        decimal=","
+                                    /></b></span></Col>
                                 
                                 <Col xs={3} style={{minWidth:'10rem'}}>
                                     <div className='action-button'>

@@ -294,7 +294,7 @@ console.log("Id:",event.target.id);
                   <Card className="product-card" style={{ width:'19rem',margin:'1rem'}}>
                       <NavLink  to={{
                     pathname:`admin/products/${product.id}`,
-                    state: {item:product,user:this.props.user?this.props.user:''}}}
+                    state: {item:product}}}
                     ><Card.Img top style={{marginLeft:'5.3rem',marginTop:'1rem',width:'8rem'}} src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp-spacegray-select-202011?wid=1280&hei=1190&fmt=jpeg&qlt=80&.v=1603406905000" alt="Card image cap" />
                       <Card.Body style={{display:'flex',flexDirection:'column',paddingLeft:'3rem',maxWidth:'30rem'}}>
                                                                            
@@ -315,7 +315,7 @@ console.log("Id:",event.target.id);
                             {/* <Row style={{display:'flex',fontSize:'12px'}}>
                             </Row> */}
                             <Row style={{fontSize:"12px",paddingBottom:'.2rem'}}>
-                               <div style={{display:this.state.isStock?'flex':'none'}}> <h7 style={{color:'gray',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faShoppingBag}/><b style={{marginRight:'.2rem'}}>Available Stock:</b></h7><span style={{color:product.stock>=10?'#1bc943':'#f83245',borderRadius:'10px',border:product.stock>=10?'1px solid #1bc943':' 1px solid #f83245',background:product.stock>=10?'#e5f9ed':'#fff5f6',padding:'.0rem .3rem'}}><b>{product.stock}</b></span>
+                               <div style={{display:this.state.isStock?'flex':'none'}}> <h7 style={{color:'gray',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faShoppingBag}/><b style={{marginRight:'.2rem'}}>Available Stock:</b></h7><span style={{color:product.stock>=10?'#1bc943':'#f83245',borderRadius:'5px',border:product.stock>=10?'1px solid #1bc943':' 1px solid #f83245',background:product.stock>=10?'#e5f9ed':'#fff5f6',padding:'.0rem .3rem'}}><b>{product.stock}</b></span>
                             </div></Row>
                             <Row style={{fontSize:"12px",paddingBottom:'.2rem'}}>
                                <div style={{display:this.state.isManufacturer?'flex':'none'}}> <h7 style={{color:'gray',display:'flex',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faUser}/><b style={{marginRight:'.2rem'}}>Added By:</b></h7><span><b>{product.user?product.user.name:null}</b></span>

@@ -14,18 +14,10 @@ import Sidebar from './components/Sidebar/Sidebar';
 import Footer from './components/Footer/Footer';
 
 import AdminNavbar from './components/Navbars/AdminNavbar';
-import  Dashboard  from './components/views/Dashboard.js';
 import { Route, Switch,Redirect ,withRouter} from "react-router-dom";
-import NotificationSystem from "react-notification-system";
 import routes from "./routes.js";
-import Test1 from './components/Test1';
-import { style } from "./components/Variables/Variables";
 import image from "./assets/images/sidebar-3.jpg";
-import { getItems } from './action/itemAction';
-import Home from './components/auth/Home';
-import back from './assets/images/back.jpg'
 import { getCategories } from './action/categoryAction';
-
 
 
 class App extends Component {
@@ -108,55 +100,22 @@ class App extends Component {
 
   render(){
     return (
-
-    
       <div className="wrapper">
               <Sidebar {...this.props} routes={routes} image={this.state.image}
-        color={this.state.color}
-        hasImage={this.state.hasImage}/>
-        <div id="main-panel" className="main-panel" ref="mainPanel">
-      {/* <div className="wrapper">
-        <NotificationSystem ref="notificationSystem" style={style} />
-        
-        <Sidebar {...this.props} routes={routes} image={this.state.image}
-        color={this.state.color}
-        hasImage={this.state.hasImage}/>
+                    color={this.state.color}
+                    hasImage={this.state.hasImage}/>
+            <div id="main-panel" className="main-panel" ref="mainPanel">  
+                <AdminNavbar
+                      {...this.props} routes={this.getRoutes(routes)}
+                      brandText={this.getBrandText(this.props.location.pathname)}
+                    />
 
-        <div id="main-panel" className="main-panel" ref="mainPanel">
-        
-          
-          <Switch>{this.getRoutes(routes)}</Switch>
-        </div>
-      </div> */}
+                      
+                <Switch>{this.getRoutes(routes)}</Switch>
+                <Container>
 
-      {/* <AppNavbar isModalOpen={this.state.isModalOpen}/> */}
-      <AdminNavbar
-            {...this.props} routes={this.getRoutes(routes)}
-            brandText={this.getBrandText(this.props.location.pathname)}
-          />
-
-            
-            <Switch>{this.getRoutes(routes)}</Switch>
-            <Container>
-
-            {/* {store.getState().auth.isLoaded?<>{store.getState().auth.isAuthenticated ?<Dashboard/>:<Spinner style={{ width: '3rem', height: '3rem', color:'green' }} type="grow" />}</>
-               :<Home/>
-               } */}
-            </Container>
-            {/* <Container>
-              <Bodycopy isModalOpen={this.state.isModalOpen}/>
-            </Container> */}
-            {/* <Container>
-              <Test1/>
-            </Container>
-            <Container>
-           
-              <Dashboard/>
-              
-            </Container> */}
-
-          
-          </div>
+                </Container>          
+             </div>
          
       </div>
     );  

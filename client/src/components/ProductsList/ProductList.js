@@ -3,12 +3,14 @@ import './ProductList.css'
 import { Card,Container, Row, Col,Button,Media,Form,Tooltip } from "react-bootstrap";
 import {connect} from 'react-redux';
 import { getItems } from './../../action/itemAction';
-import ProductListData from './ProductListData';
 // import P2 from './P2';
 import Checkbox from "../CustomCheckbox/CustomCheckbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import NewProductModal from "./NewProductModal";
+import { Suspense, lazy } from 'react';
+const ProductListData = React.lazy(() => import('./ProductListData'));
+// import ProductListData from './ProductListData';
 
 
 function ProductList(props){
@@ -60,8 +62,10 @@ function ProductList(props){
           <Row >
             
           
-
+          <Suspense fallback={<h1>Still Loading…</h1>}>
+     
                       <ProductListData products={products}/>
+          </Suspense>
             
                  
              

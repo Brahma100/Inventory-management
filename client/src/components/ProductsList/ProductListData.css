@@ -4,6 +4,12 @@
     }
 
 }
+@media(min-width:824px){
+    .inside-label{
+        display: none;
+    }
+
+}
 .range-input{
     width: 13rem;
     display: flex;
