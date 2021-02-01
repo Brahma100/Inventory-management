@@ -11,6 +11,7 @@ import {clearErrors}  from '../../action/errorActions';
 
 // import e from 'express';
 import { getItems,updateItem } from '../../action/itemAction';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class EditModal extends Component{
     
@@ -106,10 +107,14 @@ render(){
     const {name,description,manufacturer,price,stock,rating}=this.props.product;
     return(
         <>
+            <OverlayTrigger        
+                        placement="bottom"
+                    overlay={<Tooltip id="button-tooltip-2">Edit Product</Tooltip>}>
+           
             <Button onClick={this.toggle} variant="primary" size="sm">
                     <FontAwesomeIcon icon={faEdit}/>
             </Button>
-
+            </OverlayTrigger>
             <Modal isOpen={this.state.modal}  >
                 <ModalHeader toggle={this.toggle} style={{color:'white', backgroundImage: `url("${back}")`,backgroundSize:'32rem',backgroundRepeat:'no-repeat'}} closeButton>Update</ModalHeader>
                 <ModalBody>

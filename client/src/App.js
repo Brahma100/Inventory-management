@@ -18,7 +18,7 @@ import { Route, Switch,Redirect ,withRouter} from "react-router-dom";
 import routes from "./routes.js";
 import image from "./assets/images/sidebar-3.jpg";
 import { getCategories } from './action/categoryAction';
-
+import { AnimatedSwitch } from 'react-router-transition';
 
 class App extends Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class App extends Component {
     
     store.dispatch(loadUser());
     store.dispatch(getCategories());
-    
+    console.log("Action:",this.props.history);
     if(this.props.history.action==='POP')
     {
         setTimeout(()=>{
@@ -93,6 +93,7 @@ class App extends Component {
   
     store.dispatch(loadUser());
    if(!this.props.isAuthenticated){
+     console.log("update Component");
     this.props.history.push('/')
     this.props.loginModalOpen(true);
    }
@@ -109,9 +110,9 @@ class App extends Component {
                       {...this.props} routes={this.getRoutes(routes)}
                       brandText={this.getBrandText(this.props.location.pathname)}
                     />
-
+  
                       
-                <Switch>{this.getRoutes(routes)}</Switch>
+                <Switch>{this.getRoutes(routes)}</Switch>   
                 <Container>
 
                 </Container>          

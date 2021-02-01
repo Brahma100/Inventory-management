@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Light Bootstrap Dashboard React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { Component } from "react";
 
 export class UserCard extends Component {
@@ -39,7 +23,23 @@ export class UserCard extends Component {
               </h4>
             </a>
           </div>
-          <p className="description text-center">{this.props.description}</p>
+          <div style={{display:'flex',marginTop:'2.5rem'}}>
+          <div style={{display:'flex',alignItems:'center',width:'90%',marginLeft:'1rem'}}>
+            <h7 style={{marginRight:'.5rem', fontWeight:'bold',color:'#3b44c1'}}>City:</h7><span>{this.props.city}</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',width:'90%',marginLeft:'1rem'}}>
+            <h7 style={{marginRight:'.5rem', fontWeight:'bold',color:'#3b44c1'}}>State:</h7><span>{this.props.state}</span>
+          </div>
+          </div>
+          <div style={{display:'flex'}}>
+          <div style={{display:'flex',alignItems:'center',width:'90%',marginLeft:'1rem'}}>
+            <h7 style={{marginRight:'.5rem', fontWeight:'bold',color:'#3b44c1'}}>Zip Code:</h7><span>{this.props.postal}</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',width:'90%',marginLeft:'1rem'}}>
+            <h7 style={{marginRight:'.5rem', fontWeight:'bold',color:'#3b44c1'}}>Country:</h7><span>{this.props.country}</span>
+          </div>
+          </div>
+          {/* <p className="description text-center">{this.props.description}</p> */}
         </div>
         <hr />
         <div className="text-center">{this.props.socials}</div>

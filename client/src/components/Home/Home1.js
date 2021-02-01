@@ -57,7 +57,7 @@ class Home1 extends Component {
             <Col md={6} >
                 <Card className="intro_card">
                     <div className="text-black mt-3 card-content">
-                        <h1 className=" mb-3 font-weight-bold">Bamburgh React Commerce Application with Reactstrap PRO</h1>
+                        <h1 className=" mb-3 font-weight-bold">A magical and revolutionary device at an unbelievable price</h1>
                         <p>Fully coded, perfectly responsive on all screen sizes. Start working on your project today!</p><p className="font-size-lg text-black-50">Use this individual application for a head start in building a product that is related to the commerce niche. This template comes with pre-built pages for orders, customers and various sales releated analytics.</p>
                         <div className="divider border-2 border-dark my-4 border-light opacity-2 rounded-circle w-25"></div>
                             <div>

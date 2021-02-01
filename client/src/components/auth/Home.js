@@ -3,15 +3,16 @@ import ChartistGraph from "react-chartist";
 import { Container, Row, Col} from "react-bootstrap";
 import './Home.css'
 import {Card} from 'react-bootstrap';   
-
+import NotificationSystem from 'react-notification-system';
 import banner from '../../assets/images/Banner.png'
 import back from '../../assets/images/back.jpg'
 import AppNavbar from "../AppNavbar";
 import Home1 from '../Home/Home1'
-import { NavLink, withRouter} from 'react-router-dom';
+import {Prompt, NavLink, withRouter} from 'react-router-dom';
 import { loginModalOpen,loadUser } from './../../action/authActions';
 import { connect } from 'react-redux';
-import ApexChart from '../Home/ApexChart'
+import ApexChart from '../Home/ApexChart';
+
 
 const styles = {
     mediaItem: {
@@ -27,11 +28,30 @@ const styles = {
 
 class Home extends Component {
 
+notificationSystem = React.createRef();
+addNotification = event => {
+  // event.preventDefault();
+  const notification = this.notificationSystem.current;
+  notification.addNotification({
+    message: 'Welcome To ShopperZ Inventory Management System',
+    level: 'success',
+    autoDismiss:5
+  });
+};
+
 componentDidMount(e){
+  this.addNotification();
+  console.log("History:",this.props.history);
+    if(this.props.isBlocked){
+          let authenticate = window.confirm("Are You Sure Want To Go ",this.props.history.pathname)
+          if(!authenticate){
+                  this.props.history.push(this.props.history.pathname)
+          }
+    }
+
   var myobj = document.getElementById("bodyClick");
   if(myobj!==null){
   document.documentElement.classList.toggle("nav-open");
-  console.log("Body Click Removed");
   myobj.remove();
 
 }
@@ -47,8 +67,13 @@ this.props.loadUser();
   render() {
     return (
       <div>
+         <NotificationSystem ref={this.notificationSystem} />
         <div className="App" style={{ backgroundImage: `url("${back}")`,backgroundRepeat:'no-repeat'}} >
             <AppNavbar/>
+            <Prompt
+                when={this.props.isBlocked}
+                message={(location)=> `Are You Sure Want To Leave ${location.pathname}`}
+/>
             <Container>
           <div className="content" >
             <Container fluid>
@@ -98,6 +123,7 @@ this.props.loadUser();
 }
 const mapStateToProps=state=>{
   return({
+    isBlocked:state.auth.isBlocked,
     isAuthenticated:state.auth.isAuthenticated
   })
 }

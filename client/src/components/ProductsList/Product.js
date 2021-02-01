@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Accordion, Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { NavLink,useHistory,useParams } from 'react-router-dom';
-import {getItems} from '../../action/itemAction'
 import './Product.css';
 import defaultPro from '../../assets/images/default-pro.jpg';
 import {loginModalOpen,loadUser} from '../../action/authActions';
@@ -16,14 +15,7 @@ const Product=(props)=>{
     const [product,setItem]=useState({});
 
 
-  useEffect(()=>{
-//       if(parseInt(localStorage.getItem(history.location.state.item.id))!==parseInt(history.location.state.user._id)){
-        // console.log("User1",history.location.state.user._id,localStorage.getItem(history.location.state.item.id));
-//         localStorage.setItem(history.location.state.item.id,history.location.state.user._id);
-        props.rankItem({id:history.location.state.item.id});
-//     }
-    
-  },[]);
+ 
 
     useEffect(()=>{
         props.loadUser();
@@ -35,10 +27,18 @@ const Product=(props)=>{
            else{
         setItem(history.location.state.item);
         console.log("Items",history.location.state.item);
-        console.log("User",history.location.state.user);
+        // console.log("User",history.location.state.user);
+        props.rankItem({id:history.location.state.item.id});
     }
     },[history,props.isAuthenticated]);
-
+    // useEffect(()=>{
+    //     //       if(parseInt(localStorage.getItem(history.location.state.item.id))!==parseInt(history.location.state.user._id)){
+    //             // console.log("User1",history.location.state.user._id,localStorage.getItem(history.location.state.item.id));
+    //     //         localStorage.setItem(history.location.state.item.id,history.location.state.user._id);
+               
+    //     //     }
+            
+    //       },[]);
     return(
      <>
         <div>
@@ -81,7 +81,7 @@ const Product=(props)=>{
                                 <h7 style={{color:'gray',display:'flex',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faShoppingBag}/><b style={{marginRight:'.2rem'}}>Available Stock:</b></h7><span style={{color:'green'}}><b>{product.stock}</b></span>
                             </Row>
                             <Row>
-                                <h7 style={{color:'gray',display:'flex',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faUser}/><b style={{marginRight:'.2rem'}}>Added By:</b></h7><span><b>{product.user?product.user.name:null}</b></span>
+                                <h7 style={{color:'gray',display:'flex',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faUser}/><b style={{marginRight:'.2rem'}}>Added By:</b></h7><span><b>{product.user?product.user.fname+" "+product.user.lname:null}</b></span>
                             </Row>
                             <Row>
                                 <h7 style={{color:'gray',display:'flex',alignItems:'center'}}><FontAwesomeIcon style={{marginRight:'.2rem'}} icon={faCalendarAlt}/><b style={{marginRight:'.2rem'}}>Created Date:</b></h7><span>{product.date}</span>

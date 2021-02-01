@@ -16,18 +16,19 @@ export default class MainApp extends Component {
     componentDidMount(){
    
         store.dispatch(loadUser());
-        console.log("Store_data",store.getState().auth); 
+        // console.log("Store_data",store.getState().auth); 
       }
     render() {
 
         return (
             <Provider store={store}>
                 <BrowserRouter>
+                
                     <Switch>
                         <Route exact path="/">
                             <Home/>
                         </Route>
-                        <Route exact path="/products">
+                        <Route exact path="/productsGrid" component={Products}>
                             <Products/>
                         </Route>
                         <Route path="/admin" render={props => <App {...props}/>}/>

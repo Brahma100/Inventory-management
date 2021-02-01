@@ -136,7 +136,7 @@ background: transparent;
   
 .avatar {
     height: 38px;
-    width: 40px !important;
+    /* width: 40px !important; */
   }
   
 .status-overlay {
@@ -149,7 +149,7 @@ background: transparent;
     width: 10px;
     height: 10px;
     top: 30px;
-    left: 35px;
+    left: 24px;
     z-index: 5;
     padding: 2px;
     border-radius: 12px;

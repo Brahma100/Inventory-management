@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { returnErrors} from './errorActions';
 
-import { UPDATE_FAIL, UPDATE_SUCCESS, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_FAIL, REGISTER_SUCCESS, EXPIRE_EXTEND } from './types';
+import { BLOCK,FREE_BLOCK,UPDATE_FAIL, UPDATE_SUCCESS, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_FAIL, REGISTER_SUCCESS, EXPIRE_EXTEND } from './types';
 
 // check token & load user
 export const loadUser= ()=> (dispatch,getState)=>{
@@ -20,7 +20,7 @@ const config={
 // if token , add to headers
 if(token){
     config.headers['x-auth-token']=token;
-}
+
     axios.get("/auth/user",config)
     .then(res=> dispatch({
         type:USER_LOADED,
@@ -33,9 +33,16 @@ if(token){
         dispatch({
             type:AUTH_ERROR
         });
-    }) 
+    }) }
 }
 
+export const isBlockedF=(isBlocked)=>dispatch=>{
+    const type=isBlocked?"BLOCK":"FREE_BLOCK";
+    dispatch({
+        type:type,
+        payload:isBlocked
+    })
+}
 
 export const TokenExpireExtend=({rememberMe})=>dispatch=>{
     // Headers
@@ -85,14 +92,14 @@ export const login=({email,password})=>dispatch=>{
 
 // Register User
 
-export const register=({name,email,password,img})=>dispatch=>{
+export const register=({fname,lname,email,password,img,city,state,postal,country,ip})=>dispatch=>{
     // Headers
     const config={
         headers:{'Content-Type':'application/json'}
     }
     // Request body
 
-    const body=JSON.stringify({name,email,password,img});
+    const body=JSON.stringify({fname,lname,email,password,img,city,state,postal,country,ip});
     console.log(body);
 
     axios.post("/auth/register",body,config)
@@ -111,7 +118,7 @@ export const register=({name,email,password,img})=>dispatch=>{
 }
 
 
-export const update=({id,name,email})=>(dispatch,getState)=>{
+export const update=({id,fname,lname,email,password,img,city,state,postal,country,ip})=>(dispatch,getState)=>{
     // Headers
     const config={
         headers:{'Content-Type':'application/json'}
@@ -122,7 +129,7 @@ export const update=({id,name,email})=>(dispatch,getState)=>{
     }
     // Request body
 
-    const body=JSON.stringify({id,name,email});
+    const body=JSON.stringify({id,fname,lname,email,password,img,city,state,postal,country,ip});
     console.log(body);
     axios.post("/auth/update",body,config)
     .then(res=> dispatch({

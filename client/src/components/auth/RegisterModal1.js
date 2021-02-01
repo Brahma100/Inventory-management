@@ -2,21 +2,42 @@ import React,{Component} from 'react';
 import { Button,InputGroup,Col,Alert,NavLink, Modal,Form } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {register,login,TokenExpireExtend,loginModalOpen} from '../../action/authActions';
+import {register,login,TokenExpireExtend,loginModalOpen,isBlockedF} from '../../action/authActions';
 import {clearErrors}  from '../../action/errorActions';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {Prompt} from 'react-router-dom';
 import back from '../../assets/images/back.jpg';
-
+import Map from './Map';
+import publicIp from "public-ip";
 
 const schemaLogin = yup.object({
     email: yup.string().email('Invalid email').required(),
     password: yup.string().min(0, 'Password must be at least 6 characters').max(24, 'Password can be maximum 24 characters').required()
 })
+
+// fname:'',
+//         lname:'',
+//         email:'',
+//         password:'',
+//         city:this.state.city,
+//         state:this.state.State,
+//         postal:this.state.postal,
+//         country:this.state.country,
+//         mobile_num
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+
 const schemaRegister = yup.object({
-    name:yup.string().min(3, 'Name must be at least 3 characters').max(24, 'Password can be maximum 20 characters').required(),   
+    fname:yup.string().min(1, 'At least 1 characters').max(10, 'First Name can be maximum 10 characters').required(),   
+    lname:yup.string().min(1, 'At least 1 characters').max(10, 'Last Name can be maximum 10 characters').required(),   
+    city:yup.string().min(3, 'City must be at least 3 characters').max(24, 'City can be maximum 20 characters'),   
+    state:yup.string().min(3, 'State must be at least 3 characters').max(24, 'State can be maximum 20 characters'),   
+    country:yup.string().min(3, 'Country must be at least 3 characters').max(24, 'Country can be maximum 20 characters'),   
+    postal:yup.number().integer(),   
     email: yup.string().email('Invalid email').required(),
-    password: yup.string().min(6, 'Password must be at least 6 characters').max(24, 'Password can be maximum 24 characters').required()
+    password: yup.string().min(6, 'Password must be at least 6 characters').max(24, 'Password can be maximum 24 characters').required(),
+    // mobile_number:yup.number().max(9999999999,'Invalid Number').required()//.matches(phoneRegExp,"Number is Not Like Mobile number"),   
 })
 
 
@@ -27,14 +48,31 @@ class RegisterModal extends Component{
         signIn:false,
         remember:false,
         modal:this.props.isModalOpen,   // modal for adding item is false initially
-        msg:null
+        msg:null,
+        city:'',
+        State:'',
+        country:'',
+        postal:'',
+        ip:'',
+        isBlocking:this.props.isBlocked
     };
 
 
+async componentDidMount(){
 
+    let response=await fetch(`https://geolocation-db.com/json/`)
+    let ipData=await response.json();
+    
+    this.setState({ip:ipData.IPv4,city:ipData.city,country:ipData.country_name,postal:ipData.postal,State:ipData.state})
+
+    
+}
 
 
     componentDidUpdate(prevProps){
+
+        console.log(this.state.city);
+
         const {error,isAuthenticated}=this.props;
         if(error!==prevProps.error){
             if(error.id==="REGISTER_FAIL"){
@@ -63,6 +101,7 @@ class RegisterModal extends Component{
     }
 
     toggle=()=>{  
+      
         // clear the error
         this.props.clearErrors();
         // to toggle the modal 
@@ -116,7 +155,23 @@ class RegisterModal extends Component{
 render(){
     return(
         <div>
-            <NavLink onClick={this.toggle} href="#">
+          {/* <Prompt
+              when={this.state.isBlocking}
+                message={(location, action) => {
+                  // if (action === 'POP') {
+                    console.log("Backing up...",action,location)
+                  // }
+
+                  return location.pathname.startsWith("/")
+                    ? true
+                    : `Are you sure you want to Leave ${location.pathname}?`
+            }}
+          /> */}
+             {/* <Prompt
+                when={this.props.isBlocked}
+                message={(location)=> `Are You Sure Want To Leave ${location}`}
+/>  */}
+            <NavLink onClick={this.toggle} >
                <Button style={{paddingLeft:' 1.5rem',paddingRight:'1.5rem'}}><b> Register</b></Button>
             </NavLink>
 
@@ -126,29 +181,38 @@ render(){
                 <Modal.Header  style={{color:'white', backgroundImage: `url("${back}")`,backgroundSize:'32rem',backgroundRepeat:'no-repeat'}} closeButton ><b>Register</b></Modal.Header>
                 <Modal.Body>
     {this.state.msg?<Alert color="danger">{this.state.msg}</Alert>:null}
-
+    <p>isBlocking?{this.state.isBlocking?"Yes":"No"}</p>
+   
     <Formik
     // validator={() => ({})}
       validationSchema={schemaRegister}
       initialValues={{
-        name:'',
+        fname:'',
+        lname:'',
         email:'',
         password:'',
+        city:this.state.city,
+        state:this.state.State,
+        postal:this.state.postal,
+        country:this.state.country,
+        // mobile_number:''
 
       }}
       onSubmit={(values)=>{ 
         this.encodeImageFileAsURL();
         const imageURL=this.state.imageURL;
         console.log("Image URL",imageURL);
-        const {name,email,password}=values;
+        const {fname,lname,email,password,city,state,postal,country}=values;
         let img=this.state.imageURL;
+        let ip=this.state.ip;
         const newUser={
-            name,email,password,img
+            fname,lname,email,password,img,city,state,postal,country,ip
         }
         this.props.register(newUser);
     }
     }
     >
+       
       {({
         handleSubmit,
         handleChange,
@@ -158,20 +222,38 @@ render(){
         <Form noValidate onSubmit={handleSubmit}>
           
           <Form.Row>
-            <Form.Group as={Col} md="12" controlId="validationFormik01">
-              <Form.Label>Name</Form.Label>
+            <Form.Group as={Col} md="6" controlId="validationFormik01">
+           
+              <Form.Label>First Name</Form.Label>
+              
               <Form.Control
                 type="text"
-                placeholder="Name"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-                isInvalid={!!errors.name}
+                placeholder="First Name"
+                name="fname"
+                value={values.fname}
+                // onChangeCapture={(e)=>this.setState({isBlocking:e.target.value>0})}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); this.props.isBlockedF(e.target.value.length>0); handleChange(e)}}
+                isInvalid={!!errors.fname}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.name}
+                {errors.fname}
               </Form.Control.Feedback>
             </Form.Group>
+            <Form.Group as={Col} md="6" controlId="validationFormik01">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Last Name"
+                name="lname"
+                value={values.lname}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); this.props.isBlockedF(e.target.value.length>0);handleChange(e)}}
+                isInvalid={!!errors.lname}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.lname}
+              </Form.Control.Feedback>
+            </Form.Group>
+           
 
           </Form.Row>
           <Form.Row>
@@ -187,7 +269,7 @@ render(){
                   aria-describedby="inputGroupPrepend"
                   name="email"
                   value={values.email}
-                  onChange={handleChange}
+                  onChange={e=>{this.setState({isBlocking:e.target.value.length>0});this.props.isBlockedF(e.target.value.length>0); handleChange(e)}}
                   isInvalid={!!errors.email}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -205,7 +287,7 @@ render(){
                 placeholder="Password"
                 name="password"
                 value={values.password}
-                onChange={handleChange}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0});this.props.isBlockedF(e.target.value.length>0); handleChange(e)}}
                 isInvalid={!!errors.password}
               />
               <Form.Control.Feedback type="invalid">
@@ -214,21 +296,119 @@ render(){
             </Form.Group>
 
           </Form.Row>
+         
+          <Form.Row>
+            <Form.Group as={Col} md="6" controlId="validationFormik03">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="City"
+                name="city"
+                value={values.city?values.city:this.state.city}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
+                isInvalid={!!errors.city}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.city}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="6" controlId="validationFormik03">
+              <Form.Label>State</Form.Label>
+              <Form.Control
+               disabled
+                type="text"
+                placeholder="State"
+                name="state"
+                value={values.state?values.state:this.state.State}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
+                isInvalid={!!errors.state}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.state}
+              </Form.Control.Feedback>
+            </Form.Group>
+            </Form.Row>
+            <Form.Row>
+            <Form.Group as={Col} md="6" controlId="validationFormik03">
+              <Form.Label>Postal</Form.Label>
+              <Form.Control
+             
+                type="number"
+                placeholder="Postal"
+                name="postal"
+                value={values.postal?values.postal:this.state.postal}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
+                isInvalid={!!errors.postal}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.postal}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="6" controlId="validationFormik03">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+               disabled
+                type="text"
+                placeholder="Country"
+                name="country"
+                value={values.country?values.country:this.state.country}
+                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
+                isInvalid={!!errors.country}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.country}
+              </Form.Control.Feedback>
+            </Form.Group>
+            {/* <Form.Group as={Col} md="12" controlId="validationFormik03">
+              <Form.Label>Phone/Mobile Number</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Mobile Number"
+                name="mobile"
+                value={values.mobile_number}
+                onChange={handleChange}
+                isInvalid={!!errors.mobile_number}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.mobile_number}
+              </Form.Control.Feedback>
+            </Form.Group> */}
+
+          </Form.Row>
             <Form.Row>
             <Form.Group as={Col} md="12">
                 <div className="mb-3">
                     <Form.File id="formcheck-api-regular">
-                    <Form.File.Label>Profile Image</Form.File.Label>
+                    <Form.File.Label>Profile Image </Form.File.Label>
                     <input id="inputFileToLoad"  type="file" onChange={this.encodeImageFileAsURL} />
                     </Form.File>
                 </div>
             </Form.Group>
 
           </Form.Row>
+
+          {/* <Form.Row>
+          <Map
+                google={this.props.google}
+                center={{lat: 18.5204, lng: 73.8567}}
+                height='300px'
+                zoom={15}
+    />
+          </Form.Row>
+          <Form.Row>
+         
+          </Form.Row>
+          <Form.Row>
+         
+          </Form.Row>
+          <Form.Row style={{marginBottom:'10rem'}}>
+         <p>Hello</p>
+          </Form.Row> */}
           <Button type="submit">Register</Button>
+          
           <input defaultChecked={this.state.remember} style={{marginLeft:'1rem',marginTop:'.5rem'}} type="checkbox" onChange={this.handleCheckboxChange}/><span>  Remember me!</span>
                             <div style={{}} className="forgot-password text-right">
-                                Already registered <span onClick={this.handleSignIn} ><a href="#"><b>Sign in?</b></a></span>
+                                Already registered <span onClick={this.handleSignIn} ><a ><b>Sign in?</b></a></span>
                             </div>
                             <div id="imgTest"></div>
                         </Form>
@@ -283,7 +463,7 @@ render(){
                                     aria-describedby="inputGroupPrepend"
                                     name="email"
                                     value={values.email}
-                                    onChange={handleChange}
+                                    onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
                                     isInvalid={!!errors.email}
                                     />
                                      <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -303,7 +483,7 @@ render(){
                                     placeholder="Password"
                                     name="password"
                                     value={values.password}
-                                    onChange={handleChange}
+                                    onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
                                     isInvalid={!!errors.password}
                                 />
                                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -318,7 +498,7 @@ render(){
                                 required
                                 name="terms"
                                 label="Agree to terms and conditions"
-                                onChange={handleChange}
+                                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
                                 isInvalid={!!errors.terms}
                                 feedback={errors.terms}
                                 id="validationFormik0"
@@ -327,7 +507,7 @@ render(){
                             <Button type="submit">Login</Button>
                             <input defaultChecked={this.state.remember} style={{marginLeft:'1rem',marginTop:'.5rem'}} type="checkbox" onChange={this.handleCheckboxChange}/><span>  Remember me!</span>
                                                     <div style={{marginTop:'1rem',}} className="forgot-password text-right">
-                                                    Don't have an account?  <span onClick={this.handleSignIn} ><a href="#"><b>Create an Account</b></a></span>
+                                                    Don't have an account?  <span onClick={this.handleSignIn} ><a ><b>Create an Account</b></a></span>
                                     </div> 
                             </Form>
                         )}
@@ -345,6 +525,7 @@ render(){
 const mapStateToProps= state=>{
     return({
         isModalOpen:state.auth.isModalOpen,
+        isBlocked:state.auth.isBlocked,
         isAuthenticated:state.auth.isAuthenticated,
         rememberMe:state.auth.rememberMe,
         error:state.error
@@ -352,4 +533,4 @@ const mapStateToProps= state=>{
 }
 
 
-export default connect(mapStateToProps,{loginModalOpen,login,register,clearErrors,TokenExpireExtend})(RegisterModal);
+export default connect(mapStateToProps,{loginModalOpen,isBlockedF,login,register,clearErrors,TokenExpireExtend})(RegisterModal);

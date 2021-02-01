@@ -3,7 +3,7 @@ import { OverlayTrigger,Tooltip,Accordion,DropdownButton, Spinner, Row, Containe
 import {connect} from 'react-redux';
 import './Products.css'
 
-import {NavLink} from 'react-router-dom';
+import {NavLink, Prompt, withRouter} from 'react-router-dom';
 import EditModal1 from '../auth/EditModal1'
 // import E2 from './auth/E2';
 // import EditModal from './auth/EditModal'
@@ -68,14 +68,32 @@ console.log("Id:",event.target.id);
     });
   }
 
+// componentWillUnmount(){
+//   console.log("Blocked:",this.props.isBlocked);
+//     console.log("History:",this.props.history);
+//     if(this.props.isBlocked){
+//           let authenticate = window.confirm("Are You Sure Want To Go ",this.props.history.location.pathname)
+//           if(!authenticate){
+//                   this.props.history.push(this.props.history.location.pathname)
+//           }
+//     }
+// }
+  componentDidMount(e){
 
-  componentDidMount(){
+    var myobj = document.getElementById("bodyClick");
+    if(myobj!==null){
+    document.documentElement.classList.toggle("nav-open");
+    myobj.remove();}
+    
+
+
  this.props.getItems();
  this.props.getCategories();
     this.setState({products:this.props.products})
 
   }
   componentDidUpdate(){
+
     // this.props.getItems()
   }
   handleView=()=>{
@@ -162,7 +180,23 @@ console.log("Id:",event.target.id);
 
 <div style={{ backgroundImage: `url("${back}")`,backgroundRepeat:'no-repeat'}}>
       
+    <Prompt
+                when={this.props.isBlocked}
+                // message={(location)=> `Are You Sure Want To Leave ${location.pathname}`}
+                message={(location, action) => {
+                  if (action === 'POP') {
+                    console.log("Backing up...",this.props.history)
+                  } 
+              
+                  let check= location.pathname.startsWith("/app")
+                    ? true
+                    : `Are you sure you want to go to ${this.props.history.location.pathname}?`
+                    // if(check)this.props.history.push(this.props.history.location.pathname)
+                    return check
+                }}
+/>
     <AppNavbar/>
+    
     <Container  style={{marginTop:'2rem',width:'100%'}}>
 
           <p   className="content" >
@@ -173,7 +207,7 @@ console.log("Id:",event.target.id);
                   <div>
                   <Row style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
                   
-                  <div style={{color:'gray',paddingLeft:'.5rem',borderRadius:'20px',border:'1px solid gray'}}>
+                  <div style={{color:'gray',paddingLeft:'.4rem',borderRadius:'20px',border:'1px solid gray'}}>
                             <FontAwesomeIcon icon={faSearch}/>
                             <input onChange={(e)=>{this.setState({q:e.target.value})}} style={{width:'80%',border:'none',padding:'.2rem 0 .2rem.5rem',color:'black'}} placeholder="Search Products" type="text"/>
                         </div>
@@ -379,6 +413,7 @@ const mapStateToProps= state=>{
     return({
       categories:state.category.categories,
         isAuthenticated:state.auth.isAuthenticated,
+        isBlocked:state.auth.isBlocked,
         isLoading:state.auth.isLoading,
         user:state.auth.user,
         products:state.item.items,
@@ -389,4 +424,4 @@ const mapStateToProps= state=>{
 }
 
 
-export default connect(mapStateToProps,{loadUser,loginModalOpen,getItems,deleteItem,getCategories})(Products);
+export default connect(mapStateToProps,{loadUser,loginModalOpen,getItems,deleteItem,getCategories})(withRouter(Products));

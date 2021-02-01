@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import './ProductList.css'
-import { Card,Container, Row, Col,Button,Media,Form,Tooltip } from "react-bootstrap";
+import { Card,Container, Row, Col,Button,Media,Form,Tooltip, Spinner } from "react-bootstrap";
 import {connect} from 'react-redux';
 import { getItems } from './../../action/itemAction';
 // import P2 from './P2';
@@ -59,10 +59,10 @@ function ProductList(props){
             </div>
             </Col>
           </Row>
-          <Row >
+          <Row  >
             
           
-          <Suspense fallback={<h1>Still Loading…</h1>}>
+          <Suspense fallback={<div style={{marginLeft:'5rem',display:'flex',alignItems:'center',justifyContent:'space-around'}} ><Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" /><h2>Products are Loading...</h2></div>}>
      
                       <ProductListData products={products}/>
           </Suspense>

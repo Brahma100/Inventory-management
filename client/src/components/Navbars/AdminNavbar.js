@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navbar,Nav,Dropdown } from "react-bootstrap";
+import { Navbar,Nav,Dropdown, NavLink } from "react-bootstrap";
 import avatar from '../../assets/images/avatar.png'
 import AdminNavbarLinks from "./AdminNavbarLinks";
 import './AdminNavbar.css';
@@ -58,7 +58,7 @@ class Header extends Component {
               </div>:'X'}
               <div>
                   <span style={{color:'red',fontWeight:400,fontSize:'80%'}}>Shop Admin</span>
-                  <div style={{color:'#3b3e66'}}>{user? user.name:'Hello Guest'}</div>
+                  <div style={{color:'#3b3e66'}}>{user? user.fname+" "+user.lname:'Hello Guest'}</div>
               </div>
              
               
@@ -126,7 +126,10 @@ class Header extends Component {
           <Navbar.Toggle aria-controls="responsive-navbar-nav"  onClick={this.mobileSidebarToggle} />
         <Navbar.Collapse>
           {/* <AdminNavbarLinks /> */}
-          <Nav className="ml-auto" navbar>
+          <NavLink className="ml-auto"  href='/'><b>Home</b></NavLink>
+                        {/* <NavLink  href='/admin/dashboard'><b>Dashboard</b></NavLink> */}
+                        <NavLink  href='/productsGrid'><b>Products</b></NavLink>
+          <Nav  navbar>
                         {isAuthenticated?authLinks:guestLinks}    
                         </Nav>
         </Navbar.Collapse>

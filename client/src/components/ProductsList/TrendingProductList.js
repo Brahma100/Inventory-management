@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {getCategories} from '../../action/categoryAction';
 import { getItems,deleteItem } from "../../action/itemAction";
-import {loginModalOpen,loadUser} from '../../action/authActions'
+import {loginModalOpen} from '../../action/authActions'
 import CountUp from "react-countup";
 
 
@@ -40,7 +40,7 @@ class TrendingProductList extends Component {
     this.props.getItems();
   }
   render() {
-    console.log("Products From  Trending:",this.props.user);
+    // console.log("Products From  Trending:",this.props.user);
     const sort=(products)=>{
       return products.sort((a, b) => b.rank - a.rank)
     }
@@ -106,7 +106,7 @@ class TrendingProductList extends Component {
                       </Media></NavLink>
                     ):'NO PRODUCTS FOUND :('}
                 </Card.Body>   
-                  <NavLink className="m-3 p-2 btn btn-primary" style={{color:'white'}} to='/products'><span className="btn-wrapper--label">View All</span></NavLink>
+                  <NavLink className="m-3 p-2 btn btn-primary" style={{color:'white'}} to='/productsGrid'><span className="btn-wrapper--label">View All</span></NavLink>
                          
                     </Card>
              
@@ -126,11 +126,11 @@ const mapStateToProps= state=>{
     categories:state.category.categories,
       isAuthenticated:state.auth.isAuthenticated,
       isLoading:state.auth.isLoading,
-      user:state.auth.user,
+      // user:state.auth.user,
       products:state.item.items,
       itemsLoading:state.item.itemsLoading,
       itemsLoaded:state.item.itemsLoaded
       // error:state.error
   })
 }
-export default connect(mapStateToProps,{loadUser,loginModalOpen,getItems,deleteItem,getCategories})(TrendingProductList); ;
+export default connect(mapStateToProps,{loginModalOpen,getItems,deleteItem,getCategories})(TrendingProductList); ;

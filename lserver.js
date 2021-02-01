@@ -474,10 +474,17 @@ server.post('/auth/login', (req, res) => {
       token,
       user:{
         _id:user.id,
-        name:user.name,
+        fname:user.fname,
+        lname:user.lname,
         email:user.email,
         img:user.img,
-        password:user.password
+        password:user.password,
+        city:user.city,
+        state:user.state,
+        country:user.country,
+        postal:user.postal,
+        ip:user.ip,
+        date:user.date
     }  
     })
   })// End of Bcrypt
@@ -492,9 +499,9 @@ server.post('/auth/login', (req, res) => {
 
 
 server.post('/auth/register', (req, res) => {
-        const {name,email, password,img} = req.body;
+        const {fname,lname,email, password,img,city,state,postal,country,ip} = req.body;
 
-        if(!name || !email || !password ) return res.status(400).json({msg:'Please Enter all Fields'});
+        if(!fname || !lname || !email || !password || !state || !postal ) return res.status(400).json({msg:'Please Enter all Fields'});
         // Check for Existence of Registering User
         if(CheckUser({email}) === true) {  
             return res.status(400).json({msg:'User Already Exits'});
@@ -523,7 +530,7 @@ server.post('/auth/register', (req, res) => {
                         //Add new user
                         // console.log("New PAss",newPassword);
                         // console.log("Img:",img);
-                          data.users.push({id: last_item_id + 1,name:name, email: email, password: newPassword,img:img,date:date}); //add some data
+                          data.users.push({id: last_item_id + 1,fname:fname,lname:lname, email: email, password: newPassword,img:img,date:date,city:city,state:state,postal:postal,country:country,ip:ip}); //add some data
                           // console.log("Push Pass",data);
                           var writeData = fs.writeFile("./users.json", JSON.stringify(data), (err, result) => {  // WRITE
                             if (err) {
@@ -543,11 +550,17 @@ server.post('/auth/register', (req, res) => {
                                   token,
                                   user:{
                                   _id:last_item_id+1,
-                                  name:name,
+                                  fname:fname,
+                                  lname:lname,
                                   email:email,
                                   password:newPassword,
                                   img:img,
-                                  date:date
+                                  date:date,
+                                  city:city,
+                                  state:state,
+                                  country:country,
+                                  postal:postal,
+                                  ip:ip
                       }})
                     });
                 });
@@ -565,11 +578,11 @@ server.post("/auth/update",auth,function(req,res){
   // req==request from client || res=== Response that would be from Server
 
   // Destructuring User data from Request   
-  const { id ,name, email }=req.body;
+  const {id,fname,lname,email,img,city,state,postal,country,ip }=req.body;
   // console.log("ID:",id," Name:",name," Email:",email);
   
   // Check Empty entries
-  if(!email || !name) return res.status(400).json({msg:'Server: Please Enter all Fields'});
+  if(!fname || !lname || !email || !state || !postal) return res.status(400).json({msg:'Server: Please Enter all Fields'});
 
   // Finding user by Id 
   const index=userdb.users.findIndex(user=>user.id===id);
@@ -578,7 +591,7 @@ server.post("/auth/update",auth,function(req,res){
   // Stroing target User in "user" from db
   const user=userdb.users[index];  
   // Matching new Entries with Previous Entries
-  if(name===user.name && email===user.email) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
+  if(fname===user.fname && lname===user.lname && city===user.city && state===user.state && postal===user.postal && img===user.img && email===user.email ) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
   // Reading Json DB
   fs.readFile("./users.json", (err, data) => {  
     if (err) {
@@ -588,8 +601,14 @@ server.post("/auth/update",auth,function(req,res){
     // Fetching Whole users data (JSON format to String)
     var data = JSON.parse(data.toString());
     // Updating only Target User data based on Index
-    data.users[index].name=name;
+    data.users[index].fname=fname;
+    data.users[index].lname=lname;
     data.users[index].email=email;
+    data.users[index].city=city;
+    data.users[index].state=state;
+    data.users[index].postal=postal;
+    data.users[index].country=country;
+    data.users[index].img=img;
     // Writing Updated data to Json DB
     var writeData = fs.writeFile("./users.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
@@ -601,10 +620,17 @@ server.post("/auth/update",auth,function(req,res){
     res.status(200).json({
       user:{
         _id:user.id,
-        name:user.name,
+        fname:user.fname,
+        lname:user.lname,
         email:user.email,
+        img:user.img,
         password:user.password,
-        img:user.img
+        city:user.city,
+        state:user.state,
+        country:user.country,
+        postal:user.postal,
+        ip:user.ip,
+        date:user.date
       }  
       })
           
@@ -637,10 +663,17 @@ server.get("/auth/user",auth, (req,res)=>{
   res.status(200).json(
     {
       _id:user.id,
-      name:user.name,
-      email:user.email,
-      img:user.img,
-      date:user.date
+      fname:user.fname,
+        lname:user.lname,
+        email:user.email,
+        img:user.img,
+        city:user.city,
+        state:user.state,
+        country:user.country,
+        postal:user.postal,
+        password:user.password,
+        ip:user.ip,
+        date:user.date
       // password:user.password
     
   })

@@ -6,12 +6,33 @@ html,body{
   background: #3b44c1;
   border:3px solid #b3b8ff ;
 }
+.spinner-border{
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-bottom;
+  border: .5em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
+}
+.notifications-tr{
+  margin-top: 5rem !important;
+}
+.notification-success{
+  font-weight: bold;
+  border-top:7px solid rgb(15, 212, 15) !important;
+  background-color: rgb(189, 255, 189) !important;
+}
+.notification-dismiss{
+  background: rgb(68, 82, 48) !important;
+}
 /* body{
  
   overflow-x: hidden;
 } */
 /* close button of modal */
-.dropdown-toggle::after {
+.nav-item .dropdown-toggle::after {
   margin: 19px 0px 10px 7px;
 }
 .close,.close:hover{
@@ -1842,6 +1863,8 @@ body > .navbar-collapse[data-color="purple"]:after {
     .card label i {
       font-size: 16px; }
   .card label {
+    font-weight: bold;
+    color: #3b44c1;
     font-size: 12px;
     margin-bottom: 5px;
     text-transform: uppercase; }

@@ -1,4 +1,4 @@
-import {LOGIN_MODAL_OPEN,LOGIN_MODAL_CLOSE,USER_LOADED,USER_LOADING,AUTH_ERROR,LOGIN_FAIL,LOGIN_SUCCESS,LOGOUT_SUCCESS,REGISTER_FAIL,REGISTER_SUCCESS,UPDATE_FAIL,UPDATE_SUCCESS} from '../action/types';
+import {BLOCK,FREE_BLOCK,LOGIN_MODAL_OPEN,LOGIN_MODAL_CLOSE,USER_LOADED,USER_LOADING,AUTH_ERROR,LOGIN_FAIL,LOGIN_SUCCESS,LOGOUT_SUCCESS,REGISTER_FAIL,REGISTER_SUCCESS,UPDATE_FAIL,UPDATE_SUCCESS} from '../action/types';
 import { EXPIRE_EXTEND } from './../action/types';
 
 const initialState={
@@ -8,7 +8,8 @@ const initialState={
     isAuthenticated:null,
     isUpdate:null,
     user:null,
-    isModalOpen:false
+    isModalOpen:false,
+    isBlocked:false,
 };
 
 export default function(state=initialState,action){
@@ -23,6 +24,18 @@ export default function(state=initialState,action){
             return{
                 ...state,
                 isModalOpen:false
+                
+            };
+        case BLOCK:
+            return{
+                ...state,
+                isBlocked:true
+                
+            };
+        case FREE_BLOCK:
+            return{
+                ...state,
+                isBlocked:false
                 
             };
         case USER_LOADING:
@@ -72,6 +85,7 @@ export default function(state=initialState,action){
                 token:null,
                 isAuthenticated:false,
                 isLoading:false,
+                user:null
             };
         case EXPIRE_EXTEND:
             return{

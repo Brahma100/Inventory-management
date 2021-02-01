@@ -23,7 +23,7 @@ class AdminNavbarLinks extends Component {
       {/* <ul className="nav" > */}
           <div style={{margin:'5px 15px'}}>
                <li > <NavLink className="nav-link" to="/" >Home</NavLink></li>
-               <li ><NavLink className="nav-link" to="">Link</NavLink></li>
+               <li ><NavLink className="nav-link" to="/productsGrid">Products</NavLink></li>
              
                <hr style={{borderColor:'white',width:'14.3rem'}}/>  </div>
                 {/* <NavDropdown  title="Dropdown" id="basic-nav-dropdown">

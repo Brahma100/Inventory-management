@@ -11,7 +11,7 @@ import EditModal1 from '../auth/EditModal1';
 import Price_Slider from '../Slider/Price_Slider';
 import {NavLink} from 'react-router-dom'
 import CountUp from 'react-countup';
-
+import NotificationSystem from 'react-notification-system';
 
 
 const styles = {
@@ -27,7 +27,19 @@ const styles = {
     }
   };
 
+  
 function ProductList({products,deleteSelectedItem,deleteItem,user,isAuthenticated}) {
+
+//     var notificationSystem = React.createRef();
+//    const addNotification = (name) => {
+//   // event.preventDefault();
+//   let notification = notificationSystem.current;
+//     notification.addNotification({
+//     message:' has Been Deleted',
+//     level: 'Danger',
+//     autoDismiss:5
+//   });
+// };
     var f=0;
     let deleteAllClass="not-checked"
     const [state,setState]=useState({
@@ -169,7 +181,7 @@ const handleCheck= async (e,product)=> {
     return (
     
         <>
-
+ {/* <NotificationSystem ref={notificationSystem} /> */}
         <Col>
           <div className='products'>
                  <Card  className='cardpl'>
@@ -357,13 +369,15 @@ const handleCheck= async (e,product)=> {
                                 
                                 <Col xs={3} style={{minWidth:'10rem'}}>
                                     <div className='action-button'>
-
-                                    <EditModal1 user={user} product={product}/>
                                     
+                                       
+                                    <EditModal1 user={user} product={product}/>
+                                   
+                                  
                                     <div>
                                         <OverlayTrigger
-                                            placement="right"
-                                            overlay={<Tooltip id="button-tooltip-2">Delete</Tooltip>}>
+                                            placement="bottom"
+                                            overlay={<Tooltip id="button-tooltip-2">Delete Product</Tooltip>}>
                                                 
                                             <Button variant="danger" onClick={()=>deleteItem(product.id)} size="sm">
                                                 <FontAwesomeIcon icon={faTimes}/>

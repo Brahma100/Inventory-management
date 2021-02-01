@@ -20,29 +20,16 @@ import logo from '../assets/images/logo.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHome, faUserCircle, faDatabase, faUser, faCog, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 import './AppNavBar.css'
+import store from '../store';
+import { loadUser } from '../action/authActions';
 
 
 
 
-
-
-
-import Body from './Body';
-const tabs = [{
-    route: "/",
-    icon: faHome,
-   
-  },{
-    route: "/admin/dashboard",
-    icon: faDatabase,
-    
-  },{
-    route: "/admin/UserProfile",
-    icon: faUser,
-    
-  }]
 class AppNavbar extends Component{
-    
+    componentDidMount(){
+        store.dispatch(loadUser());
+    }
     state={
         
         dropdownOpen:false,
@@ -81,7 +68,7 @@ class AppNavbar extends Component{
                         </div>:'X'}
                     <div>
                         <span style={{color:'red',fontWeight:400,fontSize:'80%'}}>Shop Admin</span>
-                        <div style={{color:'#3b3e66'}}>{user? user.name:'Hello Guest'}</div>
+                        <div style={{color:'#3b3e66'}}>{user? user.fname+" "+user.lname:'Hello Gest'}</div>
                     </div>
                    
                     
@@ -122,10 +109,13 @@ class AppNavbar extends Component{
         const guestLinks=(
             <Fragment>
                 <Nav.Item>
+                   
                     <RegisterModal/>
+
+                   
                 </Nav.Item>
                 <Nav.Item>
-                        <NavLink onClick={this.toggle} href="#">
+                        <NavLink onClick={this.toggle} href='#'>
                     <       Button style={{background:'#7a7b97',paddingLeft:' 1.5rem',paddingRight:'1.5rem'}}><b> About</b></Button>
                         </NavLink>
                 </Nav.Item>
@@ -139,10 +129,13 @@ class AppNavbar extends Component{
             <div  style={{color:'#000',textDecoration:'none'}}>
             <Navbar expand="sm"> 
                 <Container>
-                    <Navbar.Brand href="/"><div className="nav-brand"><img className="nav-logo" src={logo}/><div className="brand-text"><span>inventory</span><b>ShopperZ</b></div></div></Navbar.Brand>
+                    <Navbar.Brand href="/"><div className="nav-brand"><img className="nav-logo" src={logo}/><div className="brand-text"><span><b>inventory</b></span><b>ShopperZ</b></div></div></Navbar.Brand>
                     <Navbar.Toggle onClick={this.toggle}/>
                     <Navbar.Collapse className="mainNavCollapse" isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
+                        <NavLink className="ml-auto"  href='/'><b>Home</b></NavLink>
+                        {/* <NavLink  href='/admin/dashboard'><b>Dashboard</b></NavLink> */}
+                        <NavLink  href='/productsGrid'><b>Products</b></NavLink>
+                        <Nav  navbar>
                         {isAuthenticated?authLinks:guestLinks}    
                         </Nav>
                     </Navbar.Collapse>
