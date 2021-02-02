@@ -9,13 +9,13 @@ import { loadUser } from "./action/authActions";
 import Home from './components/auth/Home';
 import Products from './components/Products/Products';
 import { BrowserRouter } from 'react-router-dom';
-
-
+import ReactGa from 'react-ga';
 export default class MainApp extends Component {
     
     componentDidMount(){
-   
-        store.dispatch(loadUser());
+            ReactGa.initialize('G-1QHM2PH8BT');
+            ReactGa.pageview('/')
+            store.dispatch(loadUser());
         // console.log("Store_data",store.getState().auth); 
       }
     render() {
@@ -26,6 +26,7 @@ export default class MainApp extends Component {
                 
                     <Switch>
                         <Route exact path="/">
+                            
                             <Home/>
                         </Route>
                         <Route exact path="/productsGrid" component={Products}>

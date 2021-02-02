@@ -2,9 +2,68 @@
 html,body{
   overflow-x: hidden;
 }
+.ct-series-a .ct-slice-pie,.ct-series-a .ct-slice-pie, .ct-series-a .ct-area {
+fill: #87CB16 !important;
+stroke: white !important;
+stroke-width: 5px;
+
+}
+.ct-series-a .ct-slice-pie:hover, .ct-series-a .ct-area:hover {
+  fill: #9fd646 !important;
+  stroke: #87CB16 !important;
+stroke-width: 5px;
+stroke-opacity: 1;
+   
+  }
+.ct-series-b .ct-slice-pie,.ct-series-b .ct-slice-pie, .ct-series-a .ct-area {
+fill: #1D62F0 !important;
+stroke: white !important;
+stroke-width: 5px;
+
+}
+.ct-series-b .ct-slice-pie:hover, .ct-series-b .ct-area:hover {
+  fill: #508bff !important;
+  stroke:#1D62F0 !important;
+stroke-width: 5px;
+stroke-opacity: 1;
+
+   
+  }
+.ct-series-c .ct-slice-pie,.ct-series-c .ct-slice-pie, .ct-series-a .ct-area {
+fill: #FF4A55 !important;
+stroke: white !important;
+stroke-width: 5px;
+}
+.ct-series-c .ct-slice-pie:hover, .ct-series-c .ct-area:hover {
+  fill: #ff7b84 !important;
+  stroke:#FF4A55 !important;
+stroke-width: 5px;
+stroke-opacity: 1;
+   
+  }
+.ct-series-d .ct-slice-pie,.ct-series-d .ct-slice-pie, .ct-series-a .ct-area {
+fill: #1DC7EA !important;
+stroke: white ;
+stroke-width: 5px;
+}
+.ct-series-d .ct-slice-pie:hover, .ct-series-d .ct-area:hover {
+  fill: #6ae6ff !important;
+  stroke: #1DC7EA !important;
+stroke-width: 5px;
+stroke-opacity: 1;
+   
+  }
+.ct-chart-pie .ct-label{
+  fill: rgb(14, 13, 13) !important;
+  stroke:rgb(34, 34, 34) !important;
+  stroke-opacity:.2 ;
+}
+.card-stats{
+  box-shadow: 0 .18rem .3rem rgba(166,166,185,.5),0 .326rem 3rem rgba(122,123,151,.2)!important;
+}
 .page-item.active .page-link{
   background: #3b44c1;
-  border:3px solid #b3b8ff ;
+  border:3px solid #b3b8ff;
 }
 .spinner-border{
   display: inline-block;

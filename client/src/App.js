@@ -9,7 +9,7 @@ import ItemModal from './components/itemModal';
 import {Container,Spinner} from 'reactstrap';
 import { loadUser,loginModalOpen } from "./action/authActions";
 import Bodycopy from './components/Bodycopy';
-import Test from './components/Test';
+
 import Sidebar from './components/Sidebar/Sidebar';
 import Footer from './components/Footer/Footer';
 

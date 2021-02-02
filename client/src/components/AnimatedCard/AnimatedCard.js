@@ -1,21 +1,49 @@
 import { CircularProgressbar, CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import CountUp from 'react-countup';
-import React from 'react';
-import './Test.css';
+import React, { useState } from 'react';
+import './AnimatedCard.css';
 import 'react-circular-progressbar/dist/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faQuestionCircle,faUserCircle,faDollarSign,faCommentDollar } from '@fortawesome/free-solid-svg-icons';
+import {  faQuestionCircle,faUserCircle,faDollarSign,faCommentDollar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 import AnimatedProgressProvider from "./AnimatedProgressProvider";
 import { easeQuadInOut } from "d3-ease";
-// import {Card,Grid,Button,Nav,NavItem,Col,Row,Modal,FormGroup,Input,Collapse} from 'reactstrap';
-import {Container,Col,Row} from 'react-bootstrap'
+import {Container,Col,Row, Spinner} from 'react-bootstrap'
 import {Card} from 'reactstrap';
-export default function Test() {
+import { connect } from 'react-redux';
+import { useEffect } from 'react';
+import {getItems} from '../../action/itemAction';
+function AnimatedCard(props) {
 
+    const [products,setProducts]=useState([]);
+    const [Expenses,setExpenses]=useState(0);
+
+
+    const countExpenses=()=>{
+        let total=0;
+        props.products.map(product=>{
+            total+=product.price*product.stock
+        })
+        // console.log("Expenses:",total);
+        setExpenses(total)
+    }
+    useEffect(()=>{
+        props.getItems();
+    },[])
+    useEffect(()=>{
+        if(props.products){
+            countExpenses();
+            setProducts(props.products)
+
+            // console.log("Products From Animated Card:",products);
+        }
+    },[props.products]);
+    
 
         return (
             <>
-            <Container>
+            {props.products.length===0?<Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" />:
+
+            <div style={{margin:'0px 17px'}}>
                 <Row  className="cardlist">
                     <Col lg={3} sm={6}>
                         <Card className="card-box card1 bg-midnight-bloom p-3 mb-5">
@@ -122,7 +150,7 @@ elf, you'll want to disable the CSS animation. */
                                     valueStart={0}
                                     
                                     valueEnd={54}
-                                    duration={3}
+                                    duration={6}
                                     easingFunction={easeQuadInOut}
                                     
                                 >
@@ -138,18 +166,18 @@ elf, you'll want to disable the CSS animation. */
                                         styles={buildStyles({ pathTransition: "none",pathColor: "rgba(255,255,255,.95)", trailColor: "rgba(255,255,255,.1)" })}
                                         >
                                     <div className="text-white d-40 rounded-circle btn-icon">
-                                        <FontAwesomeIcon icon={faCommentDollar} className="font-size-lg icon1 " />
+                                        <FontAwesomeIcon icon={faShoppingBag} className="font-size-lg icon1 " />
                                     </div>
                                     </CircularProgressbarWithChildren>
                                     );
                                     }}
                                 </AnimatedProgressProvider>
                                 <div className="pl-3">
-                                    <div className=" text-white font-weight-bold">Income</div>
+                                    <div className=" text-white font-weight-bold">Products</div>
                                     <div className="value font-weight-bold pt-2 text-white ">
-                                        $<CountUp
+                                        <CountUp
                                             start={0}
-                                            end={134.7}
+                                            end={props.products.length}
                                             duration={6}
                                             delay={0}
                                             separator=""
@@ -167,8 +195,8 @@ elf, you'll want to disable the CSS animation. */
                             <AnimatedProgressProvider
                                     valueStart={0}
                                     
-                                    valueEnd={54}
-                                    duration={3}
+                                    valueEnd={75}
+                                    duration={6}
                                     easingFunction={easeQuadInOut}
                                     
                                 >
@@ -191,13 +219,13 @@ elf, you'll want to disable the CSS animation. */
                                 <div className="pl-3">
                                     <div className="text-white  font-weight-bold">Expenses</div>
                                     <div className="value font-weight-bold pt-2  text-white">
-                                        $<CountUp
+                                        ₹<CountUp
                                         start={0}
-                                        end={3.496}
+                                        end={Expenses}
                                         duration={6}
-                                        delay={2}
+                                        delay={1}
                                         separator=""
-                                        decimals={3}
+                                        decimals={0}
                                         decimal=","
                                     />
                                     </div>
@@ -206,7 +234,14 @@ elf, you'll want to disable the CSS animation. */
                         </Card>
                     </Col>
                 </Row>
-        </Container>
+        </div>}
             </>
         );
     }
+const mapStateToProps=state=>{
+    return {
+        itemsLoaded:state.item.itemsLoaded,
+        products:state.item.items
+    }
+}
+    export default connect(mapStateToProps,{getItems})(AnimatedCard);

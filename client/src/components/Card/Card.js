@@ -1,3 +1,5 @@
+import { faCubes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 
 export class Card extends Component {
@@ -5,7 +7,7 @@ export class Card extends Component {
     return (
       <div className={"card" + (this.props.plain ? " card-plain" : "")}>
         <div className={"header" + (this.props.hCenter ? " text-center" : "")}>
-          <h4 className="title">{this.props.title}</h4>
+          <h4 style={{color:'#3b44c1',fontWeight:'400'}} className="title"><FontAwesomeIcon style={{marginRight:'.5rem'}} icon={this.props.icon}/>{this.props.title}</h4>
           <p className="category">{this.props.category}</p>
         </div>
         <div

@@ -24,7 +24,6 @@ server.use(jsonServer.defaults());
 // JWT TOKEN DATA
 const SECRET_KEY = config.get('jwtSecret')
 const expiresIn = config.get('expiresIn')
-// const expiresIn = '1h'
 
 
 // -------------------- List of Functions-----------------------
@@ -59,6 +58,8 @@ function CheckCategory({name}){
 
 
 //---------------------------------Products View Api--------------------------------------
+
+
 
 
 server.get('/products',(req,res)=>{
