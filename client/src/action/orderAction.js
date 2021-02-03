@@ -1,4 +1,4 @@
-import  {DELETE_SELECTED_ITEM,UPDATE_ITEM,GET_ITEM,ADD_ITEM,DELETE_ITEM, ITEMS_LOAD} from './types';
+import  {UPDATE_ORDER,GET_ORDER,ADD_ORDER,DELETE_ORDER, ORDERS_LOAD} from './types';
 import axios from 'axios';
 import {tokenConfig} from './authActions';
 import {returnErrors} from './errorActions';
@@ -6,7 +6,7 @@ import {returnErrors} from './errorActions';
 export const getOrders=()=> dispatch =>{
     dispatch(setOrderLoading());
 
-    axios.get('/products').then(res=>
+    axios.get('/orders').then(res=>
     dispatch({
         type:GET_ORDER,
         payload:res.data
@@ -36,44 +36,24 @@ export const deleteOrder=id=>dispatch=>{
     ).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
 }
 
-
-// export const deleteSelectedItem=ids=>dispatch=>{
-//     console.log("Id of Item",ids);
-//     const config={
-//         headers:{'Content-Type':'application/json'}
-//     }
-//     var body=JSON.stringify({ids});
-//     var {ids}=body
-//     console.log("Action Product Id",typeof ids);
-//     console.log("Body",body,body[0],ids);
-//     axios.post('/delete_selected_product',body,config).then(
-//         res=>dispatch({
-//             type:DELETE_SELECTED_ITEM,
-//             payload:ids
-//         })
-//     ).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
-// }
+export const updateOrder=({id,product_id,customer_id,by_user_id,quantity,total,payment})=>dispatch=>{
+    console.log("Id of ORDER",id);
+    const config={
+        headers:{'Content-Type':'application/json'}
+    }
+    const body=JSON.stringify({id,product_id,customer_id,by_user_id,quantity,total,payment});
+    console.log("Action Order Id",id);
+    axios.post('/update_order',body,config).then(
+        res=>dispatch({
+            type:UPDATE_ORDER,
+            payload:res.data
+        })
+    ).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
+}
 
 
-
-// export const updateOrder=({id,name,manufacturer,description,stock,price,rating})=>dispatch=>{
-//     console.log("Id of Item",id);
-//     const config={
-//         headers:{'Content-Type':'application/json'}
-//     }
-//     const body=JSON.stringify({id,name,description,manufacturer,price,stock,rating});
-//     console.log("Action Product Id",id);
-//     axios.post('/update_product',body,config).then(
-//         res=>dispatch({
-//             type:UPDATE_ITEM,
-//             payload:res.data
-//         })
-//     ).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
-// }
-
-
-// export const setItemsLoading=()=>{
-//     return{
-//         type:ITEMS_LOAD
-//     };
-// }
+export const setOrderLoading=()=>{
+    return{
+        type:ORDERS_LOAD
+    };
+}

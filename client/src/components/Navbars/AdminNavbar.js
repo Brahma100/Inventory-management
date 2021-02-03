@@ -8,7 +8,7 @@ import RegisterModal from "../auth/RegisterModal";
 import Logout from "../auth/Logout";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faDatabase, faShoppingBag, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faDatabase, faRupeeSign, faShoppingBag, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 
 class Header extends Component {
   constructor(props) {
@@ -115,6 +115,12 @@ class Header extends Component {
     }
     else if(this.props.brandText==="Products"){
       return faShoppingBag;
+    }
+    else if(this.props.brandText==="Orders"){
+      return faRupeeSign;
+    }
+    else if(this.props.brandText==="Customers"){
+      return faUser;
     }
   }
     return (

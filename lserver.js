@@ -687,9 +687,69 @@ server.get("/auth/user",auth, (req,res)=>{
 
 
 
+server.get('/customers',(req,res)=>{
 
+  fs.readFile("./customers.json", (err, data) => {  
+    if (err) {
+      const status = 401
+      const message = err
+      res.status(status).json({status, message})
+      return
+    };
 
+    // Get current users data
+    var data = JSON.parse(data.toString());
+    res.status(200).json(data.customers)
+    return
 
+});
+});
+
+server.post('/add_customer', (req, res) => {
+  const {fname,lname,address,img,email,by_user_id} = req.body;
+// console.log(product_id,customer_id,quantity,by_user_id,total,payment);
+  if(!fname || !lname || !address || !email || !by_user_id) return res.status(400).json({msg:'Please Enter all Fields'});
+
+fs.readFile("./customers.json", (err, data) => {  
+      if (err) {
+        const status = 401
+        const message = err
+        res.status(status).json({status, message})
+        return
+      };
+
+      // Get current products data
+      var data = JSON.parse(data.toString());
+      const id=crypto.randomBytes(12).toString('hex');
+      var dateTime = require('node-datetime');
+      var dt = dateTime.create();
+      var date = dt.format('Y-m-d H:M:S');
+    
+                    data.customers.push({id: id,fname:fname, lname: lname,address:address,date:date,img:img,by_user_id:by_user_id}); //add some data
+                    console.log("Push Pass",data);
+                    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+                      if (err) {
+                        const status = 401
+                        const message = err
+                        res.status(status).json({status, message})
+                        return
+                      }
+                  });
+                  res.status(200).json({                           
+                            customer:{
+                              id:id,
+                              fname:fname,
+                              lname:lname,
+                              by_user_id:by_user_id,
+                              date:date,
+                              email:email,
+                              address:address,
+                              img:img
+                            }
+              
+          });
+}); 
+})// End of Add Product Route
 
 
 
@@ -714,15 +774,9 @@ server.get('/orders',(req,res)=>{
 });
 
 server.post('/add_order', (req, res) => {
-  // "product_id":1,
-  //           "customer_name":"Raj",
-  //           "customer_address":"41/A hello World street pin:700K",
-  //           "by_user_id":1,
-  //           "date":"12/07/2020",
-  //           "time":"12:00 PM"
-  const {product_id,customer_name, customer_address,by_user_id} = req.body;
-
-  if(!product_id || !customer_name || !customer_address || !by_user_id) return res.status(400).json({msg:'Please Enter all Fields'});
+  const {product_id,customer_id,by_user_id,quantity,total,payment} = req.body;
+console.log(product_id,customer_id,quantity,by_user_id,total,payment);
+  if(!product_id || customer_id===0 || !quantity || by_user_id===0 || !total || !payment) return res.status(400).json({msg:'Please Enter all Fields'});
 
 fs.readFile("./orders.json", (err, data) => {  
       if (err) {
@@ -739,7 +793,7 @@ fs.readFile("./orders.json", (err, data) => {
       var dt = dateTime.create();
       var date = dt.format('Y-m-d H:M:S');
     
-                    data.orders.push({id: id,product_id:product_id, customer_name: customer_name,customer_address:customer_address ,by_user_id:by_user_id,date:date}); //add some data
+                    data.orders.push({id: id,product_id:product_id, customer_id: customer_id,by_user_id:by_user_id,date:date,quantity:quantity,total:total,payment:payment}); //add some data
                     console.log("Push Pass",data);
                     var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
@@ -749,22 +803,115 @@ fs.readFile("./orders.json", (err, data) => {
                         return
                       }
                   });
-                  res.status(200).json({
-                            
+                  res.status(200).json({                           
                             order:{
-                            id:id,
-                            product_id:product_id,
-                            customer_name:customer_name,
-                            customer_address:customer_address,
-                            by_user_id:by_user_id,
-                            date:date
+                              id:id,
+                              product_id:product_id,
+                              customer_id:customer_id,
+                              by_user_id:by_user_id,
+                              date:date,
+                              quantity:quantity,
+                              total:total,
+                              payment:payment
                             }
               
           });
 }); 
 })// End of Add Product Route
 
+server.post("/update_order",function(req,res){  
+  // req==request from client || res=== Response that would be from Server
 
+  const {id,product_id,customer_id,by_user_id,quantity,total,payment} = req.body;
+
+  if(!product_id || customer_id===0 || !quantity || by_user_id===0 || !total || !payment) return res.status(400).json({msg:'Please Enter all Fields'});
+
+  // Finding product by Id 
+  const index=orderdb.orders.findIndex(order=>order.id===id);
+  // Check for Existense of Product
+  if(index==-1) return res.status(400).json({msg:'Server: Order Not Exits'});
+  // Storing target Product in "product" from db
+  const order=orderdb.orders[index];  
+  // Matching new Entries with Previous Entries
+  if(quantity===order.quantity && total===order.total && payment===order.payment) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
+  // Reading Json DB
+  fs.readFile("./orders.json", (err, data) => {  
+    if (err) {
+      return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
+    };
+
+    // Fetching Whole users data (JSON format to String)
+    var data = JSON.parse(data.toString());
+    // Updating only Target User data based on Index
+    data.orders[index].quantity=quantity;
+    data.orders[index].total=total;
+    data.orders[index].payment=payment;
+    
+    // Writing Updated data to Json DB
+    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+      if (err) {
+        return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
+      };
+    });// End of File Writing
+
+  
+    res.status(200).json({
+      order:{
+        id:data.orders[index].id,
+        product_id:data.orders[index].product_id,
+        customer_id:data.orders[index].customer_id,
+        by_user_id:data.orders[index].by_user_id,
+        date:data.orders[index].date,
+        quantity:data.orders[index].quantity,
+        total:data.orders[index].total,
+        payment:data.orders[index].payment
+      }
+      })
+          
+  }); // End of File Reading
+
+});// End of Update API
+
+
+server.post("/delete_order",function(req,res){  
+  // req==request from client || res=== Response that would be from Server
+
+  const {id} = req.body;
+  // Finding product by Id 
+  console.log("id",id);
+  const index=orderdb.orders.findIndex(product=>product.id===id);
+  // Check for Existense of Product
+  if(index==-1) return res.status(400).json({msg:'Server: Product Not Exits'});
+  // Storing target Product in "product" from db
+  const order=orderdb.orders[index];  
+  // Matching new Entries with Previous Entries
+  fs.readFile("./orders.json", (err, data) => {  
+    if (err) {
+      return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
+    };
+
+    // Fetching Whole users data (JSON format to String)
+    var data = JSON.parse(data.toString()); // Object
+    var orders=data.orders;
+    data.orders=orders.filter(product=>product.id!==id)
+    // Writing Updated data to Json DB
+    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+      if (err) {
+        return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
+      };
+    });// End of File Writing
+
+    // Returing Response with 200 Status and Updated Data To the Client
+
+  
+    res.status(200).json({
+      msg:"order Deleted",
+      order:order  
+      })
+          
+  }); // End of File Reading
+
+});// End of Dalete API
 
 
 // server.use(/^(?!\/auth).*$/,  (req, res, next) => {

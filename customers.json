@@ -1,0 +1,24 @@
+{
+    "customers":[
+        {
+            "id":1,
+            "fname":"Raj",
+            "lname":"Jaiswal",
+            "email":"abc@gmail.com",
+            "address":"234 Any Colony Kolkata 700002",
+            "img":"",
+            "date":"12-01-2021 16:10"
+            
+        },
+        {
+            "id":2,
+            "fname":"Raj",
+            "lname":"Jaiswal",
+            "email":"abc@gmail.com",
+            "address":"234 Any Colony Kolkata 700002",
+            "img":"",
+            "date":"12-01-2021 16:10"
+            
+        }
+    ]
+}

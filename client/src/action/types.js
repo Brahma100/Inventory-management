@@ -26,3 +26,14 @@ export const ADD_CATEGORY='ADD_CATEGORY';
 export const BLOCK='BLOCK';
 export const FREE_BLOCK='FREE_BLOCK';
 
+export const GET_ORDER= 'GET_ORDER';
+export const ADD_ORDER='ADD_ORDER';
+export const DELETE_ORDER='DELETE_ORDER';
+export const ORDERS_LOAD='ORDERS_LOAD';
+export const UPDATE_ORDER='UPDATE_ORDER';
+
+export const GET_CUSTOMER= 'GET_CUSTOMER';
+export const ADD_CUSTOMER='ADD_CUSTOMER';
+export const DELETE_CUSTOMER='DELETE_CUSTOMER';
+export const CUSTOMERS_LOAD='CUSTOMERS_LOAD';
+export const UPDATE_CUSTOMER='UPDATE_CUSTOMER';

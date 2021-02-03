@@ -1,1 +1,1 @@
-{"orders":[{"id":1,"product_id":1,"customer_name":"Raj","customer_address":"41/A hello World street pin:700K","by_user_id":1,"date":"12/07/2020"},{"id":"6cecbe4b2e71916cd412c380","product_id":100,"customer_name":"Brahma","customer_address":"41/A hello World street pin:700K","by_user_id":1,"date":"2021-01-10 20:10:42"}]}
+{"orders":[{"id":"af06553c77f3be357751010d","product_id":"def90ed810678ce27eef8fa1","customer_id":1,"by_user_id":9,"date":"2021-02-02 16:31:18","quantity":"10","total":"1000","payment":"Completed"}]}
