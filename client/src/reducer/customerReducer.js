@@ -8,12 +8,12 @@ const initialState={
 }
 
 export default function(state=initialState,action){
-    const {type,payload}=action; //destructuring action
+   
     switch(action.type){
         case GET_CUSTOMER:
             return{
                 ...state,
-                customers:payload,
+                customers:action.payload,
                 customersLoading:false,
                 customersLoaded:true
            };
@@ -41,7 +41,7 @@ export default function(state=initialState,action){
            case ADD_CUSTOMER:
             return{
                 ...state,
-                customers:[...state.customers,payload]
+                customers:[...state.customers,action.payload]
 
            };
         case CUSTOMERS_LOAD:

@@ -1,26 +1,28 @@
 import React,{Component} from 'react';
-import { Button,InputGroup,Col,Alert,NavLink, Modal,Form } from 'react-bootstrap';
+import { Button,Col,Alert,NavLink, Modal,Form } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {register,login,TokenExpireExtend,loginModalOpen,isBlockedF} from '../../action/authActions';
 import {clearErrors}  from '../../action/errorActions';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {Prompt} from 'react-router-dom';
+
 import back from '../../assets/images/back.jpg';
+import {loadUser} from '../../action/authActions'
+import {getItems} from '../../action/itemAction';
+import {addOrder,getOrders} from '../../action/orderAction';
+import {getCustomers} from '../../action/customerAction';
+import {getCategories} from '../../action/categoryAction';
 
 
 
-const schemaRegister = yup.object({
-    fname:yup.string().min(1, 'At least 1 characters').max(10, 'First Name can be maximum 10 characters').required(),   
-    lname:yup.string().min(1, 'At least 1 characters').max(10, 'Last Name can be maximum 10 characters').required(),   
-    city:yup.string().min(3, 'City must be at least 3 characters').max(24, 'City can be maximum 20 characters'),   
-    state:yup.string().min(3, 'State must be at least 3 characters').max(24, 'State can be maximum 20 characters'),   
-    country:yup.string().min(3, 'Country must be at least 3 characters').max(24, 'Country can be maximum 20 characters'),   
-    postal:yup.number().integer(),   
-    email: yup.string().email('Invalid email').required(),
-    password: yup.string().min(6, 'Password must be at least 6 characters').max(24, 'Password can be maximum 24 characters').required(),
-       
+const schemaOrder = yup.object({
+    customer_id: yup.number().positive().integer().min(1,"Choose Any Customer"),
+    category_id: yup.number().positive().integer().min(1,"Choose Any Category"),
+    product_id: yup.string().min(9,"Choose Any Product"),
+    payment1: yup.number().positive().integer().min(1,"Choose Any Payment Status"),
+    quantity:yup.number().integer().min(1,"Choose Atleast One Quantity").max(100,'Max 100 Allowed/Order'),   
+    // total:yup.number().integer().min(1,"Choose Any Product")
+          
 })
 
 
@@ -29,22 +31,22 @@ class AddOrderModal extends Component{
     state={
        
         modal:false,   // modal for adding item is false initially
-        msg:null,
-        city:'',
-        State:'',
-        country:'',
-        postal:'',
-        ip:'',
-        isBlocking:this.props.isBlocked
+        msg:null,   
     };
 
+    componentDidMount(){
+      this.props.getCustomers();
+      this.props.getCategories();
+      this.props.getItems();
+
+    }
 
     componentDidUpdate(prevProps){
 
         console.log("Add Order Called");
-        const {error,isAuthenticated}=this.props;
+        const {error}=this.props;
         if(error!==prevProps.error){
-            if(error.id==="REGISTER_FAIL"){
+            if(error.id==="UPDATE_FAIL"){
                 this.setState({msg:error.msg.msg});
             }
             else{
@@ -60,30 +62,47 @@ class AddOrderModal extends Component{
         // }
     }
     static propTypes={
-        isAuthenticated:PropTypes.bool,
         error:PropTypes.object.isRequired,
-        register:PropTypes.func.isRequired,
         clearErrors:PropTypes.func.isRequired
     }
 
-   toggle=()=>{  
-      
-        // clear the error
+   toggle=()=>{   
         this.props.clearErrors();
-        // to toggle the modal 
-
         this.setState({
             modal:!this.state.modal
         })
         console.log("Toggle:",this.state.modal);
         
     }
-
-
-
-
+    
 
 render(){
+
+  
+  
+  var customers=this.props.customers.length===0?[]:this.props.customers;
+  var products=this.props.products.length===0?[]:this.props.products;
+  var categories=this.props.categories.length===0?[]:this.props.categories;
+  
+const  getCategory=(id)=>{
+      return categories.filter(cat=>cat.id===parseInt(id))[0].name;
+  }
+  // console.log("Category:",getCategory("1254"));
+const getProducts=(id,products)=>{
+  if(id==="0")
+  return [];
+  let cat_name=getCategory(id);
+  return products.filter(p=>p.category===cat_name)
+}
+
+const getPrice=(id)=>{
+  if(id!=='0'){
+    return products.filter(p=>p.id===id)[0].price;
+  }
+  return 0;
+}
+
+console.log("User:",this.props.user);
     return(
         <div>
           {/* <Prompt
@@ -102,7 +121,7 @@ render(){
                 when={this.props.isBlocked}
                 message={(location)=> `Are You Sure Want To Leave ${location}`}
 />  */}
-            <NavLink onClick={this.toggle} >
+            <NavLink href="#" onClick={this.toggle} >
                <Button  style={{paddingLeft:' 1.5rem',paddingRight:'1.5rem'}}><b>Add Order</b></Button>
             </NavLink>
 
@@ -112,26 +131,31 @@ render(){
     {this.state.msg?<Alert color="danger">{this.state.msg}</Alert>:null}
    
     <Formik
-      validationSchema={schemaRegister}
+      validationSchema={schemaOrder}
       initialValues={{
-        fname:'',
-        lname:'',
-        email:'',
-        password:'',
-      
+        customer_id:'0',
+        product_id:'0',
+        quantity:0,
+        total:0,
+        category_id:'0',
+        payment1:'0'
 
       }}
       onSubmit={(values)=>{ 
-        this.encodeImageFileAsURL();
-        const imageURL=this.state.imageURL;
-        console.log("Image URL",imageURL);
-        const {fname,lname,email,password,city,state,postal,country}=values;
-        let img=this.state.imageURL;
-        let ip=this.state.ip;
-        const newUser={
-            fname,lname,email,password,img,city,state,postal,country,ip
+        
+        const {product_id,customer_id,quantity,payment1}=values;
+        let by_user_id=this.props.user?this.props.user._id:9;
+        let payment=parseInt(payment1)===1?"Completed":"Pending";
+        let total=quantity*getPrice(product_id)
+        console.log(product_id,customer_id,by_user_id,quantity,total,payment);
+        const newOrder={
+          product_id,customer_id,by_user_id,quantity,total,payment
         }
-        this.props.register(newUser);
+        this.props.addOrder(newOrder);
+        this.toggle();
+        setTimeout(()=>{
+          this.props.getOrders();
+        },1500)
     }
     }
     >
@@ -145,161 +169,154 @@ render(){
         <Form noValidate onSubmit={handleSubmit}>
           
           <Form.Row>
-            <Form.Group as={Col} md="6" controlId="validationFormik01">
+            <Form.Group as={Col} md="6">
            
-              <Form.Label>First Name</Form.Label>
+              <Form.Label>Customer</Form.Label>
               
               <Form.Control
-                type="text"
-                placeholder="First Name"
-                name="fname"
-                value={values.fname}
-                // onChangeCapture={(e)=>this.setState({isBlocking:e.target.value>0})}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); this.props.isBlockedF(e.target.value.length>0); handleChange(e)}}
-                isInvalid={!!errors.fname}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.fname}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationFormik01">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Last Name"
-                name="lname"
-                value={values.lname}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); this.props.isBlockedF(e.target.value.length>0);handleChange(e)}}
-                isInvalid={!!errors.lname}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.lname}
-              </Form.Control.Feedback>
-            </Form.Group>
-           
-
-          </Form.Row>
-          <Form.Row>
-          <Form.Group as={Col} md="12" controlId="validationFormik02">
-              <Form.Label>Email ID</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  placeholder="Email ID"
-                  aria-describedby="inputGroupPrepend"
-                  name="email"
-                  value={values.email}
-                  onChange={e=>{this.setState({isBlocking:e.target.value.length>0});this.props.isBlockedF(e.target.value.length>0); handleChange(e)}}
-                  isInvalid={!!errors.email}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-            </Form.Row>
-
-            <Form.Row>
-            <Form.Group as={Col} md="12" controlId="validationFormik03">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={values.password}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0});this.props.isBlockedF(e.target.value.length>0); handleChange(e)}}
-                isInvalid={!!errors.password}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.password}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-          </Form.Row>
-         
-          <Form.Row>
-            <Form.Group as={Col} md="6" controlId="validationFormik03">
-              <Form.Label>City</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="City"
-                name="city"
-                value={values.city?values.city:this.state.city}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
-                isInvalid={!!errors.city}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.city}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationFormik03">
-              <Form.Label>State</Form.Label>
-              <Form.Control
-               disabled
-                type="text"
-                placeholder="State"
-                name="state"
-                value={values.state?values.state:this.state.State}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
-                isInvalid={!!errors.state}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.state}
-              </Form.Control.Feedback>
-            </Form.Group>
-            </Form.Row>
-            <Form.Row>
-            <Form.Group as={Col} md="6" controlId="validationFormik03">
-              <Form.Label>Postal</Form.Label>
-              <Form.Control
-             
-                type="number"
-                placeholder="Postal"
-                name="postal"
-                value={values.postal?values.postal:this.state.postal}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
-                isInvalid={!!errors.postal}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.postal}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationFormik03">
-              <Form.Label>Country</Form.Label>
-              <Form.Control
-               disabled
-                type="text"
-                placeholder="Country"
-                name="country"
-                value={values.country?values.country:this.state.country}
-                onChange={e=>{this.setState({isBlocking:e.target.value.length>0}); handleChange(e)}}
-                isInvalid={!!errors.country}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.country}
-              </Form.Control.Feedback>
-            </Form.Group>
-            {/* <Form.Group as={Col} md="12" controlId="validationFormik03">
-              <Form.Label>Phone/Mobile Number</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Mobile Number"
-                name="mobile"
-                value={values.mobile_number}
+                as="select"
+                // type="password"
+                placeholder=""
+                name="customer_id"
+                value={values.customer_id}
                 onChange={handleChange}
-                isInvalid={!!errors.mobile_number}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.mobile_number}
-              </Form.Control.Feedback>
-            </Form.Group> */}
+                isInvalid={!!errors.customer_id}
+                
+              >
+                  <option value='0'>Choose Customer</option>
 
-          </Form.Row>
+                  {this.props.customers.map((customer,key)=>(
+                      <option value={customer.id}>{customer.fname+" "+customer.lname}</option>
+                  ))
+                        
+                  }
+                
+        
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.customer_id}
+              </Form.Control.Feedback>
+
+
+            </Form.Group>
+            <Form.Group as={Col} md="6">
+             <Form.Label>Category</Form.Label>
+              
+              <Form.Control
+                as="select"
+                // type="password"
+                placeholder=""
+                name="category_id"
+                value={values.category_id}
+                onChange={handleChange}
+                isInvalid={!!errors.category_id}
+                
+              >
+                  <option value="0">Choose Category</option>
+
+                  {categories.map((category,key)=>(
+                      <option value={category.id}>{category.name}</option>
+                  ))
+                        
+                  }
+                
+        
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.category_id}
+              </Form.Control.Feedback>
+            </Form.Group>
            
 
+          </Form.Row>
+
+          <Form.Row>
+         <Form.Group as={Col} md="12">
+             <Form.Label>Product Under Choosen Category</Form.Label>
+              
+              <Form.Control
+                as="select"
+                placeholder=""
+                name="product_id"
+                value={values.product_id}
+                onChange={handleChange}
+                isInvalid={!!errors.product_id}
+              >
+                  <option value="0">Choose Product</option>
+                  {getProducts(values.category_id,products).map((product,key)=>(
+                      <option style={{fontWeight:'bold'}} value={product.id}> #{key+1} | {product.name} | Price: ₹{product.price} | Stock: {product.stock}</option>
+                  ))
+                        
+                  }
+                
+        
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.product_id}
+              </Form.Control.Feedback>
+            </Form.Group>
+            </Form.Row>
+            <Form.Row>
+         <Form.Group as={Col} md="6">
+             <Form.Label>Quantity</Form.Label>
+              
+              <Form.Control
+                type="number"
+                placeholder="Quantity"
+                name="quantity"
+                value={values.quantity}
+                onChange={handleChange}
+                isInvalid={!!errors.quantity}
+              >
+                  
+                
+        
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.quantity}
+              </Form.Control.Feedback>
+            </Form.Group>
+         <Form.Group as={Col} md="6">
+             <Form.Label>Total</Form.Label>
+              
+              <Form.Control
+              disabled
+                type="number"
+                placeholder="total"
+                name="total"
+                value={values.quantity===0?values.total:values.quantity*parseInt(getPrice(values.product_id))}
+                onChange={handleChange}
+               
+              >
+            
+        
+              </Form.Control>
+      
+              
+            </Form.Group>
+            </Form.Row>
+            <Form.Row>
+            <Form.Group as={Col} md="12">
+             <Form.Label>Payment</Form.Label>
+              
+              <Form.Control
+                as="select"
+                placeholder=""
+                name="payment1"
+                value={values.payment1}
+                onChange={handleChange}
+                isInvalid={!!errors.payment1}
+              >
+                  <option value="0">Choose Product</option>
+                  <option value="1">Completed</option>
+                  <option value="2">Pending</option>
+
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.payment1}
+              </Form.Control.Feedback>
+            </Form.Group>
+            </Form.Row>
           <Button type="submit">Add Order</Button>
           
                         </Form>
@@ -315,13 +332,13 @@ render(){
 }
 const mapStateToProps= state=>{
     return({
-        isModalOpen:state.auth.isModalOpen,
-        isBlocked:state.auth.isBlocked,
-        isAuthenticated:state.auth.isAuthenticated,
-        rememberMe:state.auth.rememberMe,
+        customers:state.customer.customers,
+        products:state.item.items,
+        categories:state.category.categories,
+        user:state.auth.user,
         error:state.error
     })
 }
 
 
-export default connect(mapStateToProps,{loginModalOpen,isBlockedF,login,register,clearErrors,TokenExpireExtend})(AddOrderModal);
+export default connect(mapStateToProps,{loadUser,clearErrors,addOrder,getOrders,getCategories,getCustomers,getItems})(AddOrderModal);

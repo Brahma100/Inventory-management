@@ -12,6 +12,7 @@ import {Prompt, NavLink, withRouter} from 'react-router-dom';
 import { loginModalOpen,loadUser } from './../../action/authActions';
 import { connect } from 'react-redux';
 import ApexChart from '../Home/ApexChart';
+import Footer from "../Footer/Footer";
 
 
 const styles = {
@@ -116,6 +117,7 @@ this.props.loadUser();
       
       <Home1/>
       </div>
+      <Footer/>
        
       </div>
     );

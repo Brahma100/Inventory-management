@@ -1,10 +1,12 @@
 import React,{useState,useEffect} from 'react';
 import {connect} from 'react-redux';
-import {getCustomers} from '../../action/customerAction';
+import {getCustomers,deleteCustomer} from '../../action/customerAction';
 import {Row,Container,Col, Spinner, Card, Button} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAddressBook, faAddressCard, faCalendar, faEnvelope, faHome, faMailBulk, faVoicemail } from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faAddressCard, faCalendar, faEnvelope, faHome, faMailBulk, faTrash, faVoicemail } from '@fortawesome/free-solid-svg-icons';
 import './CustomerList.css'
+import AddCustomerModal from './AddCustomerModal';
+import avatar from '../../assets/images/avatar.png'
 
 const CustomerList=(props)=>{
     const [customers,setCustomers]=useState([]);
@@ -28,7 +30,7 @@ const CustomerList=(props)=>{
                 </Row>
             </Col>
             <Col sm={2}>
-                <Button>Add Customer</Button>
+               <AddCustomerModal/>
             </Col>
         </Row>
     </Card>
@@ -41,13 +43,16 @@ const CustomerList=(props)=>{
                        <div>
                         <Card style={{width:'18rem',height:'11.5rem',margin:'1rem'}} key={key}>
                             <Card.Header>
-                                <Row style={{width:'100%',display:'flex',alignItems:'center'}}><div style={{marginRight:'1rem',textAlign:'center',padding:'.8rem',color:'white',borderRadius:'50%',width:'3rem',height:'3rem',background:'#ed3f2f'}}>M</div><h7>{customer.fname+" "+customer.lname}</h7></Row>
+
+                                <Row style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-around'}}>{customer.img?<img src={customer.img?customer.img:{avatar}} style={{marginRight:'1rem',textAlign:'center',color:'white',borderRadius:'50%',width:'3rem',height:'3rem',background:'#ed3f2f'}}/>:<div style={{marginRight:'1rem',textAlign:'center',padding:'.8rem',color:'white',borderRadius:'50%',width:'3rem',height:'3rem',background:'#ed3f2f'}}>{customer.fname[0]+customer.lname[0]}</div>}<h7>{customer.fname+" "+customer.lname}</h7><div style={{flex:1}}><Button onClick={()=>props.deleteCustomer(customer.id)} style={{float:'right'}} variant="danger" size="sm"><FontAwesomeIcon icon={faTrash}/></Button></div></Row>
+
                             </Card.Header>
                             <Card.Body style={{marginLeft:'1rem'}}>
                                 <Row style={{display:'flex',alignItems:'center',color:'gray'}}><FontAwesomeIcon style={{marginRight:'.5rem'}} icon={faEnvelope}/>{customer.email}</Row>
-                                <Row style={{display:'flex',alignItems:'center',color:'gray'}}><FontAwesomeIcon style={{marginRight:'.5rem'}} icon={faHome}/>{customer.address.substring(0,25)}...</Row>
+                                <Row style={{display:'flex',alignItems:'center',color:'gray'}}><FontAwesomeIcon style={{marginRight:'.5rem'}} icon={faHome}/>{customer.address?customer.address.substring(0,25):''}...</Row>
                                 <Row style={{display:'flex',alignItems:'center',color:'gray'}}><FontAwesomeIcon style={{marginRight:'.5rem'}} icon={faCalendar}/>{customer.date}</Row>
                             </Card.Body>
+                            
                         </Card>
                         </div>
                          
@@ -71,4 +76,4 @@ const mapStateToProps=state=>{
         customers:state.customer.customers
     }
 }
-export default connect(mapStateToProps,{getCustomers})(CustomerList);
+export default connect(mapStateToProps,{getCustomers,deleteCustomer})(CustomerList);

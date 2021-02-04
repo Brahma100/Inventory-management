@@ -3,22 +3,19 @@ import ChartistGraph from "react-chartist";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import  Card  from "../Card/Card.js";
 import  StatsCard  from "../StatsCard/StatsCard.js";
-import  Tasks  from "../Tasks/Tasks.js";
+
 import {
-  dataPie,
   legendPie,
   dataSales,
   optionsSales,
   responsiveSales,
   legendSales,
-  dataBar,
-  optionsBar,
-  responsiveBar,
-  legendBar
+
 } from "../Variables/Variables.js";
 import AnimatedCard from "../AnimatedCard/AnimatedCard";
 import { connect } from "react-redux";
 import {getItems} from '../../action/itemAction';
+import {getOrders} from '../../action/orderAction';
 import { faCubes } from "@fortawesome/free-solid-svg-icons";
 
 class Dashboard extends Component {
@@ -33,6 +30,7 @@ class Dashboard extends Component {
 
   componentDidMount(){
     this.props.getItems();
+
   }
 
 
@@ -169,46 +167,7 @@ class Dashboard extends Component {
             </Col>
           </Row>
 
-          <Row>
-            <Col md={6}>
-              <Card
-                id="chartActivity"
-                title="2014 Sales"
-                category="All products including Taxes"
-                stats="Data information certified"
-                statsIcon="fa fa-check"
-                content={
-                  <div className="ct-chart">
-                    <ChartistGraph
-                      data={dataBar}
-                      type="Bar"
-                      options={optionsBar}
-                      responsiveOptions={responsiveBar}
-                    />
-                  </div>
-                }
-                legend={
-                  <div className="legend">{this.createLegend(legendBar)}</div>
-                }
-              />
-            </Col>
-
-            <Col md={6}>
-              <Card
-                title="Tasks"
-                category="Backend development"
-                stats="Updated 3 minutes ago"
-                statsIcon="fa fa-history"
-                content={
-                  <div className="table-full-width">
-                    <table className="table">
-                      <Tasks />
-                    </table>
-                  </div>
-                }
-              />
-            </Col>
-          </Row>
+         
         </Container>
       </div>
     );
@@ -216,7 +175,8 @@ class Dashboard extends Component {
 }
 const mapStateToProps=state=>{
   return{
+    orders:state.order.orders,
     products:state.item.items
   }
 }
-export default connect(mapStateToProps,{getItems})(Dashboard);
+export default connect(mapStateToProps,{getItems,getOrders})(Dashboard);

@@ -12,6 +12,7 @@ import {Card} from 'reactstrap';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
 import {getItems} from '../../action/itemAction';
+import {getOrders} from '../../action/orderAction'
 function AnimatedCard(props) {
 
     const [products,setProducts]=useState([]);
@@ -28,6 +29,7 @@ function AnimatedCard(props) {
     }
     useEffect(()=>{
         props.getItems();
+        props.getOrders();  
     },[])
     useEffect(()=>{
         if(props.products){
@@ -53,7 +55,7 @@ function AnimatedCard(props) {
                             <AnimatedProgressProvider
                                     valueStart={0}
                                     
-                                    valueEnd={54}
+                                    valueEnd={props.orders.length+5}
                                     duration={3}
                                     easingFunction={easeQuadInOut}
                                     
@@ -83,7 +85,7 @@ elf, you'll want to disable the CSS animation. */
                                     <div className="value font-weight-bold pt-2 text-white ">
                                         <CountUp
                                             start={0}
-                                            end={99}
+                                            end={props.orders.length}
                                             duration={6}
                                             delay={0}
                                             separator=""
@@ -104,7 +106,7 @@ elf, you'll want to disable the CSS animation. */
                                     valueStart={0}
                                     
                                     valueEnd={54}
-                                    duration={3}
+                                    duration={6}
                                     easingFunction={easeQuadInOut}
                                     
                                 >
@@ -241,7 +243,8 @@ elf, you'll want to disable the CSS animation. */
 const mapStateToProps=state=>{
     return {
         itemsLoaded:state.item.itemsLoaded,
-        products:state.item.items
+        products:state.item.items,
+        orders:state.order.orders
     }
 }
-    export default connect(mapStateToProps,{getItems})(AnimatedCard);
+    export default connect(mapStateToProps,{getItems,getOrders})(AnimatedCard);

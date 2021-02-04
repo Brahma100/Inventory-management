@@ -13,22 +13,22 @@ export const getCustomers=()=> dispatch =>{
     }))
     .catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));   
 };
-export const addOrder=order=> dispatch =>{
-    axios.post('/add_order',order)
-    .then(res=>dispatch({
+export const addCustomer=customer=> dispatch =>{
+    axios.post('/add_customer',customer)
+    .then(res=> dispatch({
         type:ADD_CUSTOMER,
-        payload:res.data
+        payload:res.data?res.data:{}
     })).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
 };
 
-export const deleteOrder=id=>dispatch=>{
-    console.log("Id of Order",id);
+export const deleteCustomer=id=>dispatch=>{
+    console.log("Id of Customer",id);
     const config={
         headers:{'Content-Type':'application/json'}
     }
     const body=JSON.stringify({id});
     console.log("Action Order Id",id);
-    axios.post('/delete_order',body,config).then(
+    axios.post('/delete_customer',body,config).then(
         res=>dispatch({
             type:DELETE_CUSTOMER,
             payload:id

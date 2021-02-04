@@ -19,6 +19,7 @@ import routes from "./routes.js";
 import image from "./assets/images/sidebar-3.jpg";
 import { getCategories } from './action/categoryAction';
 import { AnimatedSwitch } from 'react-router-transition';
+import { Card } from 'react-bootstrap';
 
 class App extends Component {
   constructor(props) {
@@ -114,8 +115,11 @@ class App extends Component {
                       
                 <Switch>{this.getRoutes(routes)}</Switch>   
                 <Container>
-
-                </Container>          
+               
+                </Container> 
+                <Card style={{margin:'0rem',padding:'0rem'}}>
+                  <Footer/>
+                </Card>         
              </div>
          
       </div>

@@ -15,6 +15,7 @@ const userdb = JSON.parse(fs.readFileSync('./users.json', 'UTF-8'))
 const productdb=JSON.parse(fs.readFileSync('./products.json','UTF-8'))
 const categorydb=JSON.parse(fs.readFileSync('./categories.json','UTF-8'))
 const orderdb=JSON.parse(fs.readFileSync('./orders.json','UTF-8'))
+const customerdb=JSON.parse(fs.readFileSync('./customers.json','UTF-8'))
 
 server.use(bodyParser.urlencoded({extended: true}))
 server.use(bodyParser.json())
@@ -708,7 +709,7 @@ server.get('/customers',(req,res)=>{
 server.post('/add_customer', (req, res) => {
   const {fname,lname,address,img,email,by_user_id} = req.body;
 // console.log(product_id,customer_id,quantity,by_user_id,total,payment);
-  if(!fname || !lname || !address || !email || !by_user_id) return res.status(400).json({msg:'Please Enter all Fields'});
+  if(!fname || !lname || !address || !email ) return res.status(400).json({msg:'Please Enter all Fields'});
 
 fs.readFile("./customers.json", (err, data) => {  
       if (err) {
@@ -720,38 +721,77 @@ fs.readFile("./customers.json", (err, data) => {
 
       // Get current products data
       var data = JSON.parse(data.toString());
-      const id=crypto.randomBytes(12).toString('hex');
+      // const id=crypto.randomBytes(12).toString('hex');
       var dateTime = require('node-datetime');
       var dt = dateTime.create();
       var date = dt.format('Y-m-d H:M:S');
+      var last_item_id = data.customers[data.customers.length-1].id;
     
-                    data.customers.push({id: id,fname:fname, lname: lname,address:address,date:date,img:img,by_user_id:by_user_id}); //add some data
+                    data.customers.push({id: last_item_id+1,fname:fname, lname: lname,email:email,address:address,date:date, img:img,by_user_id:by_user_id}); //add some data
                     console.log("Push Pass",data);
-                    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+                    var writeData = fs.writeFile("./customers.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
                         const status = 401
                         const message = err
-                        res.status(status).json({status, message})
+                        res.status(status).json({status,message})
                         return
                       }
                   });
                   res.status(200).json({                           
                             customer:{
-                              id:id,
+                              id:last_item_id+1,
                               fname:fname,
                               lname:lname,
                               by_user_id:by_user_id,
                               date:date,
                               email:email,
-                              address:address,
-                              img:img
+                              img:img,
+                              address:address
                             }
               
           });
 }); 
 })// End of Add Product Route
 
+server.post("/delete_customer",function(req,res){  
+  // req==request from client || res=== Response that would be from Server
 
+  const {id} = req.body;
+  // Finding product by Id 
+  console.log("id",id);
+  const index=customerdb.customers.findIndex(customer=>customer.id===id);
+  // Check for Existense of Product
+  if(index==-1) return res.status(400).json({msg:'Server: Product Not Exits'});
+  // Storing target Product in "product" from db
+  const customer=customerdb.customers[index];  
+  // Matching new Entries with Previous Entries
+  fs.readFile("./customers.json", (err, data) => {  
+    if (err) {
+      return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
+    };
+
+    // Fetching Whole users data (JSON format to String)
+    var data = JSON.parse(data.toString()); // Object
+    var customers=data.customers;
+    data.customers=customers.filter(customer=>customer.id!==id)
+    // Writing Updated data to Json DB
+    var writeData = fs.writeFile("./customers.json", JSON.stringify(data), (err, result) => {  // WRITE
+      if (err) {
+        return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
+      };
+    });// End of File Writing
+
+    // Returing Response with 200 Status and Updated Data To the Client
+
+  
+    res.status(200).json({
+      msg:"Customer data Deleted",
+      customer:customer  
+      })
+          
+  }); // End of File Reading
+
+});// End of Dalete API
 
 
 
@@ -776,7 +816,7 @@ server.get('/orders',(req,res)=>{
 server.post('/add_order', (req, res) => {
   const {product_id,customer_id,by_user_id,quantity,total,payment} = req.body;
 console.log(product_id,customer_id,quantity,by_user_id,total,payment);
-  if(!product_id || customer_id===0 || !quantity || by_user_id===0 || !total || !payment) return res.status(400).json({msg:'Please Enter all Fields'});
+  if(!product_id || parseInt(customer_id)===0 || !quantity || by_user_id===0 || !total || !payment) return res.status(400).json({msg:'Please Enter all Fields'});
 
 fs.readFile("./orders.json", (err, data) => {  
       if (err) {
@@ -791,9 +831,10 @@ fs.readFile("./orders.json", (err, data) => {
       const id=crypto.randomBytes(12).toString('hex');
       var dateTime = require('node-datetime');
       var dt = dateTime.create();
+      var customer_id1=parseInt(customer_id)
       var date = dt.format('Y-m-d H:M:S');
     
-                    data.orders.push({id: id,product_id:product_id, customer_id: customer_id,by_user_id:by_user_id,date:date,quantity:quantity,total:total,payment:payment}); //add some data
+                    data.orders.push({id: id,product_id:product_id, customer_id: customer_id1,by_user_id:by_user_id,date:date,quantity:quantity,total:total,payment:payment}); //add some data
                     console.log("Push Pass",data);
                     var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {

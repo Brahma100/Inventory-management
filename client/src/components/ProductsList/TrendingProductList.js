@@ -10,7 +10,7 @@ import {getCategories} from '../../action/categoryAction';
 import { getItems,deleteItem } from "../../action/itemAction";
 import {loginModalOpen} from '../../action/authActions'
 import CountUp from "react-countup";
-
+import default_product from '../../assets/images/default-pro.jpg'
 
 const styles = {
     mediaItem: {
@@ -67,8 +67,8 @@ class TrendingProductList extends Component {
                           width={100}
                           height={100}
                           className="align-self-center mr-3"
-                          src="https://i5.walmartimages.com/asr/e73e1252-642c-4473-93ea-fd3b564a7027_1.3e81ea58fa3042452fe185129a4a865f.jpeg?odnWidth=undefined&odnHeight=undefined&odnBg=ffffff"
-                          alt="Generic placeholder"
+                          src={product.img?product.img:default_product}
+                          alt="Product Image"
                       />
                       <Media.Body className={styles.mediaBody} >
                           <p style={{display:'flex',alignItems:'center'}}><b>{product.name}</b><span style={{color:product.stock>=10?'#1bc943':'#f83245',borderRadius:'5px',border:product.stock>=10?'1px solid #1bc943':' 1px solid #f83245',background:product.stock>=10?'#e5f9ed':'#fff5f6',padding:'.0rem .3rem',marginLeft:'.5rem',fontSize:'10px'}}><b><CountUp

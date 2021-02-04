@@ -4,14 +4,15 @@ import {getOrders,deleteOrder} from '../../action/orderAction';
 import {getItems} from '../../action/itemAction';
 import {getCustomers} from '../../action/customerAction';
 import {NavLink} from 'react-router-dom'
-import {Accordion, Button, Card, Col, Container,  Dropdown,  DropdownButton,  OverlayTrigger,  Row, Spinner, Tooltip} from 'react-bootstrap'
+import {Accordion, Button, Card, Col, Container,  DropdownButton, Row, Spinner, } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown, faStar, faTrashAlt, faEdit, faChevronDown, faFilter, faTrash, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faChevronCircleDown, faChevronCircleRight, faTrashAlt,faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import avatar from '../../assets/images/avatar.png'
 import EditOrderModal from './EditOrderModal';
 import AddOrderModal from './AddOrderModal';
 
 const OrderList=(props)=>{
+    
 const [orders,setOrders]=useState([]);
 const [q,setQ]=useState('');
 const [isClient,setIsClient]=useState(true);
@@ -30,8 +31,8 @@ useEffect(()=>{
 useEffect(()=>{ 
     if(props.orders.length!==0){
     setOrders(props.orders)
-        console.log("Order:",props.orders);
-        console.log("Order:",props.products);
+        // console.log("Order:",props.orders);
+        // console.log("Order:",props.products);
 }
 },[props.orders,props.products])
 
@@ -63,8 +64,8 @@ const getCustomerImage=id=>{
     if(props.customers.length>0)
     {
     let customer=props.customers.filter(customer=>customer.id===id)
-    // console.log("Product from Order:",customer,id);
-    if(customer[0].img==='')
+    console.log("Customer:",customer,id);
+    if(customer[0].img.length===0)
     return avatar
     else return customer[0].img
     }
@@ -104,9 +105,9 @@ const getProductPrice=id=>{
 }
 const Search=(products)=>{    
     
-    return (products.length>0?products.filter(product=>
+    return (products.length!==0?products.filter(product=>
 
-           product?product.payment.toLowerCase().indexOf(q.toLowerCase())!==-1 //str.includes(PATTERN)
+           product.payment?product.payment.toLowerCase().indexOf(q.toLowerCase())!==-1 //str.includes(PATTERN)
             // product.price.toLowerCase().indexOf(q.toLowerCase())!==-1 ||
            
             :''):'');
@@ -138,25 +139,7 @@ return(
 
 
             <div className='header-filter'>
-                        {/* <div style={{marginTop:'1rem'}}>
-                                <input id="_checkbox"
-                                    //   id={111111}
-                                    name='checkAll'
-                                    type="checkbox"
-                                    // checked={chkBox}
-                                    // onChange={(e)=>handleCheck(e)}
-                                    
-                                />
-                                <label for="_checkbox">
-                                <div id="tick_mark"></div>
-                                </label>
-                               
-                        </div>
-                        <OverlayTrigger
-                                        placement="bottom"
-                                        overlay={<Tooltip id="button-tooltip-2">Delete All</Tooltip>}
-                                            >
-                        <Button onClick={(e)=>deleteAll(e)} style={{display: state.checkedBoxes.length>0 ? 'block' : 'none' }} variant="danger" size="sm"><FontAwesomeIcon icon={faTrash}/></Button></OverlayTrigger> */}
+                       
                         <div className='search-bar' >
                           <FontAwesomeIcon icon={faSearch} />
 
@@ -236,7 +219,7 @@ return(
                             <Row style={{display:'flex',alignItems:'center'}}>
                                 <Col sm={1} ><h7><b>#{key+1}</b></h7></Col>
                                 <Col style={{display:isClient?'':'none'}} sm={3} ><Row style={{display:'flex',alignItems:'center',width:'15rem'}}><img style={{borderRadius:'50%',border:'2px solid #3b44c1',height:'50px',width:'50px'}} src={getCustomerImage(order.customer_id)}/><Col style={{display:'flex',flexDirection:'column'}}><NavLink to='/admin/customers'><h7><b>{getCustomerName(order.customer_id)}</b></h7></NavLink></Col></Row></Col>
-                                <Col style={{display:isProduct?'':'none'}} sm={2} ><Row style={{display:'flex',alignItems:'center',width:'15rem'}}><img style={{height:'80px',width:'80px'}} src={getProductImage(order.product_id)}/><Col style={{display:'flex',flexDirection:'column'}}><NavLink to='/products'><h7><b>{getProductName(order.product_id)}</b></h7></NavLink><span style={{color:'gray',fontSize:'12px'}}>Qty:<b>1001</b></span></Col></Row></Col>
+                                <Col style={{display:isProduct?'':'none'}} sm={2} ><Row style={{display:'flex',alignItems:'center',width:'15rem'}}><img style={{height:'80px',width:'80px'}} src={getProductImage(order.product_id)}/><Col style={{display:'flex',flexDirection:'column'}}><NavLink to='/admin/products'><h7><b>{getProductName(order.product_id)}</b></h7></NavLink><span style={{color:'gray',fontSize:'12px'}}>Qty:<b>{order.quantity}</b></span></Col></Row></Col>
                                 <Col style={{display:isPayment?'':'none'}} sm={2} ><h7 style={{border:order.payment==="Completed"?'2px solid #1bc943':'2px solid #f83245',padding:'5px 15px',background:order.payment==="Completed"?'#e5f9ed':'#fff5f6',fontSize:'12px',fontWeight:'bold',color:order.payment==="Pending"?'#f83245':'#1bc943'}}>{order.payment}</h7></Col>
                                 <Col style={{display:isTotal?'':'none'}} sm={2} ><h7 style={{width:'10px'}}><b>₹{order.total}</b></h7></Col>
                                 <Col  sm={2} style={{display:'flex',justifyContent:'space-around'}}><EditOrderModal customer_img={getCustomerImage(order.customer_id)} product_price={getProductPrice(order.product_id)} customer_name={getCustomerName(order.customer_id)} product_img={getProductImage(order.product_id)} product_name={getProductName(order.product_id)} order={order}/><Button onClick={()=>props.deleteOrder(order.id)} style={{height:'31px',fontSize:'10px',padding:'.5rem .5rem',margin:'0rem'}} variant="danger"><FontAwesomeIcon icon={faTrashAlt}/></Button></Col>
@@ -260,7 +243,7 @@ return(
                   
                     <Card key={key} style={{width:'100%',padding:'0',margin:'1rem'}}>
                        <Card.Header>
-                       <Row style={{display:'flex',alignItems:'center',width:'15rem'}}><img style={{borderRadius:'10px',border:'2px Solid #ebebeb',height:'90px',width:'90px'}} src={getProductImage(order.product_id)}/><Col style={{display:'flex',flexDirection:'column'}}><NavLink to='/admin/products'><h7><b>{getProductName(order.product_id)}</b></h7></NavLink><span style={{color:'gray',fontSize:'12px'}}>Qty:<b>1001</b></span></Col></Row>
+                       <Row style={{display:'flex',alignItems:'center',width:'15rem'}}><img style={{borderRadius:'10px',border:'2px Solid #ebebeb',height:'90px',width:'90px'}} src={getProductImage(order.product_id)}/><Col style={{display:'flex',flexDirection:'column'}}><NavLink to='/admin/products'><h7><b>{getProductName(order.product_id)}</b></h7></NavLink><span style={{color:'gray',fontSize:'12px'}}>Qty:<b>{order.quantity}</b></span></Col></Row>
                        </Card.Header>
                        <Card.Body style={{color:'gray',fontSize:'12px'}}>
 
@@ -292,6 +275,7 @@ return(
 }
 const mapStateToProps=state=>{
     return{
+        isAuthenticated:state.auth.isAuthenticated,
         orders:state.order.orders,
         products:state.item.items,
         customers:state.customer.customers

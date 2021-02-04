@@ -14,6 +14,7 @@ import AppNavbar from '../AppNavbar';
 import back from '../../assets/images/back.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrashAlt, faUser ,faShoppingBag,faCalendarAlt,faSearch,faFilter,  faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown} from '@fortawesome/free-solid-svg-icons';
+import Footer from '../Footer/Footer';
 // import { , faFilter, faSearch, , } from '@fortawesome/free-solid-svg-icons';
 // import Pagination from './Pagination';
 // import { PropTypes } from 'prop-types';
@@ -398,7 +399,7 @@ console.log("Id:",event.target.id);
       </div>
       </Container>
       
-      
+      <Footer/>
      
       </div>
        

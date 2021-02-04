@@ -13,24 +13,18 @@ import * as yup from 'yup';
 import back from '../../assets/images/back.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import {addCustomer,getCustomers} from '../../action/customerAction';
 
 
 // import e from 'express';
-const schemaPro = yup.object({
-    name: yup.string().min(3, 'Name must be at least 3 characters').max(24, 'Password can be maximum 20 characters').required(),
-    description: yup.string().required(),
-    manufacturer: yup.string().required(),
-    // img: yup.string().required(),
-    price: yup.number().positive().integer().min(1, "Price Should be More Than 1").max(500000, "Price Should be Less Than 500K"),
-    stock: yup.number().integer().min(1, "Stock Should be More Than 1").max(1000, "Stock Should be Less Than 1K"),
-    
-    // rating: yup.number().positive().integer().min(1,"Min").max(5,"Max"),
-    
-    category: yup.number().positive().integer().min(1,"Choose Any Category"),
-    // img: yup.string().required(),
+const schemaCustomer = yup.object({
+    fname: yup.string().min(3, 'First Name must be at least 3 characters').max(24, 'Last Name can be maximum 20 characters').required(),
+    lname: yup.string().min(3, 'Last Name must be at least 3 characters').max(24, 'Last Name can be maximum 20 characters').required(),
+    address: yup.string().max(100,"Address length must be less than 100 Chars").required(),
+    email: yup.string().email('Invalid email').required(),
 })
 
-class NewProductModal extends Component{
+class AddCustomerModal extends Component{
     state={
         modal:false,   // modal for adding item is false initially
         msg:null,
@@ -97,11 +91,11 @@ render(){
     return(
         <div>
              <NavLink onClick={this.toggle} href="#">
-            <Button><FontAwesomeIcon  icon={faPlus}/><h7 style={{marginLeft:'.3rem'}} className="newproductbuttontext">Create Product</h7></Button>
+            <Button><FontAwesomeIcon  icon={faPlus}/><h7 style={{marginLeft:'.3rem'}} className="newproductbuttontext">Add New</h7></Button>
             </NavLink>
 
             <Modal show={this.state.modal} onHide={this.toggle} >
-                <Modal.Header  style={{color:'white', backgroundImage: `url("${back}")`,backgroundSize:'32rem',backgroundRepeat:'no-repeat'}} closeButton ><b>Create Product</b></Modal.Header>
+                <Modal.Header  style={{color:'white', backgroundImage: `url("${back}")`,backgroundSize:'32rem',backgroundRepeat:'no-repeat'}} closeButton ><b>Add Customer</b></Modal.Header>
                 <Modal.Body>
     {this.state.msg?<Alert color="danger">{this.state.msg}</Alert>:null}
 
@@ -110,44 +104,34 @@ render(){
 
 
     <Formik
-      validationSchema={schemaPro}
+      validationSchema={schemaCustomer}
      
 
       initialValues={{
-        name:"",
-        description:"",
-        manufacturer:"",
-        price:'',
-        stock:'',
-        // rating:'',
-        img:"",
-        category:0,
-        // createdBy:'Admin',
-        // rank:0,
+        fname:"",
+        lname:"",
+        email:"",
+        address:"",
+        img:""
       }}
       onSubmit={(values)=>{ 
-        console.log("onSUbmit");
-        const {name,description,manufacturer,price,stock,category}=values;
-        console.log("On Submit Called",name);
-        // this.encodeImageFileAsURL();
-        
-        const user=this.props.user;
-
-        var Category=this.props.categories.filter(
-          function (cat) {
-            if(cat.id ===parseInt(category))return cat.name 
-          }
-        )
-        
-        let CategoryName=Category[0].name;
+       
+        const {fname,lname,address,email}=values;
+        // this.encodeImageFileAsURL();   
         let img=this.state.imageURL;
         console.log("Image:",img);
-        const product={
-          name,description,manufacturer,price,stock,img,CategoryName,user
+        const by_user_id=this.props.user?this.props.user._id:'';
+        const customer={
+          fname,lname,email,address,img,by_user_id
         }
+        console.log("New Customer:",customer);
       //  console.log("Name:",name," Des:",description," Manu:",manufacturer," price:",price," Stock:",stock," Img:",img,"  Cat",CategoryName," User:",user);
-        this.props.addItem(product);
+        this.props.addCustomer(customer);
+        
         this.toggle();
+        setTimeout(()=>{
+            this.props.getCustomers();
+        },1000);
        }
      }
     >
@@ -161,42 +145,59 @@ render(){
           
           
           <Form.Row>
-          <Form.Group as={Col} md="12" controlId="validationFormik01">
-              <Form.Label>Product Name</Form.Label>
+          <Form.Group as={Col} md="6" controlId="validationFormik01">
+              <Form.Label>First Name</Form.Label>
               
                 <Form.Control
                   type="text"
-                  placeholder="Product Name"
+                  placeholder="First Name"
                   aria-describedby="inputGroupPrepend"
-                  name="name"
-                  value={values.name}
+                  name="fname"
+                  value={values.fname}
                   onChange={handleChange}
-                  isInvalid={!!errors.name}
+                  isInvalid={!!errors.fname}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.name}
+                  {errors.fname}
+                </Form.Control.Feedback>
+              
+            </Form.Group>
+          <Form.Group as={Col} md="6" controlId="validationFormik01">
+              <Form.Label>Last Name</Form.Label>
+              
+                <Form.Control
+                  type="text"
+                  placeholder="Last  Name"
+                  aria-describedby="inputGroupPrepend"
+                  name="lname"
+                  value={values.lname}
+                  onChange={handleChange}
+                  isInvalid={!!errors.lname}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.lname}
                 </Form.Control.Feedback>
               
             </Form.Group>
             </Form.Row>
             <Form.Row>
             <Form.Group as={Col} md="12" controlId="validationFormik02">
-              <Form.Label>Price</Form.Label>
+              <Form.Label>Email</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">₹</InputGroup.Text>
+                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
                 </InputGroup.Prepend>
               <Form.Control
-                type="number"
-                placeholder="Price"
-                name="price"
-                value={values.price}
+                type="text"
+                placeholder="Email"
+                name="email"
+                value={values.email}
                 onChange={handleChange}
-                isInvalid={!!errors.price}
+                isInvalid={!!errors.email}
               />
 
               <Form.Control.Feedback type="invalid">
-                {errors.price}
+                {errors.email}
               </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -204,84 +205,28 @@ render(){
           </Form.Row>
             <Form.Row>
             <Form.Group as={Col} md="12" controlId="validationFormik03">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Quantity"
-                name="stock"
-                value={values.stock}
-                onChange={handleChange}
-                isInvalid={!!errors.stock}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.stock}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-          </Form.Row>
-            <Form.Row>
-            <Form.Group as={Col} md="12" controlId="validationFormik04">
-              <Form.Label>Manufacturer</Form.Label>
+              <Form.Label>Address</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Manufacturer"
-                name="manufacturer"
-                value={values.manufacturer}
+                placeholder="Address"
+                name="address"
+                value={values.address}
                 onChange={handleChange}
-                isInvalid={!!errors.manufacturer}
+                isInvalid={!!errors.address}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.manufacturer}
+                {errors.address}
               </Form.Control.Feedback>
             </Form.Group>
 
           </Form.Row>
-            <Form.Row>
-            <Form.Group as={Col} md="12" controlId="validationFormik05">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-              as="textarea"
-                type="textarea"
-                placeholder="Description"
-                name="description"
-                value={values.description}
-                onChange={handleChange}
-                isInvalid={!!errors.description}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.description}
-              </Form.Control.Feedback>
-            </Form.Group>
 
-          </Form.Row>
             <Form.Row>
-            <Form.Group as={Col} md="5" controlId="validationFormik06">
-              <Form.Label>Select Category</Form.Label>
-              <Form.Control
-                as="select"
-                // type="password"
-                placeholder=""
-                name="category"
-                value={values.category}
-                onChange={handleChange}
-                isInvalid={!!errors.category}
-                
-              >
-                  <option value="0">Choose Category</option>
-                  {this.props.categories.map((category)=>(
-                        <option value={category.id}>{category.name}</option>
 
-                  ))}
-                 
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.category}
-              </Form.Control.Feedback>
-            </Form.Group>
             <Form.Group as={Col} md="7" controlId="validationFormik07">
                 <div className="mb-3">
                     <Form.File id="formcheck-api-regular">
-                    <Form.File.Label>Product Image</Form.File.Label>
+                    <Form.File.Label>Customer Image</Form.File.Label>
                     <input id="inputFileToLoad"  type="file" onChange={this.encodeImageFileAsURL} />
                     </Form.File>
                 </div>
@@ -310,4 +255,4 @@ const mapStateToProps= state=>{
 }
 
 
-export default connect(mapStateToProps,{clearErrors,addItem,getCategories})(NewProductModal);
+export default connect(mapStateToProps,{getCustomers,clearErrors,addItem,getCategories,addCustomer})(AddCustomerModal);
