@@ -500,8 +500,8 @@ var dataSales = {
 };
 var optionsSales = {
   low: 0,
-  high: 800,
-  showArea: false,
+  high: 30,
+  showArea: true,
   height: "245px",
   axisX: {
     showGrid: false

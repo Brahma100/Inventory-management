@@ -13,7 +13,7 @@ import {clearErrors}  from '../../action/errorActions';
 import { getItems,updateItem } from '../../action/itemAction';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-class EditModal extends Component{
+class UpdateProductModal extends Component{
     
     state={
         modal:false,   // modal for adding item is false initially
@@ -192,4 +192,4 @@ const mapStateToProps= state=>{
 }
 
 
-export default connect(mapStateToProps,{loadUser,loginModalOpen,getItems,updateItem,clearErrors})(withRouter(EditModal));
+export default connect(mapStateToProps,{loadUser,loginModalOpen,getItems,updateItem,clearErrors})(withRouter(UpdateProductModal));

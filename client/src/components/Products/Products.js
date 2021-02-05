@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import './Products.css'
 
 import {NavLink, Prompt, withRouter} from 'react-router-dom';
-import EditModal1 from '../auth/EditModal1'
+import UpdateProductModal from '../ProductsList/UpdateProductModal'
 // import E2 from './auth/E2';
 // import EditModal from './auth/EditModal'
 import {getCategories} from '../../action/categoryAction';
@@ -363,7 +363,7 @@ console.log("Id:",event.target.id);
                       </Card.Body>
                       </NavLink>
                       <div className="bottom-button" >
-                        <EditModal1 isAuthenticated={this.props.isAuthenticated} product={product}/>
+                        <UpdateProductModal isAuthenticated={this.props.isAuthenticated} product={product}/>
                       {this.props.isAuthenticated?<Button variant="danger" size="sm" style={{marginLeft:'1rem'}} onClick={()=>{this.props.deleteItem(product.id)}}><FontAwesomeIcon icon={faTrashAlt}/></Button>      
                         :
                         <div>

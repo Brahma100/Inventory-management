@@ -16,7 +16,7 @@ import AnimatedCard from "../AnimatedCard/AnimatedCard";
 import { connect } from "react-redux";
 import {getItems} from '../../action/itemAction';
 import {getOrders} from '../../action/orderAction';
-import { faCubes } from "@fortawesome/free-solid-svg-icons";
+import { faCubes, faTruckLoading, faTruckPickup } from "@fortawesome/free-solid-svg-icons";
 
 class Dashboard extends Component {
 
@@ -26,6 +26,7 @@ class Dashboard extends Component {
       highStock:0,
       trending:0,
       outOfStock:0,
+      showArea:true
   }
 
   componentDidMount(){
@@ -53,6 +54,72 @@ class Dashboard extends Component {
     var OutOfStock=0;
     var trending=0;
 
+    var optionsSales = {
+      low: 0,
+      high: this.props.products.length/2*3,
+      showArea: this.state.showArea,
+      height: "245px",
+      axisX: {
+        showGrid: false
+      },
+      lineSmooth: true,
+      showLine: true,
+      showPoint: true,
+      fullWidth: true,
+      chartPadding: {
+        right: 50
+      }
+    };
+    var legendSales = {
+      names: ["Orders", "Product Added"],
+      types: ["info", "danger"]
+    };
+
+
+    const OrderDate=()=>{
+      let labels=[]
+      let Orders=[]
+      let Products=[]
+      var date = new Date();
+      var dates=[]
+      function pad(n) {
+          return (n < 10) ? ("0" + n) : n;
+      }
+      for (var i = 6; i >=0; i--){
+        var tempDate = new Date();
+        tempDate.setDate(date.getDate()-i);
+        console.log("Current date:",tempDate.toLocaleDateString());
+        var str = pad(tempDate.getFullYear()) + "-" + pad(tempDate.getMonth()+1)+ "-" + pad(tempDate.getDate());
+        var shortdate=tempDate.toLocaleDateString().split("/");
+        dates.push(shortdate[0]+"/"+shortdate[1])
+        labels.push(str);  
+      }
+
+    //  console.log("Dates:",labels);
+
+      if(this.props.orders.length!==0){
+          for(var i=0;i<labels.length;i++){
+            var j=0;
+            this.props.orders.map(order=>{
+              if(order.date.split(" ")[0]===labels[i])
+                   j+=1
+            })
+            Orders.push(j);
+          }
+      }
+      if(this.props.products.length!==0){
+          for(var i=0;i<labels.length;i++){
+            var j=0;
+            this.props.products.map(product=>{
+              if(product.date.split(" ")[0]===labels[i])
+                   j+=1
+            })
+            Products.push(j);
+          }
+      }
+     return {labels:dates,series:[Orders,Products]}
+    }
+    // OrderDate();
     const stock=()=>{
       // console.log("Stock:",products);
       products.map(product=>{
@@ -125,15 +192,16 @@ class Dashboard extends Component {
           <Row>
             <Col md={8}>
               <Card
+               icon={faTruckLoading}
                 statsIcon="fa fa-history"
                 id="chartHours"
-                title="Users Behavior"
-                category="24 Hours performance"
+                title="Inventory Statistics"
+                category="Weekly Performance of Order/Products"
                 stats="Updated 3 minutes ago"
                 content={
                   <div className="ct-chart">
                     <ChartistGraph
-                      data={dataSales}
+                      data={OrderDate()}
                       type="Line"
                       options={optionsSales}
                       responsiveOptions={responsiveSales}

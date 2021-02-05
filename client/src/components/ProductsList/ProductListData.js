@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Card,Container, Row, Col,Button,Media,Form,Tooltip, Accordion, DropdownButton, OverlayTrigger, Spinner } from "react-bootstrap";
+import { Card, Row, Col,Button,Media,Tooltip, Accordion, DropdownButton, OverlayTrigger, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch,faFilter, faTimes,faEdit, faTrash, faArrowDown, faArrowLeft, faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown, faStar } from '@fortawesome/free-solid-svg-icons';
-import Checkbox from '../CustomCheckbox/CustomCheckbox';
+import { faSearch,faFilter, faTimes,faTrash, faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown, faStar } from '@fortawesome/free-solid-svg-icons';
 import './ProductListData.css'
 import {deleteItem, deleteSelectedItem} from '../../action/itemAction'
 import { connect } from 'react-redux';
-import { propTypes } from 'react-bootstrap/esm/Image';
-import EditModal1 from '../auth/EditModal1';
-import Price_Slider from '../Slider/Price_Slider';
+import UpdateProductModal from './UpdateProductModal';
+
 import {NavLink} from 'react-router-dom'
 import CountUp from 'react-countup';
-import NotificationSystem from 'react-notification-system';
+
 
 
 const styles = {
@@ -371,7 +369,7 @@ const handleCheck= async (e,product)=> {
                                     <div className='action-button'>
                                     
                                        
-                                    <EditModal1 user={user} product={product}/>
+                                    <UpdateProductModal user={user} product={product}/>
                                    
                                   
                                     <div>

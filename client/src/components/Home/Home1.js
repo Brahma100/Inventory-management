@@ -4,14 +4,6 @@ import { Container, Row, Col,Button,Media,Form,Tooltip } from "react-bootstrap";
 // import  Card  from "../Card/Card.js";
 import './Home1.css'
 import {Card} from 'react-bootstrap';   
-import  StatsCard  from "../StatsCard/StatsCard.js";
-import  Tasks  from "../Tasks/Tasks.js";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes,faEdit } from '@fortawesome/free-solid-svg-icons';
-import banner from '../../assets/images/Banner.png'
-import back from '../../assets/images/back.jpg'
-import AppNavbar from "../AppNavbar";
-import ApexChart from './ApexChart';
 
 
 import { NavLink } from 'react-router-dom';

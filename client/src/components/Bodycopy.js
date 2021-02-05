@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
-import { Media,CardSubtitle, Spinner, Row, Container, Col, Card, CardBody, Button, CardTitle, CardText, CardImg, CardLink} from 'reactstrap';
 import {connect} from 'react-redux';
-
-import EditModal1 from './auth/EditModal1'
-import E2 from './auth/E2';
-import EditModal from './auth/EditModal'
 import { getItems,deleteItem } from "../action/itemAction";
-import Body2 from './auth/Body2';
-import Pagination from './Pagination';
-import { PropTypes } from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes,faEdit } from '@fortawesome/free-solid-svg-icons';
 import ProductList from './ProductsList/ProductList';
 
 
