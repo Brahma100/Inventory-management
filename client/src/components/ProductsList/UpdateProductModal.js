@@ -90,7 +90,11 @@ class UpdateProductModal extends Component{
         const id=this.props.product.id;
         var user=this.props.user;
         console.log("User Id Given for Update: :",user)
-        const {name,description,manufacturer,stock,price,rating}=this.state;
+        const {name,description,manufacturer,stock,price}=this.state;
+        let {rating}=this.state;
+        if(rating===undefined)
+        rating=4.5
+        console.log("Data to Update:",rating);
         const editProduct={
             id,name,description,manufacturer,price,stock,rating,user
         }
@@ -186,7 +190,6 @@ const mapStateToProps= state=>{
         isUpdate:state.auth.isUpdate,
 
         isAuthenticated:state.auth.isAuthenticated,
-        // user:state.auth.user,
         error:state.error
     })
 }

@@ -1,6 +1,5 @@
 import  {UPDATE_ORDER,GET_ORDER,ADD_ORDER,DELETE_ORDER, ORDERS_LOAD} from './types';
 import axios from 'axios';
-import {tokenConfig} from './authActions';
 import {returnErrors} from './errorActions';
 
 export const getOrders=()=> dispatch =>{
@@ -18,7 +17,13 @@ export const addOrder=order=> dispatch =>{
     .then(res=>dispatch({
         type:ADD_ORDER,
         payload:res.data
-    })).catch(err=>dispatch(returnErrors(err.response.data,err.response.status)));
+    })).catch(err=>{
+        console.log("catch block error")
+        dispatch(returnErrors(err.response.data, err.response.status,"ORDER_ADD_FAIL"));
+        // dispatch({
+        //     type:ORDER_ADD_FAIL
+        // });
+    })
 };
 
 export const deleteOrder=id=>dispatch=>{

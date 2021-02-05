@@ -1,19 +1,19 @@
 {
-  "name": "mern-stack",
+  "name": "shopperz",
   "version": "1.0.0",
-  "description": "Shoppingg list build with the MERN stack",
-  "main": "lserver.js",
+  "description": "Product Inventory management Application Using React Js",
+  "main": "server.js",
  
   "scripts": {
     
     "client-install": "npm install --prefix client",
-    "start": "node lserver.js",
-    "server": "nodemon lserver.js",
+    "start": "node server.js",
+    "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
 
   },
-  "author": "mahesh",
+  "author": "Brahma Jaiswal && Ravi Yadav",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

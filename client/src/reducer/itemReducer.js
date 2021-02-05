@@ -8,7 +8,7 @@ const initialState={
 }
 
 export default function(state=initialState,action){
-    const {type,payload}=action; //destructuring action
+    const {payload}=action; //destructuring action
     switch(action.type){
         case GET_ITEM:
             return{

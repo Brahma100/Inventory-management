@@ -1,5 +1,5 @@
 
-import  {DELETE_SELECTED_ITEM,UPDATE_ORDER,GET_ORDER,ADD_ORDER,DELETE_ORDER,ORDERS_LOAD} from '../action/types';
+import  {UPDATE_ORDER,GET_ORDER,ADD_ORDER,DELETE_ORDER,ORDERS_LOAD} from '../action/types';
 
 const initialState={
     orders:[],
@@ -8,7 +8,7 @@ const initialState={
 }
 
 export default function(state=initialState,action){
-    const {type,payload}=action; //destructuring action
+    const {payload}=action; //destructuring action
     switch(action.type){
         case GET_ORDER:
             return{

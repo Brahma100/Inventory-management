@@ -1,13 +1,13 @@
-import { CircularProgressbar, CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
+import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import CountUp from 'react-countup';
 import React, { useState } from 'react';
 import './AnimatedCard.css';
 import 'react-circular-progressbar/dist/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faQuestionCircle,faUserCircle,faDollarSign,faCommentDollar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
+import {  faQuestionCircle,faUserCircle,faCommentDollar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 import AnimatedProgressProvider from "./AnimatedProgressProvider";
 import { easeQuadInOut } from "d3-ease";
-import {Container,Col,Row, Spinner} from 'react-bootstrap'
+import {Col,Row, Spinner} from 'react-bootstrap'
 import {Card} from 'reactstrap';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
@@ -15,7 +15,7 @@ import {getItems} from '../../action/itemAction';
 import {getOrders} from '../../action/orderAction'
 function AnimatedCard(props) {
 
-    const [products,setProducts]=useState([]);
+    // const [products,setProducts]=useState([]);
     const [Expenses,setExpenses]=useState(0);
 
 
@@ -23,6 +23,7 @@ function AnimatedCard(props) {
         let total=0;
         props.products.map(product=>{
             total+=product.price*product.stock
+            return
         })
         // console.log("Expenses:",total);
         setExpenses(total)
@@ -34,7 +35,7 @@ function AnimatedCard(props) {
     useEffect(()=>{
         if(props.products){
             countExpenses();
-            setProducts(props.products)
+            // setProducts(props.products)
 
             // console.log("Products From Animated Card:",products);
         }
@@ -61,7 +62,7 @@ function AnimatedCard(props) {
                                     
                                 >
                                     {value => {
-                                    const roundedValue = Math.round(value);
+                                   
                                     return (
                                         <CircularProgressbarWithChildren
                                         value={value}
@@ -111,7 +112,7 @@ elf, you'll want to disable the CSS animation. */
                                     
                                 >
                                     {value => {
-                                    const roundedValue = Math.round(value);
+                                   
                                     return (
                                         <CircularProgressbarWithChildren
                                         value={value}
@@ -157,7 +158,7 @@ elf, you'll want to disable the CSS animation. */
                                     
                                 >
                                     {value => {
-                                    const roundedValue = Math.round(value);
+                                   
                                     return (
                                         <CircularProgressbarWithChildren
                                         value={value}

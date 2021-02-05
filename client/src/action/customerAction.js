@@ -1,6 +1,6 @@
-import  {UPDATE_CUSTOMER,GET_CUSTOMER,ADD_CUSTOMER,DELETE_CUSTOMER, CUSTOMERS_LOAD} from './types';
+import  {GET_CUSTOMER,ADD_CUSTOMER,DELETE_CUSTOMER, CUSTOMERS_LOAD} from './types';
 import axios from 'axios';
-import {tokenConfig} from './authActions';
+
 import {returnErrors} from './errorActions';
 
 export const getCustomers=()=> dispatch =>{

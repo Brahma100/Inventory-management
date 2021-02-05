@@ -6,7 +6,7 @@ import './ProductListData.css'
 import {deleteItem, deleteSelectedItem} from '../../action/itemAction'
 import { connect } from 'react-redux';
 import UpdateProductModal from './UpdateProductModal';
-
+import default_product from '../../assets/images/default-pro.jpg'
 import {NavLink} from 'react-router-dom'
 import CountUp from 'react-countup';
 
@@ -202,9 +202,10 @@ const handleCheck= async (e,product)=> {
                         </div>
                         <OverlayTrigger
                                         placement="bottom"
-                                        overlay={<Tooltip id="button-tooltip-2">Delete All</Tooltip>}
+                                        overlay={<Tooltip id="button-tooltip-2">Delete Selected (Not Working :( Some Issue with Function)</Tooltip>}
                                             >
-                        <Button onClick={(e)=>deleteAll(e)} style={{display: state.checkedBoxes.length>0 ? 'block' : 'none' }} variant="danger" size="sm"><FontAwesomeIcon icon={faTrash}/></Button></OverlayTrigger>
+                                                {/* onClick={(e)=>deleteAll(e)} */}
+                        <Button  style={{display: state.checkedBoxes.length>0 ? 'block' : 'none' }} variant="danger" size="sm"><FontAwesomeIcon icon={faTrash}/></Button></OverlayTrigger>
                         <div className='search-bar' >
                           <FontAwesomeIcon icon={faSearch} />
 
@@ -298,7 +299,7 @@ const handleCheck= async (e,product)=> {
 
 
                  
-            <p style={{display:'flex',alignItems:products.length<1?"center":"",flexDirection:'column-reverse'}}>{newProducts.length===0?<><Spinner style={{ marginTop:'4rem',width: '5rem', height: '5rem', color:'green' }} animation="grow" variant="success" /></>:Range(Search(newProducts)).map((product,id)=>(
+            <p style={{display:'flex',alignItems:products.length<1?"center":"",flexDirection:'column-reverse'}}>{newProducts.length===0?<div style={{display:'flex',justifyContent:'center',alignItems:'center'}}><Spinner style={{ marginTop:'4rem',width: '5rem', height: '5rem', color:'green' }} animation="grow" variant="success" /></div>:Range(Search(newProducts)).map((product,id)=>(
                 
                 <div className="product-card-indentical" style={{color:'black',display:'flex',alignItems:'center',border:'1px solid #dee2e6',margin:'.5rem'}}>
              
@@ -329,7 +330,7 @@ const handleCheck= async (e,product)=> {
                                 width={100}
                                 height={100}
                                 className="align-self-center mr-3"
-                                src={product.img?product.img:"https://i5.walmartimages.com/asr/e73e1252-642c-4473-93ea-fd3b564a7027_1.3e81ea58fa3042452fe185129a4a865f.jpeg?odnWidth=undefined&odnHeight=undefined&odnBg=ffffff"}
+                                src={product.img?product.img:default_product}
                                 alt="Generic placeholder"
                             />
                       </NavLink>

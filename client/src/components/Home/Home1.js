@@ -1,24 +1,9 @@
 import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
-import { Container, Row, Col,Button,Media,Form,Tooltip } from "react-bootstrap";
-// import  Card  from "../Card/Card.js";
+import { Container, Row, Col } from "react-bootstrap";
 import './Home1.css'
 import {Card} from 'react-bootstrap';   
-
-
 import { NavLink } from 'react-router-dom';
 import TrendingProductList from "../ProductsList/TrendingProductList";
-const styles = {
-    mediaItem: {
-      border: "1px solid gray",
-      backgroundColor: "#f5f5f5",
- 
-    },
-    mediaItemButtons: {
-      paddingTop: "5px",
-      paddingBottom: "5px"
-    }
-  };
 
 class Home1 extends Component {
   createLegend(json) {
@@ -55,7 +40,7 @@ class Home1 extends Component {
                             <div>
                                 <a className="d-block d-sm-inline-block btn btn-primary btn-lg">
                                 <span className="btn-wrapper--icon">
-                                </span><span className="btn-wrapper--label"><NavLink style={{color:'white'}} to='/admin/dashboard'>Dashboard</NavLink></span></a>
+                                </span><span className="btn-wrapper--label"><NavLink href="#" style={{color:'white'}} to='/admin/dashboard'>Dashboard</NavLink></span></a>
                                 <a className="d-block d-sm-inline-block ml-0 mt-3 mt-sm-0 ml-sm-3 btn btn-outline-primary btn-lg" href="#"><span>Products Filters</span></a>
                             </div>
                         </div>

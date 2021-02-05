@@ -1,30 +1,16 @@
 import React, {Component, Fragment} from 'react';
-
-import {
-    Collapse,
-    Navbar,
-    
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    Container,Dropdown, Badge, Button
-} from 'react-bootstrap';
-import Logout from './auth/Logout';
-import RegisterModal from './auth/RegisterModal1';
-import LoginModal from './auth/LoginModal';
+import {Navbar, Nav,NavLink,Container,Dropdown, Button} from 'react-bootstrap';
+import Logout from '../auth/Logout';
+import RegisterModal from '../auth/RegisterModal1';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import avatar from '../assets/images/avatar.png'
-import logo from '../assets/images/logo.jpg'
+import avatar from '../../assets/images/avatar.png'
+import logo from '../../assets/images/logo.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faHome, faUserCircle, faDatabase, faUser, faCog, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import {faCog, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 import './AppNavBar.css'
-import store from '../store';
-import { loadUser } from '../action/authActions';
-
-
-
+import store from '../../store';
+import { loadUser } from '../../action/authActions';
 
 class AppNavbar extends Component{
     componentDidMount(){
@@ -61,7 +47,7 @@ class AppNavbar extends Component{
                     
                     <Dropdown.Toggle id="dropdown-basic" caret>
                         {user? <div className="user-avatar">
-                        <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
+                        <img alt="alt" className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
                         <div class="status-overlay">
                             <i class="bowtie-icon bowtie-status-success success"></i>
                         </div>
@@ -76,7 +62,7 @@ class AppNavbar extends Component{
                     <Dropdown.Menu bottom>
                             <Dropdown.Item header>
                             {user? <div className="user-avatar">
-                    <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
+                    <img alt="alt" className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
                     {/* <div class="status-overlay">
                         <i class="bowtie-icon bowtie-status-success success"></i>
                     </div> */}
@@ -129,7 +115,7 @@ class AppNavbar extends Component{
             <div  style={{color:'#000',textDecoration:'none'}}>
             <Navbar expand="sm"> 
                 <Container>
-                    <Navbar.Brand href="/"><div className="nav-brand"><img className="nav-logo" src={logo}/><div className="brand-text"><span><b>inventory</b></span><b>ShopperZ</b></div></div></Navbar.Brand>
+                    <Navbar.Brand href="/"><div className="nav-brand"><img alt="alt" className="nav-logo" src={logo}/><div className="brand-text"><span><b>inventory</b></span><b>ShopperZ</b></div></div></Navbar.Brand>
                     <Navbar.Toggle onClick={this.toggle}/>
                     <Navbar.Collapse className="mainNavCollapse" isOpen={this.state.isOpen} navbar>
                         <NavLink className="ml-auto"  href='/'><b>Home</b></NavLink>

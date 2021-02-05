@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { getItems,deleteItem } from "../action/itemAction";
-import ProductList from './ProductsList/ProductList';
+import { getItems,deleteItem } from "../../action/itemAction";
+import ProductList from './ProductList';
 
 
 const styles = {
@@ -16,7 +16,7 @@ const styles = {
   }
 };
 
-class Bodycopy extends Component {
+class ProductListPage extends Component {
   state = {
     products: this.props.products,
     pageOfItems: [],
@@ -30,16 +30,8 @@ class Bodycopy extends Component {
  this.props.getItems()
     this.setState({products:this.props.products})
  
-    // console.log("ProductS",this.props.products)
-    // console.log("Products:",this.props.products);
   }
-  componentDidUpdate(){
-//  this.props.getItems()
-    // this.setState({products:this.props.products})
- 
-    // console.log("ProductSU",this.state.products)
-    // console.log("Products:",this.props.products);
-  }
+
   handleView=()=>{
     if(!this.props.isAuthenticated){
       
@@ -62,9 +54,7 @@ class Bodycopy extends Component {
     
         return (
             <div>
-            <ProductList/>
-                            
-            
+              <ProductList/>  
             </div>
           );
     }
@@ -83,4 +73,4 @@ const mapStateToProps= state=>{
 }
 
 
-export default connect(mapStateToProps,{getItems,deleteItem})(Bodycopy);
+export default connect(mapStateToProps,{getItems,deleteItem})(ProductListPage);

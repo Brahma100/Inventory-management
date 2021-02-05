@@ -6,25 +6,14 @@ import {register,login,TokenExpireExtend,loginModalOpen,isBlockedF} from '../../
 import {clearErrors}  from '../../action/errorActions';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {Prompt} from 'react-router-dom';
 import back from '../../assets/images/back.jpg';
-import Map from './Map';
-import publicIp from "public-ip";
+
 
 const schemaLogin = yup.object({
     email: yup.string().email('Invalid email').required(),
     password: yup.string().min(0, 'Password must be at least 6 characters').max(24, 'Password can be maximum 24 characters').required()
 })
 
-// fname:'',
-//         lname:'',
-//         email:'',
-//         password:'',
-//         city:this.state.city,
-//         state:this.state.State,
-//         postal:this.state.postal,
-//         country:this.state.country,
-//         mobile_num
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 

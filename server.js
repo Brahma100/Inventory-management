@@ -9,13 +9,13 @@ const crypto= require('crypto')
 
 const server = jsonServer.create()
 
-const router = jsonServer.router('./products.json')
+const router = jsonServer.router('./Json_DataBase_Files/products.json')
 
-const userdb = JSON.parse(fs.readFileSync('./users.json', 'UTF-8'))
-const productdb=JSON.parse(fs.readFileSync('./products.json','UTF-8'))
-const categorydb=JSON.parse(fs.readFileSync('./categories.json','UTF-8'))
-const orderdb=JSON.parse(fs.readFileSync('./orders.json','UTF-8'))
-const customerdb=JSON.parse(fs.readFileSync('./customers.json','UTF-8'))
+const userdb = JSON.parse(fs.readFileSync('./Json_DataBase_Files/users.json', 'UTF-8'))
+const productdb=JSON.parse(fs.readFileSync('./Json_DataBase_Files/products.json','UTF-8'))
+const categorydb=JSON.parse(fs.readFileSync('./Json_DataBase_Files/categories.json','UTF-8'))
+const orderdb=JSON.parse(fs.readFileSync('./Json_DataBase_Files/orders.json','UTF-8'))
+const customerdb=JSON.parse(fs.readFileSync('./Json_DataBase_Files/customers.json','UTF-8'))
 
 server.use(bodyParser.urlencoded({extended: true}))
 server.use(bodyParser.json())
@@ -65,7 +65,7 @@ function CheckCategory({name}){
 
 server.get('/products',(req,res)=>{
 
-  fs.readFile("./products.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/products.json", (err, data) => {  
     if (err) {
       const status = 401
       const message = err
@@ -96,7 +96,7 @@ server.post('/add_product', (req, res) => {
       return res.status(400).json({msg:'Product Already Exits'});
   }
 
-fs.readFile("./products.json", (err, data) => {  
+fs.readFile("./Json_DataBase_Files/products.json", (err, data) => {  
       if (err) {
         const status = 401
         const message = err
@@ -114,7 +114,7 @@ fs.readFile("./products.json", (err, data) => {
           
                     data.products.push({id: id,name:name, description: description,manufacturer:manufacturer ,price:price,stock:stock,img:img,category:CategoryName,user:user,date:date,rank:0,rankUser:[],editUser:[]}); //add some data
                     console.log("Push Pass",data);
-                    var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
+                    var writeData = fs.writeFile("./Json_DataBase_Files/products.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
                         const status = 401
                         const message = err
@@ -151,7 +151,7 @@ fs.readFile("./products.json", (err, data) => {
 
 server.get('/categories',(req,res)=>{
 
-  fs.readFile("./categories.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/categories.json", (err, data) => {  
     if (err) {
       const status = 401
       const message = err
@@ -178,7 +178,7 @@ server.post('/add_category', (req, res) => {
       return res.status(400).json({msg:'Category Already Exits'});
   }
 
-fs.readFile("./categories.json", (err, data) => {  
+fs.readFile("./Json_DataBase_Files/categories.json", (err, data) => {  
       if (err) {
         const status = 401
         const message = err
@@ -199,7 +199,7 @@ fs.readFile("./categories.json", (err, data) => {
           
                     data.categories.push({id: id,name:name, user:user,date:date,products:[]}); //add some data
                     console.log("Push Pass",data);
-                    var writeData = fs.writeFile("./categories.json", JSON.stringify(data), (err, result) => {  // WRITE
+                    var writeData = fs.writeFile("./Json_DataBase_Files/categories.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
                         const status = 401
                         const message = err
@@ -231,7 +231,7 @@ server.post("/update_product",function(req,res){
   // req==request from client || res=== Response that would be from Server
 
   const {id,name,description, manufacturer,price,stock,rating,user} = req.body;
-
+console.log(id,name,description, manufacturer,price,stock,rating,user);
   if(!name || !description || !manufacturer || !stock || !rating || !price) return res.status(400).json({msg:'Please Enter all Fields'});
   // Check for Existence of Registering User
 
@@ -244,7 +244,7 @@ server.post("/update_product",function(req,res){
   // Matching new Entries with Previous Entries
   if(name===product.name && description===product.description && manufacturer===product.manufacturer && price===product.price && stock===product.stock && rating===product.rating) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
   // Reading Json DB
-  fs.readFile("./products.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/products.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -263,7 +263,7 @@ server.post("/update_product",function(req,res){
     console.log(data.products[index].editUser,user);
     
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/products.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -311,7 +311,7 @@ server.post("/rank_product",function(req,res){
   // Matching new Entries with Previous Entries
   // if(name===product.name && description===product.description && manufacturer===product.manufacturer && price===product.price && stock===product.stock && rating===product.rating) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
   // Reading Json DB
-  fs.readFile("./products.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/products.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -323,7 +323,7 @@ server.post("/rank_product",function(req,res){
     // data.products[index].rankUser.push(id.user);
     data.products[index].rank=data.products[index].rank+1;
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/products.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -365,7 +365,7 @@ server.post("/delete_product",function(req,res){
   // Storing target Product in "product" from db
   const product=productdb.products[index];  
   // Matching new Entries with Previous Entries
-  fs.readFile("./products.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/products.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -375,7 +375,7 @@ server.post("/delete_product",function(req,res){
     var products=data.products;
     data.products=products.filter(product=>product.id!==id)
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/products.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -407,7 +407,7 @@ server.post("/delete_selected_product",function(req,res){
   // Storing target Product in "product" from db
   // const product=productdb.products[index];  
   // Matching new Entries with Previous Entries
-  fs.readFile("./products.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/products.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -423,7 +423,7 @@ server.post("/delete_selected_product",function(req,res){
               return true;
       });                                            //product=>product.id!==id
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./products.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/products.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -445,7 +445,7 @@ server.post("/delete_selected_product",function(req,res){
 //-----------------------------------LOGIN API ROUTE-----------------------------------
 
 
-// Login to one of the users from ./users.json
+// Login to one of the users from ./Json_DataBase_Files/users.json
 server.post('/auth/login', (req, res) => {
   // req==request from client || res=== Response that would be Given from Server
 
@@ -509,7 +509,7 @@ server.post('/auth/register', (req, res) => {
             return res.status(400).json({msg:'User Already Exits'});
         }
 
-      fs.readFile("./users.json", (err, data) => {  
+      fs.readFile("./Json_DataBase_Files/users.json", (err, data) => {  
             if (err) {
               const status = 401
               const message = err
@@ -534,7 +534,7 @@ server.post('/auth/register', (req, res) => {
                         // console.log("Img:",img);
                           data.users.push({id: last_item_id + 1,fname:fname,lname:lname, email: email, password: newPassword,img:img,date:date,city:city,state:state,postal:postal,country:country,ip:ip}); //add some data
                           // console.log("Push Pass",data);
-                          var writeData = fs.writeFile("./users.json", JSON.stringify(data), (err, result) => {  // WRITE
+                          var writeData = fs.writeFile("./Json_DataBase_Files/users.json", JSON.stringify(data), (err, result) => {  // WRITE
                             if (err) {
                               const status = 401
                               const message = err
@@ -595,7 +595,7 @@ server.post("/auth/update",auth,function(req,res){
   // Matching new Entries with Previous Entries
   if(fname===user.fname && lname===user.lname && city===user.city && state===user.state && postal===user.postal && img===user.img && email===user.email ) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
   // Reading Json DB
-  fs.readFile("./users.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/users.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -612,7 +612,7 @@ server.post("/auth/update",auth,function(req,res){
     data.users[index].country=country;
     data.users[index].img=img;
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./users.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/users.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -690,7 +690,7 @@ server.get("/auth/user",auth, (req,res)=>{
 
 server.get('/customers',(req,res)=>{
 
-  fs.readFile("./customers.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/customers.json", (err, data) => {  
     if (err) {
       const status = 401
       const message = err
@@ -711,7 +711,7 @@ server.post('/add_customer', (req, res) => {
 // console.log(product_id,customer_id,quantity,by_user_id,total,payment);
   if(!fname || !lname || !address || !email ) return res.status(400).json({msg:'Please Enter all Fields'});
 
-fs.readFile("./customers.json", (err, data) => {  
+fs.readFile("./Json_DataBase_Files/customers.json", (err, data) => {  
       if (err) {
         const status = 401
         const message = err
@@ -729,7 +729,7 @@ fs.readFile("./customers.json", (err, data) => {
     
                     data.customers.push({id: last_item_id+1,fname:fname, lname: lname,email:email,address:address,date:date, img:img,by_user_id:by_user_id}); //add some data
                     console.log("Push Pass",data);
-                    var writeData = fs.writeFile("./customers.json", JSON.stringify(data), (err, result) => {  // WRITE
+                    var writeData = fs.writeFile("./Json_DataBase_Files/customers.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
                         const status = 401
                         const message = err
@@ -765,7 +765,7 @@ server.post("/delete_customer",function(req,res){
   // Storing target Product in "product" from db
   const customer=customerdb.customers[index];  
   // Matching new Entries with Previous Entries
-  fs.readFile("./customers.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/customers.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -775,7 +775,7 @@ server.post("/delete_customer",function(req,res){
     var customers=data.customers;
     data.customers=customers.filter(customer=>customer.id!==id)
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./customers.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/customers.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -797,7 +797,7 @@ server.post("/delete_customer",function(req,res){
 
 server.get('/orders',(req,res)=>{
 
-  fs.readFile("./orders.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/orders.json", (err, data) => {  
     if (err) {
       const status = 401
       const message = err
@@ -818,7 +818,7 @@ server.post('/add_order', (req, res) => {
 console.log(product_id,customer_id,quantity,by_user_id,total,payment);
   if(!product_id || parseInt(customer_id)===0 || !quantity || by_user_id===0 || !total || !payment) return res.status(400).json({msg:'Please Enter all Fields'});
 
-fs.readFile("./orders.json", (err, data) => {  
+fs.readFile("./Json_DataBase_Files/orders.json", (err, data) => {  
       if (err) {
         const status = 401
         const message = err
@@ -836,7 +836,7 @@ fs.readFile("./orders.json", (err, data) => {
     
                     data.orders.push({id: id,product_id:product_id, customer_id: customer_id1,by_user_id:by_user_id,date:date,quantity:quantity,total:total,payment:payment}); //add some data
                     console.log("Push Pass",data);
-                    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+                    var writeData = fs.writeFile("./Json_DataBase_Files/orders.json", JSON.stringify(data), (err, result) => {  // WRITE
                       if (err) {
                         const status = 401
                         const message = err
@@ -876,7 +876,7 @@ server.post("/update_order",function(req,res){
   // Matching new Entries with Previous Entries
   if(quantity===order.quantity && total===order.total && payment===order.payment) return res.status(400).json({msg:'Server: Entered Data is Same as Previous One'});
   // Reading Json DB
-  fs.readFile("./orders.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/orders.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -889,7 +889,7 @@ server.post("/update_order",function(req,res){
     data.orders[index].payment=payment;
     
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/orders.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };
@@ -926,7 +926,7 @@ server.post("/delete_order",function(req,res){
   // Storing target Product in "product" from db
   const order=orderdb.orders[index];  
   // Matching new Entries with Previous Entries
-  fs.readFile("./orders.json", (err, data) => {  
+  fs.readFile("./Json_DataBase_Files/orders.json", (err, data) => {  
     if (err) {
       return res.status(400).json({msg:'Server: Error while Reading JSON DB'});
     };
@@ -936,7 +936,7 @@ server.post("/delete_order",function(req,res){
     var orders=data.orders;
     data.orders=orders.filter(product=>product.id!==id)
     // Writing Updated data to Json DB
-    var writeData = fs.writeFile("./orders.json", JSON.stringify(data), (err, result) => {  // WRITE
+    var writeData = fs.writeFile("./Json_DataBase_Files/orders.json", JSON.stringify(data), (err, result) => {  // WRITE
       if (err) {
         return res.status(400).json({msg:'Server: Error while Writing into JSON DB'});
       };

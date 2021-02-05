@@ -1,9 +1,8 @@
 import React,{Component} from 'react';
-import {Col, Alert,NavLink, Button, Modal,Form,FormGroup,Label, Input, InputGroup, ButtonGroup} from 'react-bootstrap';
+import {Col, Alert,NavLink, Button, Modal,Form, InputGroup} from 'react-bootstrap';
 
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {login} from '../../action/authActions';
 import {addItem} from '../../action/itemAction';
 import {getCategories} from '../../action/categoryAction';
 
@@ -249,7 +248,6 @@ const mapStateToProps= state=>{
     return({
         categories:state.category.categories,
         user:state.auth.user,
-        isAuthenticated:state.auth.isAuthenticated,
         error:state.error
     })
 }

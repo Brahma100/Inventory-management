@@ -1,6 +1,5 @@
 import  {GET_CATEGORY,ADD_CATEGORY} from './types';
 import axios from 'axios';
-import {tokenConfig} from './authActions';
 import {returnErrors} from './errorActions';
 
 export const getCategories=()=> dispatch =>{

@@ -1,6 +1,6 @@
 import  {DELETE_SELECTED_ITEM,UPDATE_ITEM,GET_ITEM,ADD_ITEM,DELETE_ITEM, ITEMS_LOAD} from './types';
 import axios from 'axios';
-import {tokenConfig} from './authActions';
+
 import {returnErrors} from './errorActions';
 
 
@@ -39,7 +39,7 @@ export const deleteItem=id=>dispatch=>{
 
 
 export const deleteSelectedItem=ids=>dispatch=>{
-    console.log("Id of Item",ids);
+
     const config={
         headers:{'Content-Type':'application/json'}
     }

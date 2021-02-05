@@ -2,11 +2,16 @@
 html,body{
   overflow-x: hidden;
 }
-/* @media screen and (max-width:1382px){
+@media screen and (max-width:1100px){
   .order-list{
     display: none;
   }
-} */
+}
+@media screen and (min-width:1100px){
+  .order-grid{
+    display: none;
+  }
+}
 img{
   transition: transform .2s;
 }

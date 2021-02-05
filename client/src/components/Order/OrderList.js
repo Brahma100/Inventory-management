@@ -10,7 +10,7 @@ import { faChevronCircleDown, faChevronCircleRight, faTrashAlt,faFilter, faSearc
 import avatar from '../../assets/images/avatar.png'
 import EditOrderModal from './EditOrderModal';
 import AddOrderModal from './AddOrderModal';
-
+import './OrderList.css'
 const OrderList=(props)=>{
     
 const [orders,setOrders]=useState([]);
@@ -72,6 +72,7 @@ const getCustomerImage=id=>{
     else
     return "Loading...."
 }
+
 
 // const getCustomerAddress=id=>{
 //     if(props.customers.length>0)
@@ -210,7 +211,7 @@ return(
             </Card.Header>
         </Container>
          <Container className="order-list">
-        {orders.length===0?<Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" />:
+        {orders.length===0?<Container><div style={{display:'flex',justifyContent:'center',alignItems:'center'}} ><Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" /></div></Container>:
             <>
                 {Search(orders).map((order,key)=>(
                   
@@ -237,7 +238,7 @@ return(
 
         <Container className="order-grid">
             <Row>
-            {orders.length===0?<Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" />:
+            {orders.length===0?<Container><div style={{display:'flex',justifyContent:'center',alignItems:'center'}} ><Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" /></div></Container>:
             <>
                 {Search(orders).map((order,key)=>(
                   

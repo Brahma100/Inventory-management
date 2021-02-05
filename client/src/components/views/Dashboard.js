@@ -3,20 +3,16 @@ import ChartistGraph from "react-chartist";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import  Card  from "../Card/Card.js";
 import  StatsCard  from "../StatsCard/StatsCard.js";
-
 import {
   legendPie,
-  dataSales,
-  optionsSales,
   responsiveSales,
-  legendSales,
 
 } from "../Variables/Variables.js";
 import AnimatedCard from "../AnimatedCard/AnimatedCard";
 import { connect } from "react-redux";
 import {getItems} from '../../action/itemAction';
 import {getOrders} from '../../action/orderAction';
-import { faCubes, faTruckLoading, faTruckPickup } from "@fortawesome/free-solid-svg-icons";
+import { faCubes, faTruckLoading } from "@fortawesome/free-solid-svg-icons";
 
 class Dashboard extends Component {
 
@@ -85,7 +81,7 @@ class Dashboard extends Component {
       function pad(n) {
           return (n < 10) ? ("0" + n) : n;
       }
-      for (var i = 6; i >=0; i--){
+      for (let i = 6; i >=0; i--){
         var tempDate = new Date();
         tempDate.setDate(date.getDate()-i);
         console.log("Current date:",tempDate.toLocaleDateString());
@@ -98,21 +94,23 @@ class Dashboard extends Component {
     //  console.log("Dates:",labels);
 
       if(this.props.orders.length!==0){
-          for(var i=0;i<labels.length;i++){
-            var j=0;
+          for(let i=0;i<labels.length;i++){
+            let j=0;
             this.props.orders.map(order=>{
               if(order.date.split(" ")[0]===labels[i])
                    j+=1
+                   return
             })
             Orders.push(j);
           }
       }
       if(this.props.products.length!==0){
-          for(var i=0;i<labels.length;i++){
-            var j=0;
+          for(let i=0;i<labels.length;i++){
+            let j=0;
             this.props.products.map(product=>{
               if(product.date.split(" ")[0]===labels[i])
                    j+=1
+                   return
             })
             Products.push(j);
           }
@@ -145,7 +143,7 @@ class Dashboard extends Component {
       <div className="content">
         <AnimatedCard/>
         <Container fluid>
-          {products.length===0?<Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" />:<>
+          {products.length===0?<Container><div style={{display:'flex',justifyContent:'center',alignItems:'center'}} ><Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" /></div></Container>:<>
           <Row>
             <Col lg={3} sm={6}>
               <StatsCard

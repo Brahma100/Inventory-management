@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import { Navbar,Nav,Dropdown, NavLink } from "react-bootstrap";
 import avatar from '../../assets/images/avatar.png'
-import AdminNavbarLinks from "./AdminNavbarLinks";
 import './AdminNavbar.css';
 import LoginModal from "../auth/LoginModal";
 import RegisterModal from "../auth/RegisterModal";
@@ -43,22 +42,22 @@ class Header extends Component {
   render() {
     const {isAuthenticated, user}=this.props.auth;
     const authLinks=(
-      < >
-      
+      <Fragment >
+          {/* <Nav.Item>About</Nav.Item> */}
           <Nav.Item>
               
           <Dropdown className="user-dropdown" style={{padding:'0rem !important'}} isOpen={this.state.dropdownOpen} toggle={this.toggled}>
               
               <Dropdown.Toggle id="dropdown-basic" caret>
-              {user? <div className="user-avatar">
-              <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={avatar} />
-              <div class="status-overlay">
-                  <i class="bowtie-icon bowtie-status-success success"></i>
-              </div>
-              </div>:'X'}
+                  {user? <div className="user-avatar">
+                  <img alt="alt" className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
+                  <div class="status-overlay">
+                      <i class="bowtie-icon bowtie-status-success success"></i>
+                  </div>
+                  </div>:'X'}
               <div>
                   <span style={{color:'red',fontWeight:400,fontSize:'80%'}}>Shop Admin</span>
-                  <div style={{color:'#3b3e66'}}>{user? user.fname+" "+user.lname:'Hello Guest'}</div>
+                  <div style={{color:'#3b3e66'}}>{user? user.fname+" "+user.lname:'Hello Gest'}</div>
               </div>
              
               
@@ -66,7 +65,7 @@ class Header extends Component {
               <Dropdown.Menu bottom>
                       <Dropdown.Item header>
                       {user? <div className="user-avatar">
-              <img className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={avatar} />
+              <img alt="alt" className="avatar" style={{width:'2rem',borderRadius:'50%'}} src={user.img?user.img:avatar} />
               {/* <div class="status-overlay">
                   <i class="bowtie-icon bowtie-status-success success"></i>
               </div> */}
@@ -94,7 +93,7 @@ class Header extends Component {
           </Dropdown>
 
           </Nav.Item>    
-      </>
+      </Fragment>
   );
   const guestLinks=(
       < >

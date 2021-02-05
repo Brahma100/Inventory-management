@@ -33,13 +33,9 @@ class Sidebar extends Component {
         id="sidebar"
         className="sidebar"
         data-color={this.props.color}
-        data-image={this.props.image}
+      
       >
-          {this.props.hasImage ? (
-            <div className="sidebar-background" style={sidebarBackground} />
-          ) : (
-            null
-          )}
+          
          <Navbar.Brand href="/"><div className="nav-brand1"><img className="nav-logo1" src={logo}/><div className="brand-text1"><span>inventory</span><b>ShopperZ</b></div></div></Navbar.Brand>
        
         <div className="sidebar-wrapper">

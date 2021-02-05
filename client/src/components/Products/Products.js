@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { OverlayTrigger,Tooltip,Accordion,DropdownButton, Spinner, Row, Container, Col, Card, Button, Form, Pagination, } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import './Products.css'
-
+import default_product from '../../assets/images/default-pro.jpg'
 import {NavLink, Prompt, withRouter} from 'react-router-dom';
 import UpdateProductModal from '../ProductsList/UpdateProductModal'
 // import E2 from './auth/E2';
@@ -10,7 +10,7 @@ import UpdateProductModal from '../ProductsList/UpdateProductModal'
 import {getCategories} from '../../action/categoryAction';
 import { getItems,deleteItem } from "../../action/itemAction";
 import {loginModalOpen,loadUser} from '../../action/authActions'
-import AppNavbar from '../AppNavbar';
+import AppNavbar from "../AppNavbar/AppNavbar";
 import back from '../../assets/images/back.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrashAlt, faUser ,faShoppingBag,faCalendarAlt,faSearch,faFilter,  faChevronCircleDown, faChevronCircleRight, faArrowAltCircleUp, faArrowAltCircleDown} from '@fortawesome/free-solid-svg-icons';
@@ -330,7 +330,7 @@ console.log("Id:",event.target.id);
                       <NavLink  to={{
                     pathname:`admin/products/${product.id}`,
                     state: {item:product}}}
-                    ><Card.Img top style={{marginLeft:'5.3rem',marginTop:'1rem',width:'8rem'}} src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp-spacegray-select-202011?wid=1280&hei=1190&fmt=jpeg&qlt=80&.v=1603406905000" alt="Card image cap" />
+                    ><Card.Img top style={{height:'8rem',marginLeft:'5.3rem',marginTop:'1rem',width:'8rem'}} src={product.img?product.img:default_product} alt="Card image cap" />
                       <Card.Body style={{display:'flex',flexDirection:'column',paddingLeft:'3rem',maxWidth:'30rem'}}>
                                                                            
                         <Card.Title><b>{product.name}</b></Card.Title>

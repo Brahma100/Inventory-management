@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { Col,Alert,NavLink, Button, Modal,Form,FormGroup,Label, Input, Collapse, Row, Card } from 'react-bootstrap';
+import { Col,Alert, Button, Modal,Form, Row, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
@@ -11,9 +11,6 @@ import {loginModalOpen} from '../../action/authActions'
 import {clearErrors}  from '../../action/errorActions';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-
-// import e from 'express';
-import { getItems,updateItem } from '../../action/itemAction';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const schemaOrder = yup.object({
@@ -113,12 +110,12 @@ render(){
                     <Card style={{display:'flex'}}>
                         <Row style={{display:'flex',alignItems:'center'}}>
                                <div style={{display:'flex',width:'15rem'}}> 
-                                <Col style={{marginLeft:'.5 rem'}} ><img style={{height:'80px',width:'80px'}} src={this.props.product_img}/></Col>
+                                <Col style={{marginLeft:'.5 rem'}} ><img alt="alt" style={{height:'80px',width:'80px'}} src={this.props.product_img}/></Col>
                                 <Col  style={{marginTop:'1rem',display:'flex',flexDirection:'column',alignItems:'center'}}><h7><b>{this.props.product_name}</b></h7><span style={{fontSize:'12px',color:'gray'}}>Qnty:{this.props.order.quantity}</span></Col>
                                 </div>
                                 <div style={{display:'flex',width:'15rem'}}>
                                 {/* <Col sm={2}></Col> */}
-                                <Col style={{marginLeft:'1rem'}}><img  style={{borderRadius:'50%',border:'2px solid #3b44c1',height:'50px',width:'50px'}} src={this.props.customer_img}/></Col>
+                                <Col style={{marginLeft:'1rem'}}><img  alt="alt" style={{borderRadius:'50%',border:'2px solid #3b44c1',height:'50px',width:'50px'}} src={this.props.customer_img}/></Col>
                                 <Col style={{marginTop:'.8rem',display:'flex',flexDirection:'column',alignItems:'center'}} ><h7><b>{this.props.customer_name}</b></h7></Col>
                             </div>
                         </Row>

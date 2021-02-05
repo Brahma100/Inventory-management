@@ -1,13 +1,10 @@
 import React,{Component} from 'react';
-import { Alert,NavLink, Button, Modal, ModalHeader, ModalBody,Form,FormGroup,Label, Input, Collapse } from 'reactstrap';
-
+import { Alert, Button, Modal, ModalHeader, ModalBody,Form,FormGroup,Label, Input} from 'reactstrap';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {update,loadUser} from '../../action/authActions';
-
 import {clearErrors}  from '../../action/errorActions';
 
-// import e from 'express';
 
 class EditModal extends Component{
     
@@ -114,14 +111,7 @@ render(){
                                 placeholder={email}
                                 onChange={this.onChange}
                             />
-                            {/* <Label for="password">Password</Label>
-                            <Input
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="Password"
-                                onChange={this.onChange}
-                            /> */}
+                            
                             <Button color="dark" style={{marginTop:'2rem'}} block>
 
                             Update</Button>

@@ -3,12 +3,8 @@ import './ProductList.css'
 import { Card,Container, Row, Col,Button,Media,Form,Tooltip, Spinner } from "react-bootstrap";
 import {connect} from 'react-redux';
 import { getItems } from './../../action/itemAction';
-// import P2 from './P2';
-import Checkbox from "../CustomCheckbox/CustomCheckbox";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import NewProductModal from "./NewProductModal";
-import { Suspense, lazy } from 'react';
+import { Suspense} from 'react';
 const ProductListData = React.lazy(() => import('./ProductListData'));
 // import ProductListData from './ProductListData';
 
@@ -62,7 +58,7 @@ function ProductList(props){
           <Row  >
             
           
-          <Suspense fallback={<div style={{marginLeft:'5rem',display:'flex',alignItems:'center',justifyContent:'space-around'}} ><Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" /><h2>Products are Loading...</h2></div>}>
+          <Suspense fallback={<Container><div style={{display:'flex',justifyContent:'center',alignItems:'center'}} ><Spinner style={{width:'5rem',height:'5rem'}} animation="border" variant="primary" /></div></Container>}>
      
                       <ProductListData products={products}/>
           </Suspense>

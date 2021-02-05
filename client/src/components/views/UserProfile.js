@@ -4,16 +4,13 @@ import {
   Row,
   Col,
   Form,InputGroup,Card, Spinner
-
 } from "react-bootstrap";
 import {update,loadUser} from '../../action/authActions'
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import { FormInputs } from "../../components/FormInputs/FormInputs.jsx";
 import { UserCard } from "../../components/UserCard/UserCard.jsx";
 import Button from "../../components/CustomButton/CustomButton.jsx";
-
-import avatar from '../../assets/images/avatar.png' //"assets/img/faces/face-3.jpg";
+import avatar from '../../assets/images/avatar.png' 
 import { connect } from "react-redux";
 import { Prompt } from "react-router-dom";
 
@@ -64,7 +61,6 @@ encodeImageFileAsURL=()=> {
 }
   render() {
     var isLoaded=this.props.isLoaded;
-    var isLoading=this.props.isLoading;
     var id=this.props.user?this.props.user._id:null;
     var email=this.props.user?this.props.user.email:"XYZ@gmail.com";
     var fname=this.props.user?this.props.user.fname:"Guest";

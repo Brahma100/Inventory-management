@@ -1,31 +1,18 @@
 import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
 import { Container, Row, Col} from "react-bootstrap";
 import './Home.css'
 import {Card} from 'react-bootstrap';   
 import NotificationSystem from 'react-notification-system';
 import banner from '../../assets/images/Banner.png'
 import back from '../../assets/images/back.jpg'
-import AppNavbar from "../AppNavbar";
-import Home1 from '../Home/Home1'
+import AppNavbar from "../AppNavbar/AppNavbar";
+import Home1 from './Home1'
 import {Prompt, NavLink, withRouter} from 'react-router-dom';
-import { loginModalOpen,loadUser } from './../../action/authActions';
+import { loginModalOpen,loadUser } from '../../action/authActions';
 import { connect } from 'react-redux';
-import ApexChart from '../Home/ApexChart';
+import ApexChart from './ApexChart';
 import Footer from "../Footer/Footer";
 
-
-const styles = {
-    mediaItem: {
-      border: "1px solid gray",
-      backgroundColor: "#f5f5f5",
- 
-    },
-    mediaItemButtons: {
-      paddingTop: "5px",
-      paddingBottom: "5px"
-    }
-  };
 
 class Home extends Component {
 
@@ -99,7 +86,7 @@ this.props.loadUser();
                 <Col md={6}>
                   <Card className='banner-card'>
                       <div className='banner'>
-                          <img src={banner}/>
+                          <img alt="alt" src={banner}/>
                       </div>
                   </Card>
                 </Col>

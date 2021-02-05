@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { returnErrors} from './errorActions';
 
-import { BLOCK,FREE_BLOCK,UPDATE_FAIL, UPDATE_SUCCESS, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_FAIL, REGISTER_SUCCESS, EXPIRE_EXTEND } from './types';
+import { UPDATE_FAIL, UPDATE_SUCCESS, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_FAIL, REGISTER_SUCCESS, EXPIRE_EXTEND } from './types';
 
 // check token & load user
 export const loadUser= ()=> (dispatch,getState)=>{
@@ -154,6 +154,3 @@ export const logout=()=>{
         type:LOGOUT_SUCCESS
     };
 };
-// export const tokenConfig=getState=>{
-//     const token=getState().auth.token;
-// }
