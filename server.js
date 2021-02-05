@@ -231,7 +231,7 @@ server.post("/update_product",function(req,res){
   // req==request from client || res=== Response that would be from Server
 
   const {id,name,description, manufacturer,price,stock,rating,user} = req.body;
-console.log(id,name,description, manufacturer,price,stock,rating,user);
+// console.log(id,name,description, manufacturer,price,stock,rating,user);
   if(!name || !description || !manufacturer || !stock || !rating || !price) return res.status(400).json({msg:'Please Enter all Fields'});
   // Check for Existence of Registering User
 
